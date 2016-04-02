@@ -1,0 +1,41 @@
+
+  <div class="modal-body">
+    <%= form_for @groupe, remote: true, html: {style: "display: inline;"} do |f| %>
+   
+    <ul class="errors">
+            
+          </ul>
+    <% if @groupe.code.nil?%>
+ <% if Groupe.count==0 %>
+        <% code="GR0000001" %>
+      <% else %>
+        <% old_code=Groupe.last.code[-7..-1] %>
+        <% code="GR"+old_code.next %>
+      <% end %>
+      <div class="field">
+       
+        <%= f.text_field :code ,class: "input-large", value: code, readOnly: true %>
+      </div>
+    <% end %>
+      <div class="field">
+        
+        <%= f.text_field :nom,class: "input-xlarge", "placeholder"=>"Nom Groupe", "required"=>true %>
+      </div>
+      <div class="field">
+        
+        <%= f.text_field :description,class: "input-xxlarge", "placeholder"=>"Description" %>
+      </div>
+   
+     <% if !@groupe.code.nil?%>
+    <div class="field">
+        <%= f.label :active %>
+        <%= f.check_box :is_active,value: @groupe.is_active %>
+      </div>
+    <% end %>
+      <div class="modal-footer">
+        <%= f.submit  class: "btn btn-large btn-primary" %>
+         <%= link_to "Cancel", "#", class: "btn", data: {dismiss: "modal"} %>
+      </div>
+    <% end %>
+  </div>
+

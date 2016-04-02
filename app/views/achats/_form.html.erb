@@ -1,0 +1,114 @@
+
+<% if @achat.code.nil?%>
+    <%= form_for(:achat, :url => {:controller=>"achats",:action=>"create"}, remote: true, :html=> {:multipart=>true}) do |c| %>
+<ul class="errors" style="color: #EE5757;">
+            
+          </ul>
+ 
+ <%= c.hidden_field :user_id,:value=>@current_user.id%> 
+      <% tva= Option.get_config_value('tva') %>
+
+      <% if Achat.count==0 %>
+        <% code="AH0000001" %>
+      <% else %>
+        <% old_code=Achat.last.code[-7..-1] %>
+        <% code="AH"+old_code.next %>
+      <% end %>
+
+      <%= c.text_field :code,:value=>code,:readonly=>true,:class=>"input-large"%> 
+
+      tva = <%= text_field_tag  :tva,tva,:readonly=>true,:class=>"input-small",:id=>"tva",title: "TVA"%> 
+      <%= select :type_produit,:id,
+        TypeProduit.find_all_by_is_active(true).map {|t| [t.nom.force_encoding("UTF-8"), t.id]},
+        {:prompt => "#{"selectionner la catégorie de produit"}"},:onChange=>"seach_product();",:id=>"type_id",title: "catégorie de produit"%>
+      <span id="produits"> 
+        <%= c.select :produit_id,
+          Produit.find_all_by_is_active(true).map {|b| [b.nom.force_encoding("UTF-8"), b.id]},
+          {:prompt => "#{"selectionner le produit"}"},:required => true,title: "Produit" %></span>
+      <%= c.select :fournisseur_id,
+        Fournisseur.all.map {|b| [b.nom.force_encoding("UTF-8"), b.id]},
+          {:prompt => "#{"selectionner le fournisseur"}"},:required => true,title: "Fournisseur" %> <br/> <br/>
+
+      <%= c.text_field :prix_achat_unitaire,:value=>"",:class=>"input-large",:id=>"prix_u",:placeholder=>"prix achat unitaire",:required => true,onkeyup: "total(); prix_hort_taxe();",:rel=>"tooltip",  "data-original-title"=>"Prix Unitaire"%> 
+       <%= c.text_field :quantite,:value=>"",:class=>"input-large",:id=>"quant",:placeholder=>"quantite" ,:required => true,onkeyup: "total();",title: "Quatité"%>
+  <%= c.text_field :marge_brut,:value=>"",:class=>"input-large",:id=>"marge",:placeholder=>"marge brut",onkeyup: "test();",title: "Marge brut" %> 
+      
+      <%= c.text_field :prix_ht,:value=>"",:class=>"input-large",:id=>"prix_ht",:placeholder=>"prix HT",onTextChange: "test();",:readonly=>true,title: "Prix hors taxe" %> 
+     
+      <br/>
+      <span id="total" style="color: #05B2D2"></span><br/>
+      <span id="pv" style="color: #05B2D2"></span>
+      <br/>
+      <%= text_field_tag  :prix_vente,"",:id=>"prix_v",:class=>"input-xlarge",:placeholder=>"prix vente" ,:required => true,title: "Prix vente"%> 
+
+      
+      <label for="date_naissance">  Date achat  </label>  <input type="text" class="input-xlarge datepicker" name="achat[date_achat]" id="date_achat" value="<%= Date.today.to_s %>" title="date achat" readonly="true" > 
+    <!--<#%= c.date_select "date_achat",use_month_numbers: false ,start_year: 1.years.ago.year, end_year: 3.years.since.year, :order => [:day, :month, :year],class: "input-xlarge datepicker",id: "date_achat",:include_blank=>false%>-->
+     <!-- <#%=  c.datetime_select("date_achat", :prompt => {:day => 'Jour', :month => 'Mois', :year => 'Année'},:start_year => 2010,:end_year => Time.now.year)%>-->
+
+      <br/>
+      <%= c.submit"", :value => "► #{"Enregistrer"}",:id=>"submi", :class => "btn btn-large btn-primary" %>
+     <a href="/achats"  class="btn" >Vider le formulaire</a>
+       <% end %>
+      <% else %>
+      
+      <%= form_for(@achat, :url => {:controller=>"achats",:action=>"update",:id=>@achat.id}, remote: true, :html=> {:multipart=>true}) do |c| %>
+<ul class="errors" style="color: #EE5757;">
+            
+          </ul>
+ 
+ <%= c.hidden_field :user_id,:value=>@current_user.id%> 
+      <% tva= Option.get_config_value('tva') %>
+      tva = <%= text_field_tag  :tva,tva,:readonly=>true,:class=>"input-small",:id=>"tva",title: "TVA"%> 
+      <%= select :type_produit,:id,
+        TypeProduit.find_all_by_is_active(true).map {|t| [t.nom.force_encoding("UTF-8"), t.id]},
+        {:prompt => "#{"selectionner la catégorie de produit"}"},:onChange=>"seach_product();",:id=>"type_id",title: "Catégrorie de produit"%>
+      <span id="produits"> 
+        <%= c.select :produit_id,
+          Produit.find_all_by_is_active(true).map {|b| [b.nom.force_encoding("UTF-8"), b.id]},
+          {:prompt => "#{"selectionner le produit"}"},:required => true,title: "Produit" %></span>
+      <%= c.select :fournisseur_id,
+        Fournisseur.find_all_by_is_active(true).map {|b| [b.nom.force_encoding("UTF-8"), b.id]},
+          {:prompt => "#{"selectionner le fournisseur"}"},:required => true,title: "Fournisseur" %> <br/> <br/>
+
+      <%= c.text_field :prix_achat_unitaire,:class=>"input-large",:id=>"prix_u",:placeholder=>"prix achat unitaire",:required => true,onkeyup: "total(); prix_hort_taxe();",title: "prix achat" %> 
+       <%= c.text_field :quantite,:class=>"input-large",:id=>"quant",:placeholder=>"quantite" ,:required => true,onkeyup: "total();",title: "Quantité"%>
+  <%= c.text_field :marge_brut,:class=>"input-large",:id=>"marge",:placeholder=>"marge brut",onkeyup: "test();" ,title: "Marge brut"%> 
+      
+      <%= c.text_field :prix_ht,:class=>"input-large",:id=>"prix_ht",:placeholder=>"prix HT",onTextChange: "test();",:readonly=>true,title: "Prix hors taxe" %> 
+     
+      <br/>
+      <span id="total" style="color: #05B2D2"></span><br/>
+      <span id="pv" style="color: #05B2D2"></span>
+      <br/>
+      <%= text_field_tag  :prix_vente,"",:id=>"prix_v",:class=>"input-xlarge",:placeholder=>"prix vente" ,:required => true,title: "Prix de vente"%> 
+
+      
+      <label for="date_naissance">  Date achat  </label>  <input type="text" class="input-xlarge datepicker" name="achat[date_achat]" id="date_achat" value="<%= @achat.date_achat.to_s %>" title="date achat" readonly="true" onfocus="set_date_picker();"> 
+    <!--<#%= c.date_select "date_achat",use_month_numbers: false ,start_year: 1.years.ago.year, end_year: 3.years.since.year, :order => [:day, :month, :year],class: "input-xlarge datepicker",id: "date_achat",:include_blank=>false%>-->
+     <!-- <#%=  c.datetime_select("date_achat", :prompt => {:day => 'Jour', :month => 'Mois', :year => 'Année'},:start_year => 2010,:end_year => Time.now.year)%>-->
+
+      <br/>
+      <%= c.submit"", :value => "► #{"Mdifier l'achat"}",:id=>"submi", :class => "btn btn-large btn-primary" %>
+      <a href="/achats"  class="btn" >Vider le formulaire</a>
+      <% end %>
+      
+
+    <%end%>
+ 
+      
+  <script>
+  
+   setTimeout(function() {
+     $( ".datepicker" ).datepicker({
+       format: "yyyy/mm/dd"
+      
+     }); 
+  
+  },100);
+  
+   $(function (){
+   $('input').tooltip();
+});
+ 
+  </script> 

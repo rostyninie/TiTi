@@ -1,0 +1,60 @@
+<%#
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+%>
+<% typ=TypeProduit.active %>
+<div class="span3" id="sidebar"> 
+<div class="widget-body span3"><h3> Quantité en stock : </h3>
+  <div class="accordion" id="accordion1"> 
+    <ul class="nav nav-list bs-docs-sidenav nav-collapse collapse">
+       <% i=0 %>
+      <% typ.each do |tp| %>
+      <% produits=tp.produits.active %>
+        <li>
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion1" href="#collapse_<%= tp.id.to_s %>" style="text-decoration: none;">
+                <i class="icon-chevron-right"></i> <%= tp.nom.force_encoding('UTF-8') %>
+              </a>
+            </div>
+             <% if i==0 || i==1%>
+            <div id="collapse_<%= tp.id.to_s %>" class="accordion-body collapse in">
+              <% else %>
+              <div id="collapse_<%= tp.id.to_s %>" class="accordion-body collapse">
+              <% end%>
+              <div class="accordion-inner">
+                <ul class="nav nav-list bs-docs-sidenav nav-collapse collapse">
+                  <% produits.each do |p| %>
+                  <li>
+                    <% if p.quantite_stock > p.seuil_warning %>
+                    <a ><span class="badge badge-success pull-right"><%= p.quantite_stock.to_s %></span> <%= p.nom.force_encoding('UTF-8') %></a>
+                    <% elsif p.quantite_stock <= p.seuil_warning && p.quantite_stock > p.seuil_danger %>
+                    <a ><span class="badge badge-warning pull-right"><%= p.quantite_stock.to_s %></span> <%= p.nom.force_encoding('UTF-8') %></a>
+                    <% else %>
+                    <a ><span class="badge badge-important pull-right"><%= p.quantite_stock.to_s %></span> <%= p.nom.force_encoding('UTF-8') %></a>
+                    <% end %>
+                  </li>
+                  
+                  <% end %>
+                </ul>
+
+              </div>
+            </div>
+          </div>
+           <% i=i+1 %>
+        <% end %>
+    </ul>
+  </div>
+ </div>
+  </div>
+  <script>
+    $('#accordion1 .accordion-group').on('mouseover', '.accordion-heading', function() {
+      $(this).css('background', '#B3D38D');
+
+    });
+    $('#accordion1 .accordion-group').on('mouseout', '.accordion-heading', function() {
+      $(this).css('background', '#ffffff');
+
+    });
+  </script>

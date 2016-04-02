@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @droit.name %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @droit.code %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @droit.description %>
+</p>
+
+<%= link_to 'Edit', edit_droit_path(@droit) %> |
+<%= link_to 'Back', droits_path %>

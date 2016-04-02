@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <title><%= "#{"TiTi la Caissière"}" %></title>
+
+  <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="vendors/flot/excanvas.min.js"></script><![endif]-->
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+<script src="/assets/vendors/jquery-1.9.1.js"></script>
+  <script src="/assets/vendors/jquery-ui.js"></script>
+  <script src="/assets/vendors/datepicker-fr.js"></script>
+  
+     <script>
+  $(function() {
+     $( ".datepicker1" ).datepicker({
+       format: "yyyy/mm/dd"
+      
+     }); 
+  
+  });
+  
+  $(function (){
+   $('input').tooltip();
+});
+
+ $(function() {
+    $( "#accordion" ).accordion();
+  });
+
+$(function (){
+   $(".pope").popover(); 
+});
+
+
+  </script>
+  <%= csrf_meta_tags %>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+ 
+</head>
+<body>
+ 
+  <%= render 'layouts/header' %>
+  <%= yield %>
+  <div id="user-modal" class="modal hide" style="width: 600px;"></div>
+  <%= render 'layouts/footer' %>
+
+
+</body>
+
+</html>
+
+

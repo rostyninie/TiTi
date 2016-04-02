@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  code: MyString
+  nom: MyString
+  prix_vente: 1.5
+  prix_gros: 1.5
+  quantite_gros: 1
+  quantite_stock: 1
+  unite: MyString
+  type_produit_id: 1
+  rayon_id: 1
+  is_active: false
+
+two:
+  code: MyString
+  nom: MyString
+  prix_vente: 1.5
+  prix_gros: 1.5
+  quantite_gros: 1
+  quantite_stock: 1
+  unite: MyString
+  type_produit_id: 1
+  rayon_id: 1
+  is_active: false

@@ -1,0 +1,11 @@
+$("ul.errors").html("")
+<% unless flash[:notice].nil?  %>
+
+$("ul.errors").append("$(<li />)").html("<%= flash[:notice].html_safe %>")
+
+<% else  %>
+
+$(".modal-body").html("<%= escape_javascript(render(:partial=>'new_password')) %>")
+
+
+<%end %>

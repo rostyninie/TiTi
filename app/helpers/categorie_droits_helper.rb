@@ -1,0 +1,2 @@
+module CategorieDroitsHelper
+end

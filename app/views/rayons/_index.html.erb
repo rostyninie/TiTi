@@ -1,0 +1,14 @@
+<% i=0 %>
+<% @rayons.each do |d| %>
+  <tr class="odd gradeX">
+    <td><%=  i+=1%></td>
+    <td><%=  d.code.force_encoding("UTF-8") %></td>
+    <td><%=d.nom.force_encoding("UTF-8")%></td>
+  
+    <td><%=d.is_active.to_s%></td>
+    <!--<td><#%=d.categorie.nom %></td>-->
+    <td class="center"><%=link_to "Modifier",edit_rayon_path(d),remote: true,class: "btn btn-success" %></td>
+ 
+    <td class="center"><%=link_to "Supprimer",{controller: 'rayons',:action=>'delete',:id=>d.id},remote: true,class: "btn btn-danger" %></td>
+  </tr>
+<% end %>

@@ -1,0 +1,10 @@
+$("ul.errors").html("")
+<% if @category.errors.any? %>
+  <% @category.errors.full_messages.each do |message| %>
+$("ul.errors").append($("<li />").html("<%= message.html_safe %>"))
+<% end%>
+<% else %>
+$(".categorie-index").html("<%= escape_javascript(render(:partial=>'index')) %>")
+$("#categorie-modal").modal("hide")
+$.jGrowl("<%= flash[:notice] %>", {header: ''})
+<% end %>

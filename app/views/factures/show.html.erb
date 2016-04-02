@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Num:</strong>
+  <%= @facture.num %>
+</p>
+
+<p>
+  <strong>Commande:</strong>
+  <%= @facture.commande_id %>
+</p>
+
+<p>
+  <strong>Client:</strong>
+  <%= @facture.client_id %>
+</p>
+
+<p>
+  <strong>Montant:</strong>
+  <%= @facture.montant %>
+</p>
+
+<p>
+  <strong>Is solde:</strong>
+  <%= @facture.is_solde %>
+</p>
+
+<p>
+  <strong>Date facture:</strong>
+  <%= @facture.date_facture %>
+</p>
+
+<%= link_to 'Edit', edit_facture_path(@facture) %> |
+<%= link_to 'Back', factures_path %>

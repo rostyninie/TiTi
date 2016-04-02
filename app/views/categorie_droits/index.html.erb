@@ -1,0 +1,29 @@
+<h1>Listing categorie_droits</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Categorie</th>
+      <th>Droit</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @categorie_droits.each do |categorie_droit| %>
+      <tr>
+        <td><%= categorie_droit.categorie_id %></td>
+        <td><%= categorie_droit.droit_id %></td>
+        <td><%= link_to 'Show', categorie_droit %></td>
+        <td><%= link_to 'Edit', edit_categorie_droit_path(categorie_droit) %></td>
+        <td><%= link_to 'Destroy', categorie_droit, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Categorie droit', new_categorie_droit_path %>

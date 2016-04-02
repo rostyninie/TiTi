@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  code: MyString
+  prix_achat_unitaire: 1.5
+  marge_brut: 1.5
+  prix_ht: 1.5
+  quantite: 1
+  date_achat: 2016-01-21
+  user_id: 1
+  produit_id: 1
+  fournisseur_id: 1
+  is_deleted: false
+
+two:
+  code: MyString
+  prix_achat_unitaire: 1.5
+  marge_brut: 1.5
+  prix_ht: 1.5
+  quantite: 1
+  date_achat: 2016-01-21
+  user_id: 1
+  produit_id: 1
+  fournisseur_id: 1
+  is_deleted: false

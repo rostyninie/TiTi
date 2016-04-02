@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  code: MyString
+  montant: 1.5
+  en_cour: false
+  client_id: 1
+  date_reglage: 2016-01-21
+  is_deleted: false
+
+two:
+  code: MyString
+  montant: 1.5
+  en_cour: false
+  client_id: 1
+  date_reglage: 2016-01-21
+  is_deleted: false

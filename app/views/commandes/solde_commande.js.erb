@@ -1,0 +1,22 @@
+
+<% unless flash[:notice].nil? %>
+   $("#modal-solde").find('#error').html("<%= flash[:notice] %>")
+     $.jGrowl("<%= flash[:notice] %>", {header: ''})
+ 
+<% else %>
+  
+  $("#modal-solde").modal("hide")
+  $.jGrowl("<%= @msg %>", {header: ''})
+ // $("#example2 tbody").children("tr").each(function(){
+ // if($(this).find('.id').html()==<%= @id.to_s %>)
+  // {
+  // $(this).find('.reste').html("<%= @reste_to_p %>")
+   //$(this).find('.versement').html("<%= @facture.versement.to_s %>")
+  // $(this).find('.date').html("<%= @facture.updated_at.to_s %>")
+  // $('#tv').html(<%= @tv.to_s %>)
+  // $('#trv').html(<%= @trv.to_s %>)
+  // }
+ // })
+
+ $("#result").html("<%= escape_javascript(render(:partial=>'index') ) %>")
+<% end %>

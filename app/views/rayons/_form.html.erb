@@ -1,0 +1,37 @@
+<div class="modal-body">
+    <%= form_for @rayon, remote: true, html: {style: "display: inline;"} do |f| %>
+   
+    <ul class="errors">
+            
+          </ul>
+    <% if @rayon.code.nil?%>
+ <% if Rayon.count==0 %>
+        <% code="RA0000001" %>
+      <% else %>
+        <% old_code=Rayon.last.code[-7..-1] %>
+        <% code="RA"+old_code.next %>
+      <% end %>
+      <div class="field">
+       
+        <%= f.text_field :code ,class: "input-large", value: code, readOnly: true %>
+      </div>
+    <% end %>
+      <div class="field">
+        
+        <%= f.text_field :nom,class: "input-xlarge", "placeholder"=>"Nom Rayon", "required"=>true %>
+      </div>
+     
+     <% if !@rayon.code.nil?%>
+    <div class="field">
+        <%= f.label :active %>
+        <%= f.check_box :is_active,value: @rayon.is_active %>
+      </div>
+    <% end %>
+      <div class="modal-footer">
+        <%= f.submit  class: "btn btn-large btn-primary" %>
+         <%= link_to "Cancel", "#", class: "btn", data: {dismiss: "modal"} %>
+      </div>
+    <% end %>
+  </div>
+
+

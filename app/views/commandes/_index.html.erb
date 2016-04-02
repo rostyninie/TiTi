@@ -1,0 +1,104 @@
+
+<% i=0 %>
+<% gt=0 %>
+<% gtv=0 %>
+<% gtr=0 %>
+<% @commandes.each do |achat| %>
+  <tr class="odd gradeX">
+    <td><%=  i+=1%></td>
+    <% facture=Facture.find_by_commande_id(achat.id) %>
+    <td class="id hidden"><%= achat.id %></td>
+    <td class="code"><%= achat.code %></td>
+    <td><%= achat.client.nom.force_encoding('UTF-8') %></td>
+    <% liste_produis="" %>
+    <% achat.commande_produits.each do |c|
+      liste_produis+= c.produit.nom.force_encoding('UTF-8')+" Qt : "+c.quantite.to_s+" remise: "+c.remise.to_s+" "
+
+    end%>
+    <td>  <a  class="pope"
+              rel="popover" data-content="<%= liste_produis %>" 
+              data-original-title="liste des produits :">
+        <span class="label">Cliquez pour voir les produits</span></a> </td>
+    <td><%= facture.montant.to_s %></td>
+    <% if facture.versement >= facture.montant  %>
+      <td><%= facture.montant.to_s %></td>
+      <% gtv=gtv + facture.montant.to_f %>
+    <% else %>
+      <td class="versement"><%= facture.versement.to_s %></td>
+      <% gtv=gtv + facture.versement.to_f %>
+    <% end %>
+    <% if achat.en_cour==false  %>
+      <td class="solder center"> <%= image_tag "agt_action_success.png"  %> </td>
+    <% else %>
+      <td class="solder center"><%=link_to "#{"Solder..."}" ,"",remote: true,class: "bt_solder btn btn-danger",title: "Solder la facture." %></td>
+      <% end %>
+      <% if (facture.montant.to_f - facture.versement.to_f)>0  %>
+        <td class="reste"><%= (facture.montant.to_f - facture.versement.to_f).to_s %></td>
+        <% gtr=gtr + (facture.montant.to_f - facture.versement.to_f).to_f %>
+      <% else %>
+        <td><%= (0).to_s %></td>
+
+      <% end %>
+      <td class="date"><%= achat.updated_at.to_date.to_s %></td>
+      <td><%= achat.user.nom.force_encoding("UTF-8") %></td>
+      <% gt=gt + facture.montant.to_f %>
+      <td class="center"><%=link_to "#{"facture..."}" ,{controller: 'commandes',:action=>'commande_recu_pdf',:id=>0,:facture_id=>facture.id},class: "btn btn-primary",title: "Facture de la commande.",:target=>"_blank" %></td>
+
+      </tr>
+    <% end %>
+    <tr class="odd gradeX" >
+      <td style="background-color: #35aa47; font-size: 15px; font-weight: bold;"><%=  "Grand total"%></td>
+      <td><%= "-" %></td>
+      <td><%= "-" %></td>
+      <td><%= "-" %></td>
+      <td><%= gt.to_s %></td>
+      <td id="tv"><%= gtv.to_s %></td>
+      <td><%= "-" %></td>
+      <td  id="trv"><%= gtr.to_s %></td>
+      <td><%= "-" %></td>
+      <td><%= "-" %></td>
+      <td><%= "-" %></td>
+    </tr>
+    
+ 
+    <script>
+      
+      $("td .bt_solder").on('click', function() {
+        // <input title="" data-original-title="" class="btn btn-large btn-primary" id="submi" name="commit" value="► Enregistrer" type="submit">
+        // <input class="input-large" data-original-title="Prix Unitaire" id="prix_u" name="achat[prix_achat_unitaire]" onkeyup="total(); prix_hort_taxe();" placeholder="prix achat unitaire" rel="tooltip" required="required" value="" type="text">
+        // <form accept-charset="UTF-8" action="/achats" data-remote="true" enctype="multipart/form-data" method="post">
+
+        var modal = '<div class="modal-header"><button data-dismiss="modal" class="close" type="button">&times;</button><h3> soldé la commande :</h3></div><div class="modal-body"> <span id="error" style="color :red;"></span><br/><form accept-charset="UTF-8" action="/commandes/solde_commande/0" data-remote="true" enctype="multipart/form-data" method="post"}><input name="tv" value="' + $('#tv').html() + '" type="hidden"/><input name="trv" value="' + $('#trv').html() + '" type="hidden"/><input name="code" value="' + $(this).parent().parent().find('.code').html() + '" type="hidden"/><input  name="id_cmd" value="' + $(this).parent().parent().find('.id').html() + '" type="hidden"/> <input class="input-large" title="Reste à payer pour la commande" id="montant_solde" name="montant_solde" rel="tooltip"  value="' + $(this).parent().parent().find('.reste').html() + '" type="text"> <input title="" data-original-title="" class="btn btn-large btn-primary" id="submi" name="commit" value="► Enregistrer" type="submit"></form></div>';
+        $("#modal-solde").html(modal);
+        $("#modal-solde").modal('show');
+        //alert($(this).parent().parent().find('.reste').html());
+      });
+      
+      
+ 
+      $('td').on('mouseover','.pope',function(){
+        $(".pope").popover();
+      });
+      
+     // alert('cont');
+      
+   function recherche_commande()
+  {
+    
+    document.getElementById('result').innerHTML = "<img src='/assets/roller.gif'>";
+
+
+    $.ajax({
+        url: "/commandes/recherche_commande/0",
+        type: "GET",
+        data: {date_debut: $("#date_debut").val(), date_fin: $("#date_fin").val(), nom: $("#nom").val(), etat: $("#etat").val()},
+        success: function(data) {
+          // append data to your page
+          $("#result").html(data);
+        }
+      });
+    }
+    
+   
+    </script>
+   

@@ -1,0 +1,44 @@
+
+  <div class="modal-body">
+    <%= form_for @droit, remote: true, html: {style: "display: inline;"} do |f| %>
+   
+    <ul class="errors">
+            
+          </ul>
+    <% if @droit.code.nil?%>
+ <% if Droit.count==0 %>
+        <% code="DR0000001" %>
+      <% else %>
+        <% old_code=Droit.last.code[-7..-1] %>
+        <% code="DR"+old_code.next %>
+      <% end %>
+      <div class="field">
+       
+        <%= f.text_field :code ,class: "input-large", value: code, readOnly: true %>
+      </div>
+    <% end %>
+      <div class="field">
+        
+        <%= f.text_field :name,class: "input-xlarge", "placeholder"=>"Nom droit", "required"=>true %>
+      </div>
+      <div class="field">
+        
+        <%= f.text_field :description,class: "input-xxlarge", "placeholder"=>"Description" %>
+      </div>
+    <div class="field">
+        
+        <%= f.select :category_id,Category.find_all_by_is_active(true).map{|c| [c.nom,c.id]},{prompt: "catégorie"} %>
+      </div>
+     <% if !@droit.code.nil?%>
+    <div class="field">
+        <%= f.label :active %>
+        <%= f.check_box :is_active,value: @droit.is_active %>
+      </div>
+    <% end %>
+      <div class="modal-footer">
+        <%= f.submit  class: "btn btn-large btn-primary" %>
+         <%= link_to "Cancel", "#", class: "btn", data: {dismiss: "modal"} %>
+      </div>
+    <% end %>
+  </div>
+

@@ -1,0 +1,2 @@
+module DroitsHelper
+end

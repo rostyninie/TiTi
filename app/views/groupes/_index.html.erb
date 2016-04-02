@@ -1,0 +1,14 @@
+<% i=0 %>
+<% @groupes.each do |d| %>
+  <tr class="odd gradeX">
+    <td><%=  i+=1%></td>
+    <td><%=link_to  d.code,controller: "groupes",action: "view",id: d.id %></td>
+    <td><%=link_to d.nom ,controller: "groupes",action: "view",id: d.id%></td>
+    <td><%=d.description%></td>
+    <td><%=d.is_active.to_s%></td>
+    <!--<td><#%=d.categorie.nom %></td>-->
+    <td class="center"><%=link_to "Modifier",edit_groupe_path(d),remote: true,class: "btn btn-success" %></td>
+ 
+    <td class="center"><%=link_to "Supprimer",{controller: 'groupes',action: 'delete',id: d.id},remote: true,class: "btn btn-danger" %></td>
+  </tr>
+<% end %>

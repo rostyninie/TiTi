@@ -1,0 +1,120 @@
+<%#
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+%>
+ 
+    <div  style="font-size: 10px; width: 100%; overflow: hidden;">
+      <div style="display: inline;">
+       <%=  Option.get_config_value('name') %>
+      </div>
+     
+    </div>
+
+ <div  style="font-size: 6px; width: 100%; overflow: hidden; padding-top: 2px;">
+      <div style="display: inline;">
+        <%="#{"TEL : "} #{Option.get_config_value('phone')}"%>
+      </div>
+      <div style="display: inline;">
+        <%="#{"   B.P : "} #{Option.get_config_value('adress')}"%>
+      </div>
+    </div>
+
+<div  style="font-size: 10px; width: 100%; overflow: hidden; padding-top: 2px;">
+      <div style="display: inline;">
+        <%="#{"Email : "} #{Option.get_config_value('email')}" %>
+      </div>
+     
+    </div>
+
+<div  style="font-size: 15px; width: 100%; overflow: hidden; padding-top: 5px; padding-left: 40px;">
+      <div style="display: inline;">
+        <%="#{"Facture N° "} #{@facture.num}" %>
+      </div>
+     
+    </div>
+ <div  style="font-size: 5px; width: 100%; overflow: hidden; padding-top: 5px;">
+   <table border="0" style="border-style: dotted; width: 100%;" >
+  
+<tr style="border-style: dotted;">
+ <th>produits </th> 
+ <th>Quantite </th>
+ <th>Temise </th>
+ <th>PU </th> 
+ <th>Total </th>
+<tbody>
+  <% @commande_produits.each do |c|  %>
+<tr>
+  <td >
+      <%=  c.produit.nom.force_encoding('UTF-8') %>
+  </td>
+    <td style="text-align: center;">
+      <%= c.quantite  %>
+  </td>
+   <td style="text-align: center;">
+      <%= c.remise  %>
+  </td>
+  <% p=((c.produit.prix_vente * c.remise)/100).to_i %>
+ <% pu=c.produit.prix_vente - p %>
+    <td style="text-align: center;">
+      <%= "#{pu.to_s} Fcfa"  %>
+  </td>
+  <td style="text-align: center;">
+      <%= "#{(c.quantite*pu).to_s} Fcfa"  %>
+  </td>
+</tr>
+<% end  %>
+<tr>
+<tr>
+  <td style="text-align: center;">
+   <%="#{" TOTAL "}" %> 
+  </td> 
+   <td style="text-align: center;">
+   <%="#{" - "}" %> 
+  </td> 
+  <td style="text-align: center;">
+   <%="#{" - "}" %> 
+  </td> 
+   <td style="text-align: center;">
+   <%="#{" - "}" %> 
+  </td> 
+   <td style="text-align: center;">
+   <%="#{@facture.montant} Fcfa" %> 
+  </td> 
+</tr>
+<td colspan="2">
+     <%="#{"Client :  "} #{@facture.client.nom.force_encoding('UTF-8')}" %>
+  </td>
+  <td colspan="2">
+     <%="#{@facture.updated_at.to_date.to_s}" %>
+  </td>
+</tr>
+
+<tr>
+  
+  <td style="text-align: left;" colspan="3">
+     <%="#{"Versement : "} #{@facture.versement} Fcfa" %>
+  </td>
+   <td style="text-align: left;" colspan="2">
+     <%="#{"Reste : "} #{@facture.versement-@facture.montant} Fcfa" %>
+  </td>
+</tr>
+
+</tbody> 
+<!--<tr>
+ <td> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p><#%="#{"DELEGATION REGIONNAL DU LITORAL"}"; %></p> </td>
+   <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <p> <#%="#{"LITTORAL REGIONAL DELEGATION"}"; %></p>
+ </td></tr>
+
+<tr>
+ <td> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p><#%="#{"DELEGATION DEPARTEMENTAL DU WOURI"}"; %></p> </td>
+   <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <p> <#%="#{"WOURI DIVISIONAL DELEGATION"}"; %></p>
+ </td></tr>-->
+
+ </table>
+    
+</div>
+
+

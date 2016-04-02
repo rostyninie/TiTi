@@ -1,0 +1,45 @@
+
+<div class="row-fluid">
+
+  <% unless flash[:notice].nil? %>
+    <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <%= flash[:notice] %></div>
+    <script>$.jGrowl("<%= flash[:notice] %>", {header: 'Important'});</script>
+  <% end %>
+  <div class="block">
+    <div class="navbar navbar-inner block-header">
+      <div class="muted pull-left">Configurations</div>
+    </div>
+    <div class="block-content collapse in">
+      <div class="span5 offset2">
+        <div class="table-toolbar">
+          <%=form_for(:option,:url=> {:controller=>"options",:action=>"new"},:html=> {:multipart=>true}) do |c| %>
+            <div class="row-fluid">
+              <div class="span3">
+                <%= 'TVA : ' %></div><div class="span3"> <%= text_field :option,:tva, :value=>@config[:tva],:class=>"input-xlarge" %></div>
+            </div>
+            <div class="row-fluid">
+              <div class="span3">
+                <%= 'Entreprise : ' %></div> <div class="span3"><%= text_field :option, :name, :value => @config[:name],:class=>"input-xlarge" %></div> </div>
+            <div class="row-fluid">
+              <div class="span3">
+                <%= 'Téléphone : ' %></div> <div class="span3"><%= text_field :option, :phone, :value => @config[:phone],:class=>"input-xlarge" %></div> </div>
+            <div class="row-fluid">
+              <div class="span3">     
+                <%= 'Email : ' %> </div><div class="span3"> <%= text_field :option, :email, :value => @config[:email],:class=>"input-xlarge" %></div> </div>
+            <div class="row-fluid">
+              <div class="span3">     
+                <%= 'Adresse : ' %> </div><div class="span3"> <%= text_field :option, :adress, :value => @config[:adress],:class=>"input-xlarge" %></div> </div>
+            <div class="row-fluid">
+              <div class="span2 offset2">  
+                <%= c.submit "",:value =>"► #{'Modifier'}", :class => "btn btn-large btn-primary"%></div> </div> 
+
+          <% end %>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

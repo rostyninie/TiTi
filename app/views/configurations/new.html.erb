@@ -1,0 +1,28 @@
+
+<div class="row-fluid">
+
+  <% unless flash[:notice].nil? %>
+    <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <%= flash[:notice] %></div>
+    <script>$.jGrowl("<%= flash[:notice] %>", {header: 'Important'});</script>
+  <% end %>
+  <div class="block">
+    <div class="navbar navbar-inner block-header">
+      <div class="muted pull-left">Configurations</div>
+    </div>
+    <div class="block-content collapse in">
+      <div class="span5 offset2">
+        <div class="table-toolbar"
+
+             <% form_for(:configuration,:html=> {:multipart=>true}) do |c| %>
+
+               <%= 'TVA : ' %> <%= text_field :configuration, :tva, :value => @config[:tva],:class=>"input-xlarge" %><br/>
+                 <%= submit_tag "► #{'Modifier'}", :class => "btn btn-large btn-primary"%>
+               <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

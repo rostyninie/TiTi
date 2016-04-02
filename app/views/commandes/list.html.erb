@@ -1,0 +1,85 @@
+
+<div class="row-fluid">
+  <% unless flash[:notice].nil? %>
+    <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <%= flash[:notice] %></div>
+    <script>$.jGrowl("<%= flash[:notice] %>", {header: 'Important'});</script>
+  <% end %>
+
+  
+  <div class="block">
+    <div class="navbar navbar-inner block-header">
+      <div class="muted pull-left">Liste des Commandes</div>
+    </div>
+    <div class="block-content collapse in">
+      <div class="span12">
+        <div class="table-toolbar">
+          
+          <div class="btn-group">
+            <input type="text" class="input-xlarge datepicker1" id="date_debut" value="<%= Date.today.to_s %>" title="date debut" readonly="true" onblur="recherche_commande();" >          
+          </div>
+          <div class="btn-group">
+            
+            <input type="text" class="input-xlarge datepicker1" id="date_fin" value="<%= Date.today.to_s %>" title="date fin" readonly="true" onclick="recherche_commande();" >
+                                           
+          </div>
+          <div class="btn-group">
+          <%= text_field_tag :nom,"", id: "nom", placeholder: "Non client",onkeyup: "recherche_commande();",title: "Non client" %>
+          </div>
+          <div class="btn-group">
+           <%= select :solder,:is_active,[["soldée",0],["non soldée",1]].map { |t| [t[0],t[1]]  },{prompt: "etat"},{onchange: "recherche_commande();", id: "etat" }%>
+          </div>
+          <div class="btn-group pull-right">
+            <button data-toggle="dropdown" class="btn dropdown-toggle">Outils <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href="#">Print</a></li>
+              <li><a href="#">Save as PDF</a></li>
+              <li><a href="#">Export to Excel</a></li>
+            </ul>
+          </div>
+        </div>
+      
+        <div style=" height: 500px; width: 100%; overflow-x: scroll;overflow-y: scroll; " >
+          
+            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example2">
+              <thead>
+                <tr>
+                  <th>N°</th>
+                  <th>Code</th>
+                  <th>Client</th>
+                  <th>produits commdes</th>
+                  <th>Prix total</th>
+                  <th>Versement</th>
+                  <th>soldé?</th>
+                  <th>Reste à payer</th>
+                  <th>Date et heure</th>
+                  <th>Utilisateur</th>
+                  <th>voir la facture</th>
+                </tr>
+              </thead>
+              <tbody class="commande-index" id="result">
+                <%= render "index" %>
+              
+            
+                 </tbody>
+            </table>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal hide" id="modal-solde" style="width: 340px;">
+  
+</div>
+  
+<!-- /block -->
+
+<script>
+ 
+ 
+    
+ 
+</script>

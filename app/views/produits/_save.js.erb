@@ -1,0 +1,10 @@
+$("ul.errors").html("")
+<% if @produit.errors.any? %>
+  <% @produit.errors.full_messages.each do |message| %>
+$("ul.errors").append($("<li />").html("<%= message.html_safe %>"))
+<% end%>
+<% else %>
+$(".produit-index").html("<%= escape_javascript(render(:partial=>'index')) %>")
+$("#produit-modal").modal("hide")
+$.jGrowl("<%= flash[:notice] %>", {header: ''})
+<% end %>

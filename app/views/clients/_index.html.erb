@@ -1,0 +1,21 @@
+<% i=0 %>
+
+     <% @clients.each do |client| %>
+      <tr class="odd gradeX">
+        <td><%=  i+=1%></td>
+        <td><%= client.code.force_encoding("UTF-8") %></td>
+        <td><%= client.nom.force_encoding("UTF-8") %></td>
+        <td><%= client.phone.force_encoding("UTF-8") %></td>
+        <td><%= client.address.force_encoding("UTF-8") %></td>
+        <td><%= client.ville.force_encoding("UTF-8") %></td>
+        <td><%= client.pay.nom %></td>
+        <td><%= client.is_active.to_s %></td>
+    <!--<td><#%=d.categorie.nom %></td>-->
+    <td class="center"><%=link_to "Modifier",edit_client_path(client),remote: true,class: "btn btn-success" %></td>
+ 
+    <td class="center"><%=link_to "Supprimer",{controller: 'clients',:action=>'delete',:id=>client.id},remote: true,class: "btn btn-danger" %></td>
+  </tr>
+<% end %>
+  
+   
+   

@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @commande.code %>
+</p>
+
+<p>
+  <strong>Montant:</strong>
+  <%= @commande.montant %>
+</p>
+
+<p>
+  <strong>En cour:</strong>
+  <%= @commande.en_cour %>
+</p>
+
+<p>
+  <strong>Client:</strong>
+  <%= @commande.client_id %>
+</p>
+
+<p>
+  <strong>Date reglage:</strong>
+  <%= @commande.date_reglage %>
+</p>
+
+<p>
+  <strong>Is deleted:</strong>
+  <%= @commande.is_deleted %>
+</p>
+
+<%= link_to 'Edit', edit_commande_path(@commande) %> |
+<%= link_to 'Back', commandes_path %>

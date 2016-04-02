@@ -1,0 +1,11 @@
+<div class="modal-header">
+    <button data-dismiss="modal" class="close" type="button">&times;</button>
+    <h3>Supprimer l'utilisateur <%= "#{@user.full_name} ?" %></h3>
+  </div>
+<div class="modal-body">
+  
+   <div class="modal-footer">
+    <%= link_to "Oui, Supprimer l'utilisateur", user_path(@user), method: :delete, remote: true, class: "btn btn-danger" %>
+    <%= link_to "Non", "#", class: "btn btn-default", data: { dismiss: "modal" } %>
+  </div>
+</div>

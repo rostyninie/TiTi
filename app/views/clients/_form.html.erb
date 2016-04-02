@@ -1,0 +1,46 @@
+ <div class="modal-body">
+<%= form_for @client , remote: true, html: {style: "display: inline;"} do |f| %>
+ <ul class="errors">
+            
+          </ul>
+   
+   <% if @client.code.nil?%>
+ <% if Client.count==0 %>
+        <% code="CL0000001" %>
+      <% else %>
+        <% old_code=Client.last.code[-7..-1] %>
+        <% code="CL"+old_code.next %>
+      <% end %>
+      <div class="field">
+       
+        <%= f.text_field :code ,class: "input-large", value: code, readOnly: true %>
+      </div>
+    <% end %>
+ 
+  <div class="field">
+<%= f.text_field :nom,class: "input-xlarge", "placeholder"=>"Nom Client", "required"=>true %>
+  </div>
+  <div class="field">
+   <%= f.text_field :phone,class: "input-xlarge", "placeholder"=>"Tel Client", "required"=>true %>
+  </div>
+  <div class="field">
+   <%= f.text_field :address,class: "input-xlarge", "placeholder"=>"Adresse Client", "required"=>true %>
+  </div>
+  <div class="field">
+   <%= f.text_field :ville,class: "input-xlarge", "placeholder"=>"Ville Client", "required"=>true %>
+  </div>
+  <div class="field">
+    <%= f.select :pay_id,Pay.all.map{|p| [p.nom,p.id]},selected: "Cameroon" %>
+  </div>
+ <% if !@client.code.nil?%>
+    <div class="field">
+        <%= f.label :active %>
+        <%= f.check_box :is_active,value: @client.is_active %>
+      </div>
+    <% end %>
+      <div class="modal-footer">
+        <%= f.submit  class: "btn btn-large btn-primary" %>
+         <%= link_to "Cancel", "#", class: "btn", data: {dismiss: "modal"} %>
+      </div>
+    <% end %>
+</div>

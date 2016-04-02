@@ -1,0 +1,213 @@
+
+<div class="row-fluid">
+  <% unless flash[:notice].nil? %>
+    <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <%= flash[:notice] %></div>
+    <script>$.jGrowl("<%= flash[:notice] %>", {header: 'Important'});</script>
+  <% end %>
+
+    
+    <div class="block">
+    <div class="navbar navbar-inner block-header">
+      <div class="muted pull-left">Effectuer un Achat</div>
+    </div>
+    <div class="block-content collapse in">
+      <div class="span12" id="form_achat">
+        <%= render "form"  %>
+        </div>
+      </div>
+      </div>
+    
+  <div class="block">
+    <div class="navbar navbar-inner block-header">
+      <div class="muted pull-left">Liste des achats</div>
+    </div>
+    <div class="block-content collapse in">
+      <div class="span12">
+        <div class="table-toolbar">
+          
+          <div class="btn-group">
+            <input type="text" class="input-xlarge datepicker1" id="date_debut" value="<%= Date.today.to_s %>" title="date debut" readonly="true" onblur="recherche_achat();" >          
+          </div>
+          <div class="btn-group">
+            
+            <input type="text" class="input-xlarge datepicker1" id="date_fin" value="<%= Date.today.to_s %>" title="date fin" readonly="true" onclick="recherche_achat();" >
+                                           
+          </div>
+          <div class="btn-group">
+            <%= select :produit,:id,Produit.find_all_by_is_active(true).map{|v| [v.nom.force_encoding("UTF-8"),v.id]} ,{:prompt =>"#{"produits"}"},:id =>"produit_id", onchange: "recherche_achat();" %>
+
+          </div>
+          <div class="btn-group">
+            <%= select :fournisseur_id,:id,Fournisseur.all.map{|v| [v.nom.force_encoding("UTF-8"),v.id]} ,{:prompt =>"#{"fournisseurs"}"},:id =>"fournisseur_id" , onchange: "recherche_achat();"%>
+
+          </div>
+          <div class="btn-group pull-right">
+            <button data-toggle="dropdown" class="btn dropdown-toggle">Outils <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href="#">Print</a></li>
+              <li><a href="#">Save as PDF</a></li>
+              <li><a href="#">Export to Excel</a></li>
+            </ul>
+          </div>
+        </div>
+      
+        <div style=" height: 500px; width: 100%; overflow-x: scroll;overflow-y: scroll; " >
+          
+            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example2">
+              <thead>
+                <tr>
+                  <th>N°</th>
+                  <th>Code</th>
+                  <th>Prix achat unitaire</th>
+                  <th>Marge brut</th>
+                  <th>Prix HT</th>
+                   <th>Prix Vente</th>
+                  <th>Quantite</th>
+                  <th>Date achat</th>
+                  <th>Utilisateur</th>
+                  <th>Produit</th>
+                  <th>Fournisseur</th>
+                  <th>Etat</th>
+                  <th>Total</th>
+                  <th>Modifications</th>
+                  <th>Modifier</th>
+                  <th>Supprimer</th>
+                
+                </tr>
+              </thead>
+              <tbody class="achat-index" id="result">
+                <%= render "index" %>
+              
+            
+                 </tbody>
+            </table>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- /block -->
+<div id="achat-modal" class="modal hide" style="width: 700px;"></div>
+
+
+<script type="text/javascript">
+ 
+   function seach_product() {
+
+  
+      $.ajax({
+        url: "/achats/seach_product/0",
+        type: "GET",
+        data: {type_id: $("#type_id").val()},
+        success: function(data) {
+          // append data to your page
+          $("#produits").html(data);
+        }
+      });
+
+    }
+  
+  function recherche_achat()
+  {
+    
+    document.getElementById('result').innerHTML = "<img src='/assets/roller.gif'>";
+
+
+    $.ajax({
+        url: "/achats/recherche_achat/0",
+        type: "GET",
+        data: {date_debut: $("#date_debut").val(), date_fin: $("#date_fin").val(), produit_id: $("#produit_id").val(), fournisseur_id: $("#fournisseur_id").val()},
+        success: function(data) {
+          // append data to your page
+          $("#result").html(data);
+        }
+      });
+//.<#%= "#{remote_function(:url=>{:controller=>"achats",:action=>"recherche_achat"},
+//:with=>"'date_debut='+$('date_debut').val()+'&produit_id='+$('produit_id').val()+'&date_fin='+$('date_fin').val()+'&fournisseur_id='+$('fournisseur_id').val()",:update=>"result")}"
+//%>
+  }
+  function test()
+  {
+
+   // document.getElementById('total').innerHTML = 'total = ' + $('#date_debut').val();
+    // alert($('total').value);
+     var pu = parseFloat($('#prix_u').val());
+    var pht =parseFloat($('#prix_ht').val());
+    var tva = $('#tva').val();
+    var marge = parseFloat($('#marge').val());
+    var quant = parseFloat($('#quant').val());
+    var ptva = 0;
+     ptva = pu/tva;
+    
+    if (isNaN(marge)) {
+      document.getElementById('pv').innerHTML = 'svp la marge brut doit être un nombre.';
+    }
+    else
+    {
+      document.getElementById('pv').innerHTML = '';
+      var not= (pht+ptva+(marge/quant));
+      //$('#prix_v').val(pu+" "+marge+" "+ptva+"  "+pht);
+      $('#prix_v').val(parseFloat(not));
+    }
+  }
+  function total()
+  {
+    var pu = $('#prix_u').val();
+    var quant = $('#quant').val();
+    if (isNaN(pu) || isNaN(quant)) {
+      // $('submi').prop("readonly","true");
+      document.getElementById('submi').disabled = true;
+      document.getElementById('total').innerHTML = 'svp le prix unitaire d\'achat et la quantité doivent êtres des nombres.';
+
+    }
+    else
+    {
+      document.getElementById('submi').disabled = false;
+      document.getElementById('total').innerHTML = 'total = ' + (pu * quant);
+       
+
+    }
+
+    // alert($('total').value);
+  }
+
+  function prix_hort_taxe()
+  {
+    var pu = $('#prix_u').val();
+    var tva = $('#tva').val();
+    var ptva = 0;
+    ptva = pu/tva;
+    $('#prix_ht').val(pu - ptva);
+    // document.getElementById('prix_ht').innerHTML = ' ' + (pu - ptva);
+    // alert($('total').value);
+  }
+
+
+  function prix_vente()
+  {
+     var pu = $('#prix_u').val();
+    var pht = $('#prix_ht').val();
+    var tva = $('#tva').val();
+    var ptva = 0;
+     ptva = pu/tva;
+    var marge = $('#marge').val();
+    if (isNaN(marge)) {
+      document.getElementById('pv').innerHTML = 'svp la marge brut doit être un nombre.';
+    }
+    else
+    {
+      document.getElementById('pv').innerHTML = '';
+      $('#prix_v').val(ptva+pht+(marge/$("#quant").val()));
+    }
+
+    // alert($('total').value);
+  }
+ 
+ 
+
+  
+</script>

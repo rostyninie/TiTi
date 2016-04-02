@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  categorie_id: 1
+  droit_id: 1
+
+two:
+  categorie_id: 1
+  droit_id: 1

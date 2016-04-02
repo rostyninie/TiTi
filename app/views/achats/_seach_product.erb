@@ -1,0 +1,3 @@
+<%= select :achat,:produit_id,
+       @produits.map {|b| [b.nom, b.id]},
+        {:prompt => "#{"selectionner le produit"}"} %>

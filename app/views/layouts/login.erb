@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin Login</title>
+    <!-- Bootstrap -->
+   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+
+  <%= csrf_meta_tags %>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body id="login" style="background-image:  url(/assets/17617-NRRXSU.jpg); background-size: 900px;">
+     <div class="row-fluid">
+       <div class="span2 offset5" style="padding-bottom: 10px;">
+          <!--<span class="text-center" style="color: #ff9900; font-size: 75px;">TiTi</span>-->
+          <img src="/assets/logo_titi1.png">
+        </div>
+        </div>
+    <div class="container">
+     
+      <%= yield %>
+
+    </div> <!-- /container -->
+    <div id="user-modal" class="modal hide" style="width: 400px;">
+  
+</div>
+   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+
+
+  </body>
+</html>

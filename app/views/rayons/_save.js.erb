@@ -1,0 +1,10 @@
+$("ul.errors").html("")
+<% if @rayon.errors.any? %>
+  <% @rayon.errors.full_messages.each do |message| %>
+    $("ul.errors").append($("<li />").html("<%= message.html_safe %>"))
+  <% end %>
+<% else %>
+  $(".rayon-index").html("<%= escape_javascript(render(:partial=>'index') ) %>")
+  $("#rayon-modal").modal("hide")
+  $.jGrowl("<%= flash[:notice] %>", {header: ''})
+<% end %>

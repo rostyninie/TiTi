@@ -1,0 +1,140 @@
+<div class="row-fluid">
+
+  <% unless flash[:notice].nil? %>
+    <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <%= flash[:notice] %></div>
+    <script>$.jGrowl("<%= flash[:notice] %>", {header: 'Important'});</script>
+  <% end %>
+
+  <div class="block">
+    <div class="navbar navbar-inner block-header">
+      <div class="muted pull-left">Produits</div>
+    </div>
+    <div class="block-content collapse in">
+      <div class="span12">
+        <div class="table-toolbar">
+          <div class="btn-group">
+            <%= link_to "Nouveau",new_produit_path, remote: true, class: "btn btn-success" %>
+              <!-- <#%= link_to "Nouveau","#",remote: true,  class: "btn btn-success",onclick: '$("#droit-modal").modal("show");' %>-->
+            </div>
+            <div class="btn-group">
+              <%= text_field_tag :nom,"", id: "nom", placeholder: "nom",onkeyup: "appel();" %>
+
+            </div>
+
+            <div class="btn-group">
+              <%= select :rayon,:rayon_id,Rayon.all(conditions: {is_active: true}).map { |t| [t.nom.force_encoding("UTF-8"),t.id]  },{prompt: "Rayon"},{onchange: "appel();", id: "rayon" }%>
+            </div>
+
+            <div class="btn-group">
+              <%= select :type_produit,:type_produit_id,TypeProduit.all(conditions: {is_active: true}).map { |t| [t.nom.force_encoding("UTF-8"),t.id]  },{prompt: "Catégorie"},{onchange: "appel();", id: "type_produit" }%>
+            </div>
+
+            <div class="btn-group">
+              <%= select :rayon,:is_active,["active","desactive"].map { |t| [t,t]  },{prompt: "etat"},{onchange: "appel();", id: "etat" }%>
+            </div>
+            <div class="btn-group">
+              <!-- <#%= select :etats,:id,['true','false'].map{|v| [v,v]} ,{:prompt =>"#{"etat"}"},{:onChange =>"#{remote_function(:url=>{:controller=>"droit",:action=>"recherche_droit"},
+     :with=>"'nom='+$('nom').value+'&etat='+value+'&category_id='+$('category_id').value",:update=>"result")}",:id =>"etat"} %>-->
+
+            </div>
+
+            <div class="btn-group">
+              <!--<#%= select :categories,:id,Categorie.find_all_by_is_active(true).map{|v| [v.nom,v.id]} ,{:prompt =>"#{"selectionner la catégorie"}"},{:onChange =>"#{remote_function(:url=>{:controller=>"droit",:action=>"recherche_droit"},
+   :with=>"'nom='+$('nom').value+'&etat='+$('etat').value+'&category_id='+value",:update=>"result")}",:id =>"category_id"} %>-->
+
+            </div>
+            <div class="btn-group pull-right">
+              <button data-toggle="dropdown" class="btn dropdown-toggle">Outils <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li><a href="#">Print</a></li>
+                <li><a href="#">Save as PDF</a></li>
+                <li><a href="#">Export to Excel</a></li>
+              </ul>
+            </div>
+          </div>
+          <div style=" height: 500px; width: 100%; overflow-x: scroll;overflow-y: scroll; ">
+
+            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example2">
+              <thead>
+                <tr>
+                  <th>N°</th>
+                  <th>Code</th>
+                  <th>Nom</th>
+                  <th>Prix vente</th>
+                  <th>Quantite gros</th>
+                  <th>Prix gros</th>
+                  
+                  <th>Quantite stock</th>
+                  <th>Unite</th>
+                  <th>Type produit</th>
+                  <th>Rayon</th>
+                  <th>Is active</th>
+                  <th>seuil d'attention</th>
+                   <th>seuil de danger</th>
+                  <!-- <th>Catégorie</th>-->
+                  <th>Modifier</th>
+                  <th>Supprimer</th>
+                </tr>
+              </thead>
+              <tbody class="produit-index" id="result">
+                <%= render "index" %>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="produit-modal" class="modal hide" style="width: 400px;"></div>
+  <!--<div id="droit-modal" class="modal hide">
+    <div class="modal-header">
+      <button data-dismiss="modal" class="close" type="button">&times;</button>
+      <h3>Achat</h3>
+    </div>
+    <div class="modal-body">
+       <#%= form_for :droit, remote: true, html: {style: "display: inline;"} do |f| %>
+ 
+
+        <div class="field">
+          <#%= f.label :name %><br>
+          <#%= f.text_field :name %>
+        </div>
+        <div class="field">
+          <#%= f.label :code %><br>
+          <#%= f.text_field :code %>
+        </div>
+        <div class="field">
+          <#%= f.label :description %><br>
+          <#%= f.text_field :description %>
+        </div>
+        <div class="actions">
+          <#%= f.submit %>
+        </div>
+      <#% end %>
+      </div>
+    </div>-->
+  <script>
+    function appel()
+    {
+      document.getElementById('result').innerHTML = "<img src='/assets/roller.gif'>";
+
+      $.ajax({
+        url: "/produits/recherche_produit/0",
+        type: "GET",
+        data: {nom: $("#nom").val(), etat: $("#etat").val(), rayon: $("#rayon").val(), type_produit: $("#type_produit").val()},
+        success: function(data) {
+          // append data to your page
+          $("#result").html(data);
+        }
+      });
+
+    }
+
+
+  </script>
+
+

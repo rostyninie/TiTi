@@ -1,0 +1,11 @@
+$("ul.errors").html("")
+<% if @achat.errors.any? %>
+  <% @achat.errors.full_messages.each do |message| %>
+$("ul.errors").append($("<li />").html("<%= message.html_safe %>"))
+<% end%>
+<% else %>
+$(".achat-index").html("<%= escape_javascript(render(:partial=>'index')) %>")
+$.jGrowl("<%= flash[:notice] %>", {header: 'information'})
+$("#form_achat").html("<%= escape_javascript(render(:partial=>'form')) %>")
+
+<% end %>

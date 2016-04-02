@@ -1,0 +1,23 @@
+ 
+<div class="form-signin">
+  <%=form_for :login,:url=>{:controller=>"users",:action=>"login"},:html=> {:multipart=>true} do |c|%>
+        <h2 class="form-signin-heading">Authentification</h2>
+        
+        <%= c.text_field :email, :class=>"input-block-level", :placeholder=>"Adresse Email",required: true%>
+        <%= c.password_field :passe, :class=>"input-block-level", :placeholder=>"Mot de passe",required: true%>
+       
+        <label class="checkbox">
+          <input type="checkbox" value="true" name="login[remenber_me]"> Se rappeler de moi!!!
+        </label>
+        <button class="btn btn-large btn-primary" type="submit">Connexion</button>
+        <%end%>
+        <%=link_to "Mot de passe oublié?",{controller: "users", action: "set_new_password", id: 0},remote: true %>
+          <% unless flash[:notice].nil? %>
+    <div class="alert alert-error">
+      <button type="button" class="close" data-dismiss="alert" >&times;</button>
+      <%= flash[:notice] %></div>
+    <script>$.jGrowl("<%= flash[:notice] %>", {header: 'Important'});</script>
+  <% end %>
+      </div>
+
+ 

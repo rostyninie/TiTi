@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  compte: MyString
+  nom: MyString
+  prenom: MyString
+  tel: MyString
+  date_naissance: 2016-01-21
+  groupe_id: 1
+  passe: MyString
+  is_active: false
+  photo_content_type: MyString
+  photo_file_name: MyString
+  photo_file_size: 1
+
+two:
+  compte: MyString
+  nom: MyString
+  prenom: MyString
+  tel: MyString
+  date_naissance: 2016-01-21
+  groupe_id: 1
+  passe: MyString
+  is_active: false
+  photo_content_type: MyString
+  photo_file_name: MyString
+  photo_file_size: 1

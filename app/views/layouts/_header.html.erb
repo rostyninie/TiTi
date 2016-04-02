@@ -1,0 +1,164 @@
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="#"><%=  Option.get_config_value('name') %></a>
+      <div class="nav-collapse collapse">
+        <ul class="nav pull-right">
+          <li class="dropdown">
+            <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"> <i class="icon-user"></i><!-- <#%= "#{@current_user.nom}  #{@current_user.prenom}" %> --><i class="caret"></i>
+
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <%=link_to "Profile",edit_user_path(@current_user),remote: true,:tabindex=>"-1" %>
+
+              </li>
+              <li class="divider"></li>
+              <li>
+                <a tabindex="-1" href="/users/deconnexion/0">Déconnexion</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="nav">
+          <li class="active">
+            <a href="/users/dashboard/0">Tableau de Bord</a>
+          </li>
+          <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle">Ventes <b class="caret"></b>
+
+            </a>
+            <ul class="dropdown-menu" id="menu1">
+              <li>
+                <%= link_to "Effectuer des vente",:controller => "commandes" %> <!-- <i class="icon-arrow-right"></i>-->
+
+              </li>
+              <li>
+                <%= link_to "Liste des Commandes",:controller => "commandes",:action => "list",:id => 0 %> <!-- <i class="icon-arrow-right"></i>-->
+
+              </li>
+
+              <li>
+                <%= link_to "Statistiques",:controller => "factures" %> 
+              </li>
+
+
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle">Produits <b class="caret"></b>
+
+            </a>
+            <ul class="dropdown-menu" id="menu1">
+              <li>
+                <%= link_to "Type Produit",:controller => "type_produits" %> <!-- <i class="icon-arrow-right"></i>-->
+
+              </li>
+
+              <li>
+                <%= link_to "Produits",:controller => "produits" %> 
+              </li>
+              <li>
+                <%= link_to "Rayons",:controller => "rayons" %> 
+              </li>
+              <li>
+                <%= link_to "Achats",:controller => "achats" %> 
+              </li>
+
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Ressource humaines <i class="caret"></i>
+
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <%= link_to "Fournisseurs",:controller => "fournisseurs" %> 
+              </li>
+              <li>
+                <%= link_to "Clients",:controller => "clients" %>
+              </li> 
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Utilisateurs <i class="caret"></i>
+
+            </a>
+            <ul class="dropdown-menu">
+             
+
+              <li>
+                <%= link_to "liste des utilisateurs",:controller => "users" %>
+              </li>
+              <li class="divider"></li>
+              <li>
+                <%= link_to "Groupes",:controller => "groupes" %>
+              </li>
+              <li>
+                <%= link_to "Catégorie droits",:controller => "categories" %> 
+              </li>
+
+              <li>
+                <%= link_to "Droits",:controller => "droits" %> 
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Modifier les paramètres <i class="caret"></i>
+
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <%= link_to "configurations",controller: "options",action: "new" %>
+              </li>
+
+
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </div>
+</div>
+<div id="men"> 
+<%= render 'layouts/menu' %>
+  </div>
+<div class="container-fluid">
+  <div class="row-fluid">
+
+
+    <!--/span-->
+    <div class="span9" id="content">
+      
+      <div class="row-fluid">
+
+        <div class="navbar">
+          <div style="float: right;" id="back">
+          <%= link_to_function image_tag("/assets/arrows_black_32.png"), "history.back()",title: 'retour' %>
+        </div>
+          <div class="navbar-inner">
+            <ul class="breadcrumb">
+              <i class="icon-chevron-left hide-sidebar"><a href='#' title="Hide Sidebar" rel='tooltip'>&nbsp;</a></i>
+              <i class="icon-chevron-right show-sidebar" style="display:none;"><a href='#' title="Show Sidebar" rel='tooltip'>&nbsp;</a></i>
+              <li>
+                <a href="/users/dashboard/0">Dashboard</a> <span class="divider">/</span>	
+              </li>
+               <li>
+                <a href="/<%= controller_name.to_s %>"> <%= controller_name.to_s %></a> <span class="divider">/</span>	
+              </li>
+              <li>
+               <%= action_name.to_s %>
+              </li>
+             
+            </ul>
+          </div>
+        </div>
+        
+      </div>
+     
+     

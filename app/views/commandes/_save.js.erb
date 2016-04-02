@@ -1,0 +1,9 @@
+
+$("#form").html("<%= escape_javascript(render(:partial=>'form')) %>")
+$("#result").html("<%= escape_javascript(render(:partial=>'index')) %>")
+$.jGrowl("<%= flash[:notice] %>", {header: 'information'})
+
+
+
+
+
