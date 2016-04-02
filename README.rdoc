@@ -5,21 +5,43 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version
+* Ruby version : 2.2.3
 
-* System dependencies
+* Rails version : 4.0.0
+
+* System dependencies 
 
 * Configuration
 
-* Database creation
+* Database creation 
+-----------------------------------------------------------------------------
+Ouvrir la console à partir de projet et exécuter la commande : rake db:create
+-----------------------------------------------------------------------------
 
 * Database initialization
+-----------------------------------------------------------------------------
+Ouvrir la console à partir de projet et exécuter la commande : 
+-> rake db:migrate
+-> rake db:seed
+-----------------------------------------------------------------------------
 
 * How to run the test suite
 
 * Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
+* Deployment instructions :
+
+1- installer ruby version 2.2.3
+2- installer mysql
+3- installer rails 4.0.0
+4- installer le gem bundler
+5- Ouvrir la console à partir de projet et exécuter la commande : 
+-> bundle install
+-> rake db:migrate
+-> rake db:seed
+-> lancer le serveur : rails s
+6- ouvrir le navigateur et entrer dans la barre d'adresse : localhost:3000
+
 
 * ...
 
