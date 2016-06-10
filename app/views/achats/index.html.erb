@@ -65,6 +65,7 @@
                   <th>Prix HT</th>
                    <th>Prix Vente</th>
                   <th>Quantite</th>
+                   <th>Qt Stock avant l'achat</th>
                   <th>Date achat</th>
                   <th>Utilisateur</th>
                   <th>Produit</th>
@@ -73,7 +74,7 @@
                   <th>Total</th>
                   <th>Modifications</th>
                   <th>Modifier</th>
-                  <th>Supprimer</th>
+                  
                 
                 </tr>
               </thead>
@@ -100,8 +101,8 @@
 
   
       $.ajax({
-        url: "/achats/seach_product/0",
-        type: "GET",
+        url: "/achats/seach_product",
+        type: "POST",
         data: {type_id: $("#type_id").val()},
         success: function(data) {
           // append data to your page

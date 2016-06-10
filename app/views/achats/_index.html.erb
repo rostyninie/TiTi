@@ -10,6 +10,7 @@
     <td><%= achat.prix_ht %></td>
     <td><%= achat.prix_vente %></td>
     <td><%= achat.quantite %></td>
+    <td><%= achat.quantite_stock_av %></td>
     <td><%= achat.date_achat %></td>
     <td><%= achat.user.nom.force_encoding("UTF-8") %></td>
     <td><%=h achat.produit.nom.force_encoding("UTF-8") %></td>
@@ -25,7 +26,7 @@
     <% end %>
      <td class="center"><%=link_to "Modifier",edit_achat_path(achat),remote: true,class: "btn btn-success" %></td>
 
-      <td class="center"><%=link_to "Supprimer",{controller: 'achats',:action=>'delete',:id=>achat.id},remote: true,class: "btn btn-danger" %></td>
+      <!--<td class="center"><#%=link_to "Supprimer",{controller: 'achats',:action=>'delete',:id=>achat.id},remote: true,class: "btn btn-danger" %></td>-->
       </tr>
     <% end %>
     <tr class="odd gradeX" >

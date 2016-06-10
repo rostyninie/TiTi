@@ -1,6 +1,7 @@
 class GroupesController < ApplicationController
   before_action :set_groupe, only: [:show, :edit, :update, :destroy]
    before_filter :login_required
+   filter_access_to :all
   # GET /groupes
   # GET /groupes.json
   def index
@@ -41,13 +42,20 @@ class GroupesController < ApplicationController
  def delete
     @groupe = Groupe.find(params[:id])
     @groupe.nom=@groupe.nom.force_encoding("UTF-8")
+    @groupe.description=@groupe.description.force_encoding("UTF-8")
  end
   # DELETE /groupes/1
   # DELETE /groupes/1.json
   def destroy
     @groupes = Groupe.all
-    @groupe.destroy
-    flash[:notice]="Groupe Supprimé avec succès!!!"
+    if GroupeCategorie.find_all_by_groupe_id(@groupe.id).count==0
+      @groupe.destroy
+      flash[:notice]="Groupe Supprimé avec succès!!!"
+    else
+      flash[:notice]="Veillez d'abord retirer toute les catégories de droit affectés à ce groupe avant de le supprimer!!!"
+    end
+    
+    
   end
 
   def view
@@ -128,6 +136,7 @@ class GroupesController < ApplicationController
     def set_groupe
       @groupe = Groupe.find(params[:id])
       @groupe.nom=@groupe.nom.force_encoding("UTF-8")
+      @groupe.description=@groupe.description.force_encoding("UTF-8")
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

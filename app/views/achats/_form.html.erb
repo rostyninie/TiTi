@@ -81,7 +81,9 @@
       <span id="total" style="color: #05B2D2"></span><br/>
       <span id="pv" style="color: #05B2D2"></span>
       <br/>
-      <%= text_field_tag  :prix_vente,"",:id=>"prix_v",:class=>"input-xlarge",:placeholder=>"prix vente" ,:required => true,title: "Prix de vente"%> 
+      <%= c.text_field  :prix_vente,:id=>"prix_v",:class=>"input-xlarge",:placeholder=>"prix vente" ,:required => true,title: "Prix de vente"%> 
+      
+       <%=  text_field_tag  :raison,"",:id=>"raison",:class=>"input-xlarge",:placeholder=>"Raison de la modification" ,:required => true,title: "Raison de la modification"%> 
 
       
       <label for="date_naissance">  Date achat  </label>  <input type="text" class="input-xlarge datepicker" name="achat[date_achat]" id="date_achat" value="<%= @achat.date_achat.to_s %>" title="date achat" readonly="true" onfocus="set_date_picker();"> 

@@ -100,8 +100,8 @@
   document.getElementById('result').innerHTML = "<img src='/assets/roller.gif'>";
 
       $.ajax({
-        url: "/users/user_by_groupe/0",
-        type: "GET",
+        url: "/users/user_by_groupe",
+        type: "POST",
         data: {groupe_id: value},
         success: function(data) {
           // append data to your page

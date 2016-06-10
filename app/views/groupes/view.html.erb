@@ -18,7 +18,7 @@
     </div>
     <div class="block-content collapse in">
       <div class="span12">
-        <%= form_for(:groupes, :url => {:controller=> 'groupes',:action=> 'view'}, :html=> {:multipart=>true}) do |b| %>
+        <%= form_for(:groupes, :url => {:controller=> 'groupes',:action=> 'view',:id=> params[:id]}, :html=> {:multipart=>true}) do |b| %>
           <fieldset>
             <legend>Catégories</legend>
             
@@ -26,7 +26,7 @@
                <% @all_categories.each do |c| %>
                
                <tr>
-                 <td><label for="<% c.nom.to_s  %>"> <b><span class="text-info" ><%= c.nom+"    "  %> </span></b><%="     "+c.description  %></label></td><td><%= check_box_tag "groupes[categorie_ids][]",c.id%></td></tr>
+                 <td><label for="<% c.nom.force_encoding("UTF-8")  %>"> <b><span class="text-info" ><%= c.nom.force_encoding("UTF-8")+"    "  %> </span></b><%="     "+c.description.force_encoding("UTF-8")  %></label></td><td><%= check_box_tag "groupes[categorie_ids][]",c.id%></td></tr>
            
             <% end  %>
            <tr> <td><%= b.submit"", :value => "#{"Ajouter des droits au groupe"}", :class => "btn btn-large btn-primary" %></td><tr>
@@ -39,10 +39,10 @@
                <% @categorie1=Category.find_by_id_and_is_active(c.category_id,true) %>
             <% unless @categorie1.nil? %>
             <tr>
-             <td><%=@categorie1.nom%></td>
-                <td><%=@categorie1.description%></td>
+             <td><%=@categorie1.nom.force_encoding("UTF-8")%></td>
+                <td><%=@categorie1.description.force_encoding("UTF-8")%></td>
                 
-                 <td class="center"><%=link_to "Supprimer",{:controller=>"groupes",:action=>"delete_categorie",:id=>c.id},:class=>"btn btn-danger" ,:confirm=>"voulez vous vraiment supprimer la catégorie "+@categorie1.nom+" ?"%></td> 
+                 <td class="center"><%=link_to "Supprimer",{:controller=>"groupes",:action=>"delete_categorie",:id=>c.id},:class=>"btn btn-danger" ,:confirm=>"voulez vous vraiment supprimer la catégorie "+@categorie1.nom.force_encoding("UTF-8")+" ?"%></td> 
             </tr>
              <% end  %>
               <% end  %>

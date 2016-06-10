@@ -1,6 +1,8 @@
 class DroitsController < ApplicationController
-  before_action :set_droit, only: [:show, :edit, :update, :destroy]
+  
     before_filter :login_required
+    filter_access_to :all
+    before_action :set_droit, only: [:show, :edit, :update, :destroy]
   # GET /droits
   # GET /droits.json
   def index

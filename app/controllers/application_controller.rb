@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
    before_filter :message_user
-
+   before_filter { |c| Authorization.current_user = c.current_user }
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
   
@@ -35,8 +35,15 @@ class ApplicationController < ActionController::Base
   end
   def is_loggedin
     if session[:user_id]
-      redirect_to :controller => 'users', :action => 'dashboard', :id => 0
+      redirect_to :controller => 'users', :action => 'dashboard'
     end
   end
   
+  
+protected
+
+def permission_denied
+  flash[:notice] = "Désolé, Vous n'êtes pas authorisé à accéder à cette page."
+  redirect_to root_url
+end
 end

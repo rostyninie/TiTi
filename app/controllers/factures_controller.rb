@@ -1,4 +1,6 @@
 class FacturesController < ApplicationController
+  before_filter :login_required
+  filter_resource_access
   before_action :set_facture, only: [:show, :edit, :update, :destroy]
 
   # GET /factures

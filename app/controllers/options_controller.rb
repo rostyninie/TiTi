@@ -1,5 +1,6 @@
 class OptionsController < ApplicationController
   before_filter :login_required
+  filter_access_to :all
   before_action :set_option, only: [:show, :edit, :update, :destroy]
 
   # GET /options

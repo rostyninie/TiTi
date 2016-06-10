@@ -127,7 +127,7 @@ class UsersController < ApplicationController
     @user=User.find(cookies[:use_id].to_i)
      session[:user_id]=@user.id
         flash[:notice]="Bienvenue M "+@user.prenom.force_encoding("UTF-8")
-        redirect_to session[:back_url] || {:controller => 'users', :action => 'dashboard', :id => 0}
+        redirect_to session[:back_url] || {:controller => 'users', :action => 'dashboard'}
   end
   if request.post?
     @email=params[:login][:email]
@@ -149,7 +149,7 @@ class UsersController < ApplicationController
         redirect_to  :controller => 'users', :action => 'first_login_change_password', :id => @user.id
         else
            flash[:notice]="Bienvenue M "+@user.full_name.force_encoding("UTF-8")
-        redirect_to session[:back_url] || {:controller => 'users', :action => 'dashboard', :id => 0}
+        redirect_to session[:back_url] || {:controller => 'users', :action => 'dashboard'}
         end
        
       else
@@ -187,7 +187,7 @@ def first_login_change_password
     @user.update_attribute(:passe,passe)
     @user.update_attribute(:first_login,false)
      flash[:notice]="Bienvenue M "+@user.full_name
-     redirect_to :controller => 'users', :action => 'dashboard', :id => 0
+     redirect_to :controller => 'users', :action => 'dashboard'
   end
 end
 def set_new_password

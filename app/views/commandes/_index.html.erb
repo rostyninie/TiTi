@@ -89,8 +89,8 @@
 
 
     $.ajax({
-        url: "/commandes/recherche_commande/0",
-        type: "GET",
+        url: "/commandes/recherche_commande",
+        type: "POST",
         data: {date_debut: $("#date_debut").val(), date_fin: $("#date_fin").val(), nom: $("#nom").val(), etat: $("#etat").val()},
         success: function(data) {
           // append data to your page

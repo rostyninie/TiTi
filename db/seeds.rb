@@ -209,8 +209,43 @@
   Pay.find_or_create_by_nom(param)
 end
 
+
+[["admin","possède tous les droits sur le système"],
+  ["vente_controle","controlle total sur les commandes"],
+  ["vente_view","voir les commandes et imprimer les factures"],
+  ["achat_controle","controlle total sur les aprovisionement"],
+  ["achat_view","voir les achat et imprimer les etat"],
+  ["categories_controle","controlle total sur les categories de droit"],
+  ["categories_view","voir les différents catégories de droit"],
+  ["clients_controle","controlle total sur les client"],
+  ["clients_view","voir les cleint"],
+  ["options_controle","controlle total sur les configurations"],
+  ["droits_controle","controlle total sur les droits"],
+  ["factures_controle","controlle total sur les facture"],
+  ["fournisseurs_controle","controlle total sur les fournisseurs"],
+  ["fournisseurs_view","controlle total sur les aprovisionement"],
+  ["groupes_controle","controlle total sur les groupes"],
+  ["groupe_view","voir les groupe"],
+  ["produits_controle","controlle total sur les produits"],
+  ["produits_view","voir les produits"],
+  ["rayons_controle","controlle total sur les rayons"],
+  ["rayons_view","voir les rayons"],
+  ["type_produits_controle","controlle total sur les catégories de produits"],
+  ["type_produits_view","voir les categories de produits"]].each do |param|
+  if Category.first.nil?
+    Category.find_or_create_by_code_and_nom_and_description("CG0000001",param[0],param[1]) 
+  else
+    old_code = Category.last.code[-7..-1]
+    code="CG"+old_code.next
+    Category.find_or_create_by_code_and_nom_and_description(code,param[0],param[1]) 
+  end
+  
+end
+
 Groupe.create(:nom=>"admin",:code=>"GR0000001",:description=>"groupe des administrateur",:is_active=>1)
 
 User.create(:compte=>"admin@admin.cm",:nom=>"admin",:prenom=>"admin",:groupe_id=>Groupe.first.id,:passe=>Digest::SHA1.hexdigest("admin"),:is_admin=>1)
 
 Client.create(:nom=>"autre",:code=>"CL0000001",:address=>"autre",:phone=>"655206994",:pay_id=>1,:ville=>"Douala")
+
+GroupeCategorie.create(:groupe_id=>Groupe.first.id,:category_id=>Category.first.id)

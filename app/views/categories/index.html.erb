@@ -98,8 +98,8 @@
   document.getElementById('result').innerHTML="<img src='/assets/roller.gif'>";
  
   $.ajax({
-  url: "/categories/recherche_category/0",
-  type: "GET",
+  url: "/categories/recherche_category",
+  type: "POST",
   data: {nom: $("#nom").val(),etat: $("#etat").val()},
   success: function (data) { 
   // append data to your page

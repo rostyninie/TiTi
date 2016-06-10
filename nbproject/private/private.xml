@@ -2,20 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/F:/Programmation_Ruby/Projet_ruby/TiTiNew/app/controllers/users_controller.rb</file>
-            <file>file:/F:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/users/dashboard.html.erb</file>
-            <file>file:/F:/Programmation_Ruby/Projet_ruby/TiTiNew/db/seeds.rb</file>
-            <file>file:/F:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/layouts/_header.html.erb</file>
-            <file>file:/F:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/achats/index.html.erb</file>
-            <file>file:/F:/Programmation_Ruby/Projet_ruby/TiTiNew/config/routes.rb</file>
-            <file>file:/F:/Programmation_Ruby/Projet_ruby/TiTiNew/config/database.yml</file>
-            <file>file:/F:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/layouts/_menu.erb</file>
-            <file>file:/F:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/commandes/_index.html.erb</file>
-            <file>file:/F:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/commandes/list.html.erb</file>
-            <file>file:/F:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/layouts/application.html.erb</file>
-            <file>file:/F:/Programmation_Ruby/Projet_ruby/TiTiNew/app/controllers/application_controller.rb</file>
-            <file>file:/F:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/layouts/_footer.html.erb</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

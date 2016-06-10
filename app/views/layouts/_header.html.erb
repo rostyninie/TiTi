@@ -26,22 +26,26 @@
         </ul>
         <ul class="nav">
           <li class="active">
-            <a href="/users/dashboard/0">Tableau de Bord</a>
+            <%=link_to "Tableau de Bord",dashboard_users_path %>
           </li>
+          <%if permitted_to? :list, :commandes%>
           <li class="dropdown">
             <a href="#" data-toggle="dropdown" class="dropdown-toggle">Ventes <b class="caret"></b>
 
             </a>
             <ul class="dropdown-menu" id="menu1">
+              <%if permitted_to? :create, :commandes%>
               <li>
                 <%= link_to "Effectuer des vente",:controller => "commandes" %> <!-- <i class="icon-arrow-right"></i>-->
 
               </li>
+               <%  end %>
+              <%if permitted_to? :list, :commandes%>
               <li>
-                <%= link_to "Liste des Commandes",:controller => "commandes",:action => "list",:id => 0 %> <!-- <i class="icon-arrow-right"></i>-->
+                <%= link_to "Liste des Commandes",list_commandes_path%> <!-- <i class="icon-arrow-right"></i>-->
 
               </li>
-
+              <%  end %>
               <li>
                 <%= link_to "Statistiques",:controller => "factures" %> 
               </li>
@@ -49,41 +53,55 @@
 
             </ul>
           </li>
+           <%  end %>
+           <%if permitted_to? :index, :produits%>
           <li class="dropdown">
             <a href="#" data-toggle="dropdown" class="dropdown-toggle">Produits <b class="caret"></b>
 
             </a>
             <ul class="dropdown-menu" id="menu1">
+               <%if permitted_to? :index, :type_produits%>
               <li>
                 <%= link_to "Type Produit",:controller => "type_produits" %> <!-- <i class="icon-arrow-right"></i>-->
 
               </li>
-
+              <%  end %>
               <li>
                 <%= link_to "Produits",:controller => "produits" %> 
               </li>
+              <%if permitted_to? :index, :rayons%>
               <li>
                 <%= link_to "Rayons",:controller => "rayons" %> 
               </li>
+              <%  end %>
+              <%if permitted_to? :index, :rayons%>
               <li>
                 <%= link_to "Achats",:controller => "achats" %> 
               </li>
-
+              <%  end %>
             </ul>
           </li>
+          <%  end %>
+          <%if (permitted_to? :index, :clients) || (permitted_to? :index, :fournisseurs) %>
           <li class="dropdown">
             <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Ressource humaines <i class="caret"></i>
 
             </a>
             <ul class="dropdown-menu">
+               <%if permitted_to? :index, :fournisseurs %>
               <li>
                 <%= link_to "Fournisseurs",:controller => "fournisseurs" %> 
               </li>
+              <%  end %>
+              <%if permitted_to? :index, :clients %>
               <li>
                 <%= link_to "Clients",:controller => "clients" %>
               </li> 
+              <%  end %>
             </ul>
           </li>
+           <%  end %>
+          <%if permitted_to? :index, :users %>
           <li class="dropdown">
             <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Utilisateurs <i class="caret"></i>
 
@@ -95,18 +113,25 @@
                 <%= link_to "liste des utilisateurs",:controller => "users" %>
               </li>
               <li class="divider"></li>
+              <%if permitted_to? :index, :groupes %>
               <li>
                 <%= link_to "Groupes",:controller => "groupes" %>
               </li>
+              <%  end %>
+              <%if permitted_to? :index, :categories %>
               <li>
                 <%= link_to "Catégorie droits",:controller => "categories" %> 
               </li>
-
+              <%  end %>
+              <%if permitted_to? :index, :droits %>
               <li>
                 <%= link_to "Droits",:controller => "droits" %> 
               </li>
+              <%  end %>
             </ul>
           </li>
+          <%  end %>
+          <%if permitted_to? :new, :options %>
           <li class="dropdown">
             <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Modifier les paramètres <i class="caret"></i>
 
@@ -119,6 +144,7 @@
 
             </ul>
           </li>
+          <%  end %>
         </ul>
       </div>
       <!--/.nav-collapse -->
@@ -146,7 +172,7 @@
               <i class="icon-chevron-left hide-sidebar"><a href='#' title="Hide Sidebar" rel='tooltip'>&nbsp;</a></i>
               <i class="icon-chevron-right show-sidebar" style="display:none;"><a href='#' title="Show Sidebar" rel='tooltip'>&nbsp;</a></i>
               <li>
-                <a href="/users/dashboard/0">Dashboard</a> <span class="divider">/</span>	
+                <a href="/users/dashboard">Dashboard</a> <span class="divider">/</span>	
               </li>
                <li>
                 <a href="/<%= controller_name.to_s %>"> <%= controller_name.to_s %></a> <span class="divider">/</span>	

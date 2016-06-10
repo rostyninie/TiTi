@@ -1,5 +1,6 @@
 class RayonsController < ApplicationController
   before_filter :login_required
+  filter_access_to :all
   before_action :set_rayon, only: [:show, :edit, :update, :destroy,:delete]
 
   # GET /rayons

@@ -48,4 +48,15 @@ class User < ActiveRecord::Base
   def full_name
     "#{nom} #{prenom}"
   end
+  
+  def role_symbols
+ gc=GroupeCategorie.find_all_by_groupe_id(groupe.id)
+ categos=[]
+ gc.each do |gct|
+  categos.push(gct.category)
+ end
+    categos.map do |role|
+    role.nom.underscore.to_sym
+  end
+end
 end

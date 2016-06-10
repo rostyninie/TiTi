@@ -123,8 +123,8 @@
       document.getElementById('result').innerHTML = "<img src='/assets/roller.gif'>";
 
       $.ajax({
-        url: "/produits/recherche_produit/0",
-        type: "GET",
+        url: "/produits/recherche_produit",
+        type: "POST",
         data: {nom: $("#nom").val(), etat: $("#etat").val(), rayon: $("#rayon").val(), type_produit: $("#type_produit").val()},
         success: function(data) {
           // append data to your page

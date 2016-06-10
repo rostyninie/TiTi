@@ -1,6 +1,6 @@
 platform=RUBY_PLATFORM
 path=""
-if platform.include?("i386-mingw32")
+if platform.include?("i386-mingw32") || platform.include?("x64-mingw32") 
   path= "#{Rails.root}/pdf/wkhtmltopdf.exe"
 elsif platform.include?("x86_64-linux")
   path= "usr/local/bin/wkhtmltopdf"

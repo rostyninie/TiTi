@@ -111,8 +111,8 @@
   document.getElementById('result').innerHTML="<img src='/assets/roller.gif'>";
  
   $.ajax({
-  url: "/droits/recherche_droit/0",
-  type: "GET",
+  url: "/droits/recherche_droit",
+  type: "POST",
   data: {nom: $("#nom").val(),etat: $("#etat").val(),category: $("#category_id").val()},
   success: function (data) { 
   // append data to your page

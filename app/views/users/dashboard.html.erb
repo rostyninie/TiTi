@@ -5,132 +5,152 @@
   <script>$.jGrowl("<%= flash[:notice] %>", {header: 'Important'});</script>
 <% end %> 
 
-  <div class="row-fluid" style="background-color: #ffffff; padding: 5px; border-radius: 10px 10px 10px 10px; box-shadow: 3px 3px 5px 3px #888888; background: url(/assets/pattern8.png);">
+<div class="row-fluid" style="background-color: #ffffff; padding: 5px; border-radius: 10px 10px 10px 10px; box-shadow: 3px 3px 5px 3px #888888; background: url(/assets/pattern8.png);">
 
- <ul>
-  <div class="span3" > <ol class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle" style="display: inline;"> <%=image_tag("/assets/menepho.png")%></a>
-   <ul class="dropdown-menu" id="me" style="">
+  <ul>
+    <%if permitted_to? :index, :produits %>
+      <div class="span3" > <ol class="dropdown">
+          <a href="#" data-toggle="dropdown" class="dropdown-toggle" style="display: inline;"> <%=image_tag("/assets/menepho.png")%></a>
+          <ul class="dropdown-menu" id="me" style="">
+            <%if permitted_to? :index, :type_produits %>
               <li>
                 <%= link_to "Type Produit",:controller => "type_produits" %> <!-- <i class="icon-arrow-right"></i>-->
 
               </li>
+            <%end %>
+            <li>
+              <%= link_to "Produits",:controller => "produits" %> 
+            </li>
 
-              <li>
-                <%= link_to "Produits",:controller => "produits" %> 
-              </li>
+            <%if permitted_to? :index, :rayons %>
               <li>
                 <%= link_to "Rayons",:controller => "rayons" %> 
               </li>
+            <%end %>
+            <%if permitted_to? :index, :achats %>
               <li>
                 <%= link_to "Achats",:controller => "achats" %> 
               </li>
+            <%end %>
 
-
-            </ul>
-          </ol>  
-  </div>
-
-
- <div class="span3" > <ol class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle" style="display: inline;"><%=image_tag("/assets/vente_a_o.png")%></a>
- <ul class="dropdown-menu" id="me" style="">
+          </ul>
+        </ol>  
+      </div>
+    <%end %>
+    <%if permitted_to? :list, :commandes %>
+      <div class="span3" > <ol class="dropdown">
+          <a href="#" data-toggle="dropdown" class="dropdown-toggle" style="display: inline;"><%=image_tag("/assets/vente_a_o.png")%></a>
+          <ul class="dropdown-menu" id="me" style="">
+            <%if permitted_to? :index, :commandes %>
               <li>
                 <%= link_to "Effectuer des vente",:controller => "commandes" %> <!-- <i class="icon-arrow-right"></i>-->
 
               </li>
+            <%end %>  
+
+            <li>
+              <%= link_to "Liste des Commandes",list_commandes_path %> <!-- <i class="icon-arrow-right"></i>-->
+
+            </li>
+
+            <li>
+              <%= link_to "Statistiques",:controller => "factures" %> 
+            </li>
+
+
+          </ul>
+        </ol>    
+      </div>
+    <%end %>
+    <%if (permitted_to? :index, :clients) || (permitted_to? :index, :fournisseurs) %>
+      <div class="span3">
+        <ol class="dropdown">
+          <a href="#" data-toggle="dropdown" class="dropdown-toggle" style="display: inline;"><%=image_tag("/assets/menepho_hr_web.png")%></a>
+          <ul class="dropdown-menu" id="me" style="">
+            <%if permitted_to? :index, :fournisseurs %>
               <li>
-                <%= link_to "Liste des Commandes",:controller => "commandes",:action => "list",:id => 0 %> <!-- <i class="icon-arrow-right"></i>-->
-
-              </li>
-
-              <li>
-                <%= link_to "Statistiques",:controller => "factures" %> 
-              </li>
-
-
-            </ul>
-          </ol>    
- </div>
-  
-  <div class="span3">
-    <ol class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle" style="display: inline;"><%=image_tag("/assets/menepho_hr_web.png")%></a>
-  <ul class="dropdown-menu" id="me" style="">
-           <li>
                 <%= link_to "Fournisseurs",:controller => "fournisseurs" %> 
               </li>
+            <%end %>
+            <%if permitted_to? :index, :clients %>
               <li>
                 <%= link_to "Clients",:controller => "clients" %>
               </li> 
+            <%end %>
 
-
-            </ul>
-          </ol>
-  </div>
-
- 
-     <div class="span3" style="padding-bottom: 0px;">
-          <ol class="dropdown">
-            <a href="#" data-toggle="dropdown" class="dropdown-toggle" style="display: inline;"><%=image_tag("/assets/menepho_user_web.png")%></a>
-
-            
-            <ul class="dropdown-menu" id="me" style="">
-             <li>
-                <%= link_to "liste des utilisateurs",:controller => "users" %>
-              </li>
-              <li class="divider"></li>
-              <li>
-                <%= link_to "Groupes",:controller => "groupes" %>
-              </li>
-              <li>
-                <%= link_to "Catégorie droits",:controller => "categories" %> 
-              </li>
-
-              <li>
-                <%= link_to "Droits",:controller => "droits" %> 
-              </li>
-
-
-            </ul>
-          </ol>
-         </div>
-   
-   <div class="span3" style="padding-bottom: 0px;">
-          <ol class="dropdown">
-            <a href="#" data-toggle="dropdown" class="dropdown-toggle" style="display: inline;"><%=image_tag("/assets/menepho_configuration_web.png")%></a>
-
-            
-            <ul class="dropdown-menu" id="me" style="">
-               <li>
-                <%= link_to "configurations",controller: "options",action: "new" %>
-              </li>
-
-
-            </ul>
-          </ol>
-         </div>
-   
-   <div class="span3" style="padding-bottom: 0px;">
-          <ol class="dropdown">
-            <a href="#" data-toggle="dropdown" class="dropdown-toggle" style="display: inline;"><%=image_tag("/assets/menepho_stat_web.png")%></a>
-
-            
-            <ul class="dropdown-menu" id="me" style="">
-              <li>
-                <%= link_to "Statistiques",:controller => "commandes" %> <!-- <i class="icon-arrow-right"></i>-->
-
-              </li>
-             
-
-
-            </ul>
-          </ol>
-         </div>
-   
           </ul>
-   
-  
+        </ol>
+      </div>
+
+    <%end %>
+    <%if permitted_to? :index, :users %>
+    <div class="span3" style="padding-bottom: 0px;">
+      <ol class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle" style="display: inline;"><%=image_tag("/assets/menepho_user_web.png")%></a>
+
+
+        <ul class="dropdown-menu" id="me" style="">
+          <li>
+            <%= link_to "liste des utilisateurs",:controller => "users" %>
+          </li>
+          <li class="divider"></li>
+          <%if permitted_to? :index, :groupes %>
+          <li>
+            <%= link_to "Groupes",:controller => "groupes" %>
+          </li>
+          <%end %>
+          <%if permitted_to? :index, :categories %>
+          <li>
+            <%= link_to "Catégorie droits",:controller => "categories" %> 
+          </li>
+          <%end %>
+          <%if permitted_to? :index, :droits %>
+          <li>
+            <%= link_to "Droits",:controller => "droits" %> 
+          </li>
+          <%end %>
+
+        </ul>
+      </ol>
+    </div>
+    <%end %>
+    
+    <%if permitted_to? :new, :options %>
+    <div class="span3" style="padding-bottom: 0px;">
+      <ol class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle" style="display: inline;"><%=image_tag("/assets/menepho_configuration_web.png")%></a>
+
+
+        <ul class="dropdown-menu" id="me" style="">
+          <li>
+            <%= link_to "configurations",controller: "options",action: "new" %>
+          </li>
+
+
+        </ul>
+      </ol>
+    </div>
+    <%end %>
+    <div class="span3" style="padding-bottom: 0px;">
+      <ol class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle" style="display: inline;"><%=image_tag("/assets/menepho_stat_web.png")%></a>
+
+
+        <ul class="dropdown-menu" id="me" style="">
+          <li>
+            <%= link_to "Statistiques",:controller => "commandes" %> <!-- <i class="icon-arrow-right"></i>-->
+
+          </li>
+
+
+
+        </ul>
+      </ol>
+    </div>
+
+  </ul>
+
+
 
 
 </div>

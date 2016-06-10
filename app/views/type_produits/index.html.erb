@@ -104,8 +104,8 @@
       document.getElementById('result').innerHTML = "<img src='/assets/roller.gif'>";
 
       $.ajax({
-        url: "/type_produits/recherche_type_produit/0",
-        type: "GET",
+        url: "/type_produits/recherche_type_produit",
+        type: "POST",
         data: {nom: $("#nom").val(), etat: $("#etat").val()},
         success: function(data) {
           // append data to your page

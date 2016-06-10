@@ -13,6 +13,7 @@
         <th>Prix HT</th>
         <th>Prix Vente</th>
         <th>Quantite</th>
+        <th>Raison</th>
         <th>Date achat</th>
         <th>Utilisateur</th>
         <th>Produit</th>
@@ -30,6 +31,7 @@
           <td><%= achat.prix_ht %></td>
           <td><%= achat.prix_vente %></td>
           <td><%= achat.quantite %></td>
+          <td><%= achat.raison %></td>
           <td><%= achat.date_achat %></td>
           <td><%= achat.user.nom.force_encoding("UTF-8") %></td>
           <td><%=h achat.produit.nom.force_encoding("UTF-8") %></td>

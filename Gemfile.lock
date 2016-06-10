@@ -26,9 +26,6 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 0.3.37)
     arel (4.0.2)
-    aws-sdk-v1 (1.66.0)
-      json (~> 1.4)
-      nokogiri (>= 1.4.4)
     builder (3.1.4)
     climate_control (0.0.3)
       activesupport (>= 3.0)
@@ -41,6 +38,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.10.0)
+    declarative_authorization (0.5.7)
     erubis (2.7.0)
     execjs (2.6.0)
     hike (1.2.3)
@@ -57,12 +55,11 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.25.1)
     mimemagic (0.3.0)
-    mini_portile2 (2.0.0)
     minitest (4.7.5)
     multi_json (1.11.2)
-    mysql (2.9.1-x86-mingw32)
-    nokogiri (1.6.7.2-x86-mingw32)
-      mini_portile2 (~> 2.0.0.rc2)
+    mysql2 (0.3.20)
+    mysql2 (0.3.20-x64-mingw32)
+    mysql2 (0.3.20-x86-mingw32)
     paperclip (4.3.4)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -120,14 +117,17 @@ GEM
     wicked_pdf (1.0.4)
 
 PLATFORMS
+  ruby
+  x64-mingw32
   x86-mingw32
 
 DEPENDENCIES
-  aws-sdk-v1
   coffee-rails (~> 4.0.0)
+  declarative_authorization (= 0.5.7)
   jbuilder (~> 1.2)
   jquery-rails
-  mysql (= 2.9.1)
+  json (= 1.8.3)
+  mysql2 (= 0.3.20)
   paperclip (~> 4.2)
   rack (~> 1.5.5)
   rails (= 4.0.0)
@@ -140,4 +140,4 @@ DEPENDENCIES
   wicked_pdf
 
 BUNDLED WITH
-   1.10.6
+   1.12.5

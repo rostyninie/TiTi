@@ -3,8 +3,8 @@
   <tr class="odd gradeX">
     <td><%=  i+=1%></td>
     <td><%=link_to  d.code,controller: "categories",action: "view",id: d.id %></td>
-    <td><%=link_to d.nom ,controller: "categories",action: "view",id: d.id%></td>
-    <td><%=d.description%></td>
+    <td><%=link_to d.nom.force_encoding("UTF-8") ,controller: "categories",action: "view",id: d.id%></td>
+    <td><%=d.description.force_encoding("UTF-8")%></td>
     <td><%=d.is_active.to_s%></td>
     <!--<td><#%=d.categorie.nom %></td>-->
     <td class="center"><%=link_to "Modifier",edit_category_path(d),remote: true,class: "btn btn-success" %></td>

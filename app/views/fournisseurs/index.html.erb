@@ -112,8 +112,8 @@
       document.getElementById('result').innerHTML = "<img src='/assets/roller.gif'>";
 
       $.ajax({
-        url: "/fournisseurs/recherche_fournisseur/0",
-        type: "GET",
+        url: "/fournisseurs/recherche_fournisseur",
+        type: "POST",
         data: {nom: $("#nom").val(), etat: $("#etat").val(), pays: $("#pay_id").val(), ville: $("#ville").val()},
         success: function(data) {
           // append data to your page

@@ -1,6 +1,7 @@
 class AchatsController < ApplicationController
   before_filter :login_required
   before_filter :message_user
+  filter_access_to :all
   before_action :set_achat, only: [:show, :edit, :update, :destroy]
 
   # GET /achats
@@ -32,6 +33,7 @@ class AchatsController < ApplicationController
     @achat.update_attribute(:date_achat,params[:achat][:date_achat])
     @achat.update_attribute(:prix_vente,params[:prix_vente])
     @produit=Produit.find(@achat.produit_id)
+    @achat.update_attribute(:quantite_stock_av,@produit.quantite_stock)
     quantite_stock=@produit.quantite_stock>0?(@achat.quantite+@produit.quantite_stock):@achat.quantite
     @produit.update_attribute(:quantite_stock,quantite_stock)
     @produit.update_attribute(:prix_vente,params[:prix_vente])
@@ -89,6 +91,7 @@ class AchatsController < ApplicationController
     acha_hsto.produit_id=ancien_produit_id
     acha_hsto.quantite=ancien_quantite
     acha_hsto.user_id=ancien_user_id
+    acha_hsto.raison=params[:raison]
     acha_hsto.save
      acha_hsto.update_attribute(:date_achat,ancien_date_achat)
     @achat=Achat.new

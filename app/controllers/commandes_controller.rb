@@ -1,12 +1,19 @@
 class CommandesController < ApplicationController
-  before_action :set_commande, only: [:show, :edit, :update, :destroy]
   before_filter :message_user
   before_filter :login_required
+  filter_access_to :all
+  before_action :set_commande, only: [:show, :edit, :update, :destroy]
   # GET /commandes
   # GET /commandes.json
   def index
     @commandes = Commande.all(:order=>"updated_at desc")
     @produits=Produit.active
+    @clients=Client.active
+    @client_string='["'
+    @clients.each do |cl|
+      @client_string+=cl.nom+'","'
+    end
+     @client_string+='"]'
     @commande = Commande.new
   end
 
@@ -28,6 +35,15 @@ class CommandesController < ApplicationController
   # POST /commandes.json
   def create
     @commande = Commande.new(commande_params)
+    @client=Client.find_by_nom(params[:client])
+    unless @client.nil?
+      @commande.client_id=@client.id
+    else
+      old_code=Client.last.code[-7..-1] 
+         code="CL"+old_code.next 
+      @client=Client.create(nom: params[:client],phone: "655206994",code: code,address: "Douala-cameroun",ville: "Douala",pay_id: 30)
+      @commande.client_id=@client.id
+    end
     @list_produit=params[:list_produits]
     @montant=params[:montant]
     @paiement=params[:paiement]

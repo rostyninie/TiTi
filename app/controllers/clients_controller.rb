@@ -1,6 +1,7 @@
 class ClientsController < ApplicationController
    before_filter :login_required
    before_filter :message_user
+   filter_access_to :all
   before_action :set_client, only: [:show, :edit, :update, :destroy]
 
   # GET /clients

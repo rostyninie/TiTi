@@ -1,6 +1,7 @@
 class TypeProduitsController < ApplicationController
   
   before_filter :login_required
+  filter_access_to :all
   before_action :set_type_produit, only: [:show, :edit, :update, :destroy]
 
   # GET /type_produits
