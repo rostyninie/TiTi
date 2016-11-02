@@ -17,7 +17,7 @@
 
       <%= c.text_field :code,:value=>code,:readonly=>true,:class=>"input-large"%> 
 
-      tva = <%= text_field_tag  :tva,tva,:readonly=>true,:class=>"input-small",:id=>"tva",title: "TVA"%> 
+      tva = <%= text_field_tag  :tva,tva,:readonly=>true,:class=>"input-small",:id=>"tva",title: "TVA"%> <br/> <br/>
       <%= select :type_produit,:id,
         TypeProduit.find_all_by_is_active(true).map {|t| [t.nom.force_encoding("UTF-8"), t.id]},
         {:prompt => "#{"selectionner la catégorie de produit"}"},:onChange=>"seach_product();",:id=>"type_id",title: "catégorie de produit"%>
@@ -29,18 +29,30 @@
         Fournisseur.all.map {|b| [b.nom.force_encoding("UTF-8"), b.id]},
           {:prompt => "#{"selectionner le fournisseur"}"},:required => true,title: "Fournisseur" %> <br/> <br/>
 
-      <%= c.text_field :prix_achat_unitaire,:value=>"",:class=>"input-large",:id=>"prix_u",:placeholder=>"prix achat unitaire",:required => true,onkeyup: "total(); prix_hort_taxe();",:rel=>"tooltip",  "data-original-title"=>"Prix Unitaire"%> 
-       <%= c.text_field :quantite,:value=>"",:class=>"input-large",:id=>"quant",:placeholder=>"quantite" ,:required => true,onkeyup: "total();",title: "Quatité"%>
-  <%= c.text_field :marge_brut,:value=>"",:class=>"input-large",:id=>"marge",:placeholder=>"marge brut",onkeyup: "test();",title: "Marge brut" %> 
-      
-      <%= c.text_field :prix_ht,:value=>"",:class=>"input-large",:id=>"prix_ht",:placeholder=>"prix HT",onTextChange: "test();",:readonly=>true,title: "Prix hors taxe" %> 
+    Prix achat unitaire :  <div class="input-append"> <%= c.text_field :prix_achat_unitaire,:value=>"",:class=>"input-large",:id=>"prix_u",:placeholder=>"prix achat unitaire",:required => true,onkeyup: "total(); prix_hort_taxe();",:rel=>"tooltip",  "data-original-title"=>"Prix Unitaire"%><span class="add-on">Fcfa</span> </div>  &nbsp;&nbsp;&nbsp;
+     Quantité :   <%= c.text_field :quantite,:value=>"",:class=>"input-large",:id=>"quant",:placeholder=>"quantite" ,:required => true,onkeyup: "total();",title: "Quatité"%><br/> <br/>
+  Marge : <div class="input-append"> 
+     <%= c.text_field :marge_brut,:value=>"",:class=>"input-large",:id=>"marge",:placeholder=>"Marge",onkeyup: "prix_vente_frai();",title: "Marge" %><span class="add-on">Fcfa</span></div>  &nbsp;&nbsp;&nbsp;
      
+    Prix hors taxe : <div class="input-append"> 
+       <%= c.text_field :prix_ht,:value=>"",:class=>"input-large",:id=>"prix_ht",:placeholder=>"prix HT",onTextChange: "test();",:readonly=>true,title: "Prix hors taxe" %> <span class="add-on">Fcfa</span>
+     </div>
+     <br/>
+      Somme frais : <div class="input-append"> 
+       <%= c.text_field :som_frai,:value=>"0",:class=>"input-large",:id=>"som_frai",:placeholder=>"Somme frais",:readonly=>true,title: "Somme frais" %> <span class="add-on">Fcfa</span>
+</div>
       <br/>
       <span id="total" style="color: #05B2D2"></span><br/>
       <span id="pv" style="color: #05B2D2"></span>
       <br/>
-      <%= text_field_tag  :prix_vente,"",:id=>"prix_v",:class=>"input-xlarge",:placeholder=>"prix vente" ,:required => true,title: "Prix vente"%> 
-
+     Coût achat Unitaire : <div class="input-append"> 
+      <%= c.text_field  :cout_achat,:value=>"",:class=>"input-xlarge",:id=>"cout_a",:placeholder=>"Coût achat Unitaire" ,:readonly=>true,:required => true,title: "Coût d'achat unitaire"%><span class="add-on">Fcfa</span></div>  &nbsp;&nbsp;&nbsp;
+Prix de revient :<div class="input-append"> 
+       <%= c.text_field  :prix_revient,:value=>"",:class=>"input-xlarge",:id=>"prix_v",:placeholder=>"prix de revient" ,:required => true,title: "Prix de revient"%><span class="add-on">Fcfa</span></div>  <br/><br/>
+Prix de vente :<div class="input-append"> 
+      <%= text_field_tag  :prix_vente,"",:id=>"prix_r",:class=>"input-xlarge",:placeholder=>"prix de vente" ,title: "Prix de vente"%><span class="add-on">Fcfa</span></div>  &nbsp;&nbsp;&nbsp;
+    Prix du carton :<div class="input-append">   
+      <%= text_field_tag  :prix_gros,"",:id=>"prix_g",:class=>"input-xlarge",:placeholder=>"prix du carton" ,title: "Prix du carton"%><span class="add-on">Fcfa</span> </div> 
       
       <label for="date_naissance">  Date achat  </label>  <input type="text" class="input-xlarge datepicker" name="achat[date_achat]" id="date_achat" value="<%= Date.today.to_s %>" title="date achat" readonly="true" > 
     <!--<#%= c.date_select "date_achat",use_month_numbers: false ,start_year: 1.years.ago.year, end_year: 3.years.since.year, :order => [:day, :month, :year],class: "input-xlarge datepicker",id: "date_achat",:include_blank=>false%>-->
@@ -59,7 +71,7 @@
  
  <%= c.hidden_field :user_id,:value=>@current_user.id%> 
       <% tva= Option.get_config_value('tva') %>
-      tva = <%= text_field_tag  :tva,tva,:readonly=>true,:class=>"input-small",:id=>"tva",title: "TVA"%> 
+      tva = <%= text_field_tag  :tva,tva,:readonly=>true,:class=>"input-small",:id=>"tva",title: "TVA"%> <br/> <br/>
       <%= select :type_produit,:id,
         TypeProduit.find_all_by_is_active(true).map {|t| [t.nom.force_encoding("UTF-8"), t.id]},
         {:prompt => "#{"selectionner la catégorie de produit"}"},:onChange=>"seach_product();",:id=>"type_id",title: "Catégrorie de produit"%>
@@ -71,19 +83,24 @@
         Fournisseur.find_all_by_is_active(true).map {|b| [b.nom.force_encoding("UTF-8"), b.id]},
           {:prompt => "#{"selectionner le fournisseur"}"},:required => true,title: "Fournisseur" %> <br/> <br/>
 
-      <%= c.text_field :prix_achat_unitaire,:class=>"input-large",:id=>"prix_u",:placeholder=>"prix achat unitaire",:required => true,onkeyup: "total(); prix_hort_taxe();",title: "prix achat" %> 
-       <%= c.text_field :quantite,:class=>"input-large",:id=>"quant",:placeholder=>"quantite" ,:required => true,onkeyup: "total();",title: "Quantité"%>
-  <%= c.text_field :marge_brut,:class=>"input-large",:id=>"marge",:placeholder=>"marge brut",onkeyup: "test();" ,title: "Marge brut"%> 
+   Prix achat unitaire : <div class="input-append">  <%= c.text_field :prix_achat_unitaire,:class=>"input-large",:id=>"prix_u",:placeholder=>"prix achat unitaire",:required => true,onkeyup: "total(); prix_hort_taxe();",title: "prix achat" %><span class="add-on">Fcfa</span></div>  &nbsp;&nbsp;&nbsp;
+    Quantité :   <%= c.text_field :quantite,:class=>"input-large",:id=>"quant",:placeholder=>"quantite" ,:required => true,onkeyup: "total();",title: "Quantité"%><br/> <br/>
+ Marge  : <div class="input-append">  <%= c.text_field :marge_brut,:class=>"input-large",:id=>"marge",onkeyup: "prix_vente_frai();",:placeholder=>"marge" ,title: "Marge"%><span class="add-on">Fcfa</span></div>  &nbsp;&nbsp;&nbsp;
       
-      <%= c.text_field :prix_ht,:class=>"input-large",:id=>"prix_ht",:placeholder=>"prix HT",onTextChange: "test();",:readonly=>true,title: "Prix hors taxe" %> 
-     
+  Prix hors taxe :    <div class="input-append">  <%= c.text_field :prix_ht,:class=>"input-large",:id=>"prix_ht",:placeholder=>"prix HT",onTextChange: "test();",:readonly=>true,title: "Prix hors taxe" %><span class="add-on">Fcfa</span> </div> 
+  <br/>
+      Somme frais : <div class="input-append"> 
+       <%= c.text_field :som_frai,:value=>FraiAchat.where(achat_id: @achat.id).sum(:montant),:class=>"input-large",:id=>"som_frai",:placeholder=>"Somme frais",:readonly=>true,title: "Somme frais" %> <span class="add-on">Fcfa</span>
+</div>
       <br/>
       <span id="total" style="color: #05B2D2"></span><br/>
       <span id="pv" style="color: #05B2D2"></span>
       <br/>
-      <%= c.text_field  :prix_vente,:id=>"prix_v",:class=>"input-xlarge",:placeholder=>"prix vente" ,:required => true,title: "Prix de vente"%> 
-      
-       <%=  text_field_tag  :raison,"",:id=>"raison",:class=>"input-xlarge",:placeholder=>"Raison de la modification" ,:required => true,title: "Raison de la modification"%> 
+      Coût achat unitaire :    <div class="input-append"> <%= c.text_field  :cout_achat,:id=>"cout_a",:class=>"input-xlarge",:placeholder=>"Coût achat unitaire" ,:readonly=>true,:required => true,title: "Coût achat unitaire"%><span class="add-on">Fcfa</span></div>  &nbsp;&nbsp;&nbsp;
+    Prix de revient :   <div class="input-append"> <%= c.text_field  :prix_revient,:id=>"prix_v",:class=>"input-xlarge",:placeholder=>"prix de revient" ,:required => true,title: "Prix de revient"%><span class="add-on">Fcfa</span></div>  <br/><br/>
+    Prix de vente :  <div class="input-append"> <%= c.text_field  :prix_vente,:id=>"prix_r",:class=>"input-xlarge",:placeholder=>"prix vente",title: "Prix de vente"%><span class="add-on">Fcfa</span></div>  &nbsp;&nbsp;&nbsp;
+    Prix du carton : <div class="input-append">  <%= text_field_tag  :prix_gros,@achat.produit.prix_gros,:id=>"prix_g",:class=>"input-xlarge",:placeholder=>"prix du carton" ,title: "Prix du carton"%><span class="add-on">Fcfa</span></div>  <br/>
+     Raison :   <%=  text_field_tag  :raison,"",:id=>"raison",:class=>"input-xlarge",:placeholder=>"Raison de la modification" ,:required => true,title: "Raison de la modification"%> 
 
       
       <label for="date_naissance">  Date achat  </label>  <input type="text" class="input-xlarge datepicker" name="achat[date_achat]" id="date_achat" value="<%= @achat.date_achat.to_s %>" title="date achat" readonly="true" onfocus="set_date_picker();"> 

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  coordonne_bancaire_id: 
+  fournisseur_id: 
+  valeur: MyString
+
+two:
+  coordonne_bancaire_id: 
+  fournisseur_id: 
+  valeur: MyString

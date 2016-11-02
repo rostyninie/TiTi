@@ -1,0 +1,8 @@
+<%= 'stock initial :' %> 
+                
+                <%= select :ach,:achat_id,@stock_initailes.map { |a| ["#{"Stock initial N°"} #{a.code} du #{a.created_at.to_s.gsub("UTC","")}",a.id]  },{prompt: "Stock initial"},{onchange: "appel();", id: "stock_initial_id" }%>
+
+<%= 'stock finale :' %> 
+                
+                <%= select :acht,:achat_finale_id,@stock_initailes.map { |a| ["#{"Stock finale N°"} #{a.code} du #{a.created_at.to_s.gsub("UTC","")}",a.id]  },{prompt: "Stock finale"},{onchange: "appel();", id: "stock_finale_id" }%>
+

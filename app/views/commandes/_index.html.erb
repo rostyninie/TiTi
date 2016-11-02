@@ -11,14 +11,32 @@
     <td class="code"><%= achat.code %></td>
     <td><%= achat.client.nom.force_encoding('UTF-8') %></td>
     <% liste_produis="" %>
+     <% if Option.get_config_value('mode')=='1' %>
     <% achat.commande_produits.each do |c|
-      liste_produis+= c.produit.nom.force_encoding('UTF-8')+" Qt : "+c.quantite.to_s+" remise: "+c.remise.to_s+" "
+      liste_produis+= c.produit.nom.force_encoding('UTF-8')+"=>"+" Qt : "+c.quantite.to_s+", remise: "+(c.remise.round(2)).to_s+"; \n"
 
     end%>
-    <td>  <a  class="pope"
+    
+     <% elsif Option.get_config_value('mode')=='2' || Option.get_config_value('mode')=='3' %>
+    <% achat.commande_produits.each do |c|
+      stock=c.achat.nil? ? "pas de stock" : Achat.find(c.achat_id).code
+      liste_produis+= c.produit.nom.force_encoding('UTF-8')+"=>"+" Qt : "+c.quantite.to_s+", remise: "+(c.remise.round(2)).to_s+", Stock: "+stock+"; \n"
+
+    end%>
+    <% elsif Option.get_config_value('mode')=='4' %>
+   <%  liste_produis="" %>
+     <% end %>
+    <td> 
+      <% if Option.get_config_value('mode')=='2' || Option.get_config_value('mode')=='3' || Option.get_config_value('mode')=='1'%>
+      <a  class="pope"
               rel="popover" data-content="<%= liste_produis %>" 
               data-original-title="liste des produits :">
-        <span class="label">Cliquez pour voir les produits</span></a> </td>
+        <span class="label">Cliquez pour voir les produits</span></a> 
+    <% else %>
+      
+      <%=link_to "Liste des produits",{controller: 'commandes',:action=>'list_produit',:id=>achat.id},remote: true,class: "btn btn-success" %>
+      <% end %>
+    </td>
     <td><%= facture.montant.to_s %></td>
     <% if facture.versement >= facture.montant  %>
       <td><%= facture.montant.to_s %></td>
@@ -48,6 +66,7 @@
     <% end %>
     <tr class="odd gradeX" >
       <td style="background-color: #35aa47; font-size: 15px; font-weight: bold;"><%=  "Grand total"%></td>
+      <td class="hidden"></td>
       <td><%= "-" %></td>
       <td><%= "-" %></td>
       <td><%= "-" %></td>

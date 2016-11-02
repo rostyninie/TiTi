@@ -1,0 +1,13 @@
+$("ul.errors").html("")
+<% if @frai.errors.any? %>
+  <% @frai.errors.full_messages.each do |message| %>
+$("ul.errors").append($("<li />").html("<%= message.html_safe %>"))
+<% end%>
+<% else %>
+
+$(".frais-index").html("<%= escape_javascript(render(:partial=>'index_frai_achat')) %>")
+$("#form_frai").html("<%= escape_javascript(render(:partial=>'form_frai_app')) %>")
+$.jGrowl("<%= flash[:notice] %>", {header: 'information'})
+
+
+<% end %>

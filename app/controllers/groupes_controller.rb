@@ -61,7 +61,8 @@ class GroupesController < ApplicationController
   def view
     @group=Groupe.find(params[:id])
     @categories=GroupeCategorie.all(:conditions=>"groupe_id=#{@group.id}")
-    @all_categories=Category.all(:conditions=>{is_active: true})
+    @all_categories=Category.find_by_sql("SELECT * FROM categories  where is_active=true and id not in (select category_id FROM groupe_categories where groupe_id=#{@group.id})")
+    #@all_categories=Category.all(:conditions=>{is_active: true})
     if request.post?
      if params[:groupes][:categorie_ids].first
       @categorie_ids=params[:groupes][:categorie_ids]
@@ -107,9 +108,12 @@ class GroupesController < ApplicationController
      @groupe=@group_categorie.groupe_id
      @group_categorie.destroy
      if @group_categorie.destroyed?
+        @all_categories=Category.find_by_sql("SELECT * FROM categories  where is_active=true and id not in (select category_id FROM groupe_categories where groupe_id=#{@groupe})")
+
        flash[:notice]="Droits supprimer avec succès!!!"
     redirect_to :controller=>"groupes",:action=>"view",:id=>@groupe
      else
+           @all_categories=Category.find_by_sql("SELECT * FROM categories  where is_active=true and id not in (select category_id FROM groupe_categories where groupe_id=#{@groupe})")
        flash[:notice]="Problème lors de la suppréssion!!!"
     redirect_to :controller=>"groupes",:action=>"view",:id=>@groupe
      end

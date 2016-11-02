@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
    :message => "téléphone invalide!!! exp : 655206994"
  scope :active,-> { where(is_active: true) }
  before_save :set_first_login
- scope :inactive, :conditions => { :is_active => false }
+ scope :inactive, -> { where(is_active: false) }
   
 #    has_attached_file :photo,
 #    #:styles => {:original=> "125x125#"},

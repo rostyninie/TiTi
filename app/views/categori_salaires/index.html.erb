@@ -1,0 +1,31 @@
+<h1>Listing categori_salaires</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Nom</th>
+      <th>Is active</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @categori_salaires.each do |categori_salaire| %>
+      <tr>
+        <td><%= categori_salaire.code %></td>
+        <td><%= categori_salaire.nom %></td>
+        <td><%= categori_salaire.is_active %></td>
+        <td><%= link_to 'Show', categori_salaire %></td>
+        <td><%= link_to 'Edit', edit_categori_salaire_path(categori_salaire) %></td>
+        <td><%= link_to 'Destroy', categori_salaire, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Categori salaire', new_categori_salaire_path %>

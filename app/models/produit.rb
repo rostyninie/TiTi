@@ -4,6 +4,9 @@ class Produit < ActiveRecord::Base
    has_many :achats
    has_many :achat_histories
    has_many :commande_produit
+   has_many :unique_produits
+   has_many :mouvement_stocks
+   has_many :valorisations
   validates_format_of     :quantite_stock, :with => /\A[0-9]*\Z/i,   :allow_blank=>true,
     :message => " invalide!!! veillez entrer un nombre"
   validates_format_of     :quantite_gros, :with => /\A[0-9]*\Z/i,   :allow_blank=>true,
@@ -13,7 +16,7 @@ class Produit < ActiveRecord::Base
   validates_format_of     :prix_vente, :with => /\A[0-9.]*\Z/i,   :allow_blank=>true,
     :message => " invalide!!! veillez entrer un nombre"
   scope :active,-> { where(is_active: true) }
-  scope :inactive, :conditions => { :is_active => false }
+  scope :inactive, -> { where(is_active: false) }
   before_save :set_is_active
    def set_is_active
     if self.is_active.nil?

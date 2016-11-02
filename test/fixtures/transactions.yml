@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  titre: MyString
+  description: MyString
+  montant: 1.5
+  achat_id: 
+  commande_id: 
+  is_deduc: false
+  is_add: false
+  date_transaction: 2016-08-17
+
+two:
+  titre: MyString
+  description: MyString
+  montant: 1.5
+  achat_id: 
+  commande_id: 
+  is_deduc: false
+  is_add: false
+  date_transaction: 2016-08-17

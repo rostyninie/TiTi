@@ -1,17 +1,17 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  code: MyString
+  code: 
   nom: MyString
   phone: MyString
   address: MyString
-  ville_id: 1
+  ville: 1
   pay_id: 1
 
 two:
-  code: MyString
+  code: 
   nom: MyString
   phone: MyString
   address: MyString
-  ville_id: 1
+  ville: 1
   pay_id: 1

@@ -1,0 +1,55 @@
+
+<% if @frais.description.nil?%>
+    <%= form_for(:frai_achat, :url => {:controller=>"achats",:action=>"create_frais"}, remote: true, :html=> {:multipart=>true}) do |c| %>
+<ul class="errors" style="color: #EE5757;">
+            
+          </ul>
+ 
+ 
+<%= c.hidden_field :achat_id,:value=>@achat.id%> 
+
+     
+App = <%= text_field_tag  :app,@achat.code,:readonly=>true,:class=>"input-small",:id=>"code_achat",title: "code achat"%> 
+
+
+      
+      
+     <br/> <br/>
+
+      <%= c.text_field :description,:value=>"",:class=>"input-large",:id=>"description",:placeholder=>"Description",:required => true,:rel=>"tooltip",  "data-original-title"=>"Description"%> 
+      <%= c.text_field :montant,:value=>"",:class=>"input-large",:id=>"montant",:placeholder=>"Montant du frais" ,:required => true,title: "Montant du frais"%>
+  
+      <br/>
+     
+      <br/>
+    
+      <%= c.submit"", :value => "► #{"Enregistrer"}",:id=>"submi", :class => "btn btn-large btn-primary" %>
+    
+      
+  
+       <% end %>
+      <% else %>
+      
+      <%= form_for(:frai_achat, :url => {:controller=>"achats",:action=>"update_frais",:id=>@achat.id}, remote: true, :html=> {:multipart=>true}) do |c| %>
+<ul class="errors" style="color: #EE5757;">
+            
+          </ul>
+ App = <%= text_field_tag  :app,@frais.achat.code,:readonly=>true,:class=>"input-small",:id=>"code_achat",title: "code achat"%> 
+
+      
+     <br/> <br/>
+
+      <%= c.text_field :description,:value=>@frais.description.force_encoding("UTF-8"),:class=>"input-large",:id=>"description",:placeholder=>"Description du frais",:required => true,:rel=>"tooltip",  "data-original-title"=>"Description du frais"%> 
+      <%= c.text_field :montant,:value=>@frais.montant,:class=>"input-large",:id=>"montant",:placeholder=>"Montant du frais" ,:required => true,title: "Montant du frais"%>
+  
+      <br/>
+     
+      <br/>
+      <%= c.submit"", :value => "► #{"Mdifier le frais"}",:id=>"submi", :class => "btn btn-large btn-primary" %>
+   
+      <% end %>
+      
+
+    <%end%>
+ 
+   

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @categori_salaire.code %>
+</p>
+
+<p>
+  <strong>Nom:</strong>
+  <%= @categori_salaire.nom %>
+</p>
+
+<p>
+  <strong>Is active:</strong>
+  <%= @categori_salaire.is_active %>
+</p>
+
+<%= link_to 'Edit', edit_categori_salaire_path(@categori_salaire) %> |
+<%= link_to 'Back', categori_salaires_path %>

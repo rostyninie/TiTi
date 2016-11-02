@@ -1,0 +1,3 @@
+$("#<%= @coordonne_four.coordonne_bancaire.code.force_encoding("UTF-8") %>").html("<%=  @coordonne_four.valeur %>")
+$("#valeur_coord-modal").modal("hide")
+$.jGrowl("<%= flash[:notice] %>", {header: ''})

@@ -1,4 +1,4 @@
-
+$("#tb_produit").html("<%= escape_javascript(render(:partial=>'form_produits')) %>")
 $("#form").html("<%= escape_javascript(render(:partial=>'form')) %>")
 $("#result").html("<%= escape_javascript(render(:partial=>'index')) %>")
 $.jGrowl("<%= flash[:notice] %>", {header: 'information'})

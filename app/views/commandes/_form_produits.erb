@@ -1,0 +1,112 @@
+                  <% if Option.get_config_value('mode')=='1' ||  Option.get_config_value('mode')=='2'%>
+                  <%@produits.each do |p|%>
+                    <% if Option.get_config_value('mode')=='2'%>
+                      <% activ_achat=p.achats.where(is_active: true).first %>
+                  <% unless activ_achat.nil? %>
+                      <tr class="info pr">
+                        <td class="numero hidden"><%= p.id.to_s %></td>
+                        <td class="nom"><%= p.nom.force_encoding("UTF-8") %></td>
+                        <td class="prix_vente"><%= activ_achat.prix_vente.to_s %></td>
+                        <td class="quantite">
+                          <% sortie=activ_achat.sortie.nil? ? 0 : activ_achat.sortie %>
+                          <%pourc=(((sortie)*100)/activ_achat.quantite).to_i%>
+                          <span class="last_achat hidden"><%= activ_achat.quantite.to_s %></span>
+                          <%if pourc>=70%>
+                            <div class="progress progress-success">
+                              <div style="width: <%= (pourc).to_s+"%" %>;" class="bar"><%= sortie.to_s %></div></div>
+                          <%elsif pourc>=25 && pourc<70%>
+                            <div class="progress progress-warning">
+                              <div style="width: <%= (pourc).to_s+"%" %>;" class="bar"><%= sortie.to_s %></div></div>
+                          <%elsif   pourc<25%>
+                            <div class="progress progress-danger">
+                              <div style="width: <%= (pourc).to_s+"%" %>;" class="bar"><%= sortie.to_s %></div></div>
+                          <%end%>
+                        </td>
+                        <%if permitted_to? :change_app, :achats %>
+                        <td><%=link_to "Changer de stock",{controller: 'achats',:action=>'change_app',:id=>p.id},remote: true,class: "btn" %></td>
+                        <%end%>
+                        <td class="quantite_gros hidden"><%= p.quantite_gros.to_s %></td>  
+                        <!--<td class="prix_gros hidden"><#%= (p.quantite_gros*activ_achat.prix_vente).to_s %></td> -->  
+                        <td class="prix_gros hidden"><%= (p.prix_gros).to_s %></td> 
+                          <td class="unite hidden"><%= p.unite.force_encoding("UTF-8") %></td>
+                          <td class="code hidden"><%= p.code %></td>
+                          <%end%>
+                          
+                        <%elsif Option.get_config_value('mode')=='1'%>
+                      <tr class="info pr">
+                        <td class="numero hidden"><%= p.id.to_s %></td>
+                        <td class="nom"><%= p.nom.force_encoding("UTF-8") %></td>
+                          <td class="prix_vente"><%= p.prix_vente.to_s %></td>
+                       
+                          <td class="quantite">
+                            <%if p.achats.count>0%>
+                              <!--<#%pourc=((p.quantite_stock*100)/(p.achats.last.quantite+p.quantite_stock)).to_i%>-->
+                              <% qt_ach_activ= p.achats.where(is_active: true).sum(:quantite)==0 ? 1 : p.achats.where(is_active: true).sum(:quantite)%>
+                              <%pourc=(((p.achats.where(is_active: true).sum(:sortie))*100)/(qt_ach_activ)).to_i%>
+                              <span class="last_achat hidden"><%= qt_ach_activ.to_s %></span>
+                              <%if pourc>=70%>
+                                <div class="progress progress-success">
+                                  <div style="width: <%= (pourc).to_s+"%" %>;" class="bar"><%= p.achats.where(is_active: true).sum(:sortie).to_s %></div></div>
+                              <%elsif pourc>=25 && pourc<70%>
+                                <div class="progress progress-warning">
+                                  <div style="width: <%= (pourc).to_s+"%" %>;" class="bar"><%= p.achats.where(is_active: true).sum(:sortie).to_s %></div></div>
+                              <%elsif   pourc<25%>
+                                <div class="progress progress-danger">
+                                  <div style="width: <%= (pourc).to_s+"%" %>;" class="bar"><%= p.achats.where(is_active: true).sum(:sortie).to_s %></div></div>
+                              <%end%>
+                            <%else%>
+                              <div class="progress progress-danger">
+                                <div style="width: 0;" class="bar"><%= p.achats.where(is_active: true).sum(:etat_stock).to_s %></div></div>
+                            <%end%>
+
+                          </td>
+                          <td class="quantite_gros hidden"><%= p.quantite_gros.to_s %></td>
+                            <td class="prix_gros hidden"><%= p.prix_gros.to_s %></td>
+                          <td class="unite hidden"><%= p.unite.force_encoding("UTF-8") %></td>
+                          <td class="code hidden"><%= p.code %></td>
+
+                        </tr>
+                        <%end%>
+                      <%end%>
+                        
+                         <!-- Le else c'est pour le mode de gestion en code-barre  -->
+                        <%else%>
+       <!-- ****************************************************************************************************************  -->
+                         <%@uniques.each do |p|%>
+                   
+                      
+                
+                      <tr class="info pr">
+                        <td class="numero hidden"><%= p.id.to_s %></td>
+                        <td class="code_b"><%= p.code %></td>
+                        <td class="nom"><%= p.produit.nom.force_encoding("UTF-8") %></td>
+                        <td class="prix_vente"><%= p.prix_vente.to_s %></td>
+                        <td class="quantite">
+                          <% sortie= p.achat.sortie.nil? ? 0 : p.achat.sortie %>
+                          <%pourc=(((sortie)*100)/p.achat.quantite).to_i%>
+                          <span class="last_achat hidden"><%= p.achat.quantite.to_s %></span>
+                          <%if pourc>=70%>
+                            <div class="progress progress-success">
+                              <div style="width: <%= (pourc).to_s+"%" %>;" class="bar"><%= sortie.to_s %></div></div>
+                          <%elsif pourc>=25 && pourc<70%>
+                            <div class="progress progress-warning">
+                              <div style="width: <%= (pourc).to_s+"%" %>;" class="bar"><%= sortie.to_s %></div></div>
+                          <%elsif   pourc<25%>
+                            <div class="progress progress-danger">
+                              <div style="width: <%= (pourc).to_s+"%" %>;" class="bar"><%= sortie.to_s %></div></div>
+                          <%end%>
+                        </td>
+                        <% if Option.get_config_value('mode')=='5'%>
+                         <%if permitted_to? :change_app, :achats %>
+                        <td><%=link_to "Changer de stock",{controller: 'achats',:action=>'change_app',:id=>p.id},remote: true,class: "btn" %></td>
+                        <%end%>
+                         <%end%>
+                          
+                          <td class="unite hidden"><%= p.produit.unite.force_encoding("UTF-8") %></td>
+                          <td class="code hidden"><%= p.achat.code %></td>
+                         
+                        
+                      <%end%>
+                        
+         <!-- ****************************************************************************************************************  -->
+                      <%end%> 

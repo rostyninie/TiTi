@@ -20,7 +20,7 @@
 //= require assets/DT_bootstrap.js
 //= require vendors/jquery.uniform.min.js
 //= require vendors/chosen.jquery.min
-//= require vendors/bootstrap-datepicker
+//= require vendors/bootstrap-datepicker.js
 //= require vendors/wysiwyg/wysihtml5-0.3.0
 //= require vendors/wysiwyg/bootstrap-wysihtml5
 //= require vendors/wizard/jquery.bootstrap.wizard.min

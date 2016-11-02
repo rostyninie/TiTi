@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @coordonne_bancaire.code %>
+</p>
+
+<p>
+  <strong>Nom:</strong>
+  <%= @coordonne_bancaire.nom %>
+</p>
+
+<p>
+  <strong>Is active:</strong>
+  <%= @coordonne_bancaire.is_active %>
+</p>
+
+<%= link_to 'Edit', edit_coordonne_bancaire_path(@coordonne_bancaire) %> |
+<%= link_to 'Back', coordonne_bancaires_path %>

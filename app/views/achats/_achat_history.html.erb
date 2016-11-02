@@ -1,6 +1,6 @@
 <div class="modal-header">
   <button data-dismiss="modal" class="close" type="button">&times;</button>
-  <h3>Liste de modifications :</h3>
+  <h3>Liste de modifications :                 <span style="padding-left: 200px;"><a href="#" class="btn btn-primary" onclick="achat_history_pdf();"> Imprimer la liste <i class="icon-white icon-print"> </i>  </a> </span> </h3>
 </div>
 <div class="modal-body">
   <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example2">
@@ -9,6 +9,7 @@
         <th>N°</th>
         <th>Code</th>
         <th>Prix achat unitaire</th>
+        <th>Coût achat</th>
         <th>Marge brut</th>
         <th>Prix HT</th>
         <th>Prix Vente</th>
@@ -27,6 +28,7 @@
           <td><%=  i+=1%></td>
           <td><%= achat.code %></td>
           <td><%= achat.prix_achat_unitaire %></td>
+          <td><%= achat.cout_achat %></td>
           <td><%= achat.marge_brut %></td>
           <td><%= achat.prix_ht %></td>
           <td><%= achat.prix_vente %></td>
@@ -44,3 +46,13 @@
  </table>
 
 </div>
+<script>
+ function achat_history_pdf()
+  {
+    
+  //  document.getElementById('result').innerHTML = "<img src='/assets/roller.gif'>";
+
+window.open('/achats/achat_history_pdf?produit_id=<%=@achat_histories.first.produit.id%>&code=<%=@achat_histories.first.code%>','_blank');
+    
+  }
+  </script>

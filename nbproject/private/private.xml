@@ -2,6 +2,24 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/app/controllers/commandes_controller.rb</file>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/config/routes.rb</file>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/achats/_index.html.erb</file>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/achats/_form_frai_app.html.erb</file>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/config/authorization_rules.rb</file>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/achats/_save_frais.js.erb</file>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/achats/frais_app.html.erb</file>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/app/models/achat.rb</file>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/achats/_index_frai_achat.html.erb</file>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/achats/_form.html.erb</file>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/fournisseurs/edit.js.erb</file>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/achats/index.html.erb</file>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/app/controllers/achats_controller.rb</file>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/commandes/index.html.erb</file>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/achats/create_frais.js.erb</file>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/commandes/list.html.erb</file>
+            <file>file:/G:/Programmation_Ruby/Projet_ruby/TiTiNew/app/views/commandes/_index.html.erb</file>
+        </group>
     </open-files>
 </project-private>

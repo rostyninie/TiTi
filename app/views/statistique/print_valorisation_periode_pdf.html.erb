@@ -1,0 +1,88 @@
+<div  style="font-size: 30px; width: 100%; overflow: hidden;">
+  <div style="display: inline;">
+    <%=  Option.get_config_value('name') %>
+  </div>
+
+</div>
+
+<div  style="font-size: 15px; width: 100%; overflow: hidden; padding-top: 2px;">
+  <div style="display: inline;">
+    <%="#{"TEL : "} #{Option.get_config_value('phone')}"%>
+  </div>
+  <div style="display: inline;">
+    <%="#{"   B.P : "} #{Option.get_config_value('adress')}"%>
+  </div>
+</div>
+
+<div  style="font-size: 30px; width: 100%; overflow: hidden; padding-top: 2px;">
+  <div style="display: inline;">
+    <%="#{"Email : "} #{Option.get_config_value('email')}" %>
+  </div>
+</div>
+
+<div class="span8" style="font-weight: bold; font-size: 20px; font-style: italic; color: #93a1a1;">
+  <%= "Valorisation du produit : #{@produit.nom.force_encoding("UTF-8")} du #{@init_achat.date_achat.to_s} - #{@last_achat.date_achat.to_s}" %></div>
+
+<center>
+<div  style="font-size: 12px; width: 100%; overflow: hidden; padding-top: 20px;">
+<table cellpadding="4" cellspacing="1" border="1" class="table table-striped table-bordered" id="example2" style="border-style: dashed;">
+  <thead>
+    <tr>
+      <th rowspan="2" style="border-style: dotted;">Date</th>
+      <th rowspan="2" style="border-style: dotted;">Opérations</th>
+      <th rowspan="1" colspan="3" style="border-style: dotted;">Stock initial et entrées</th>
+      <th rowspan="1" colspan="3" style="border-style: dotted;">Sorties</th>
+      <th rowspan="1" colspan="3" style="border-style: dotted;">Stock</th>
+    </tr>
+    <tr>
+  <th vertical-align=middle style="border-style: dotted; writing-mode:vertical-rl; white-space: nowrap;"><b>Quanité</b></th>
+<th vertical-align=middle style="border-style: dotted;"><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Coût unitaire</b></div></th>
+<th vertical-align=middle style="border-style: dotted;"><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Montant</b></div></th>
+<th vertical-align=middle style="border-style: dotted;"><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Quanité</b></div></th>
+<th vertical-align=middle style="border-style: dotted;"><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Coût unitaire</b></div></th>
+<th vertical-align=middle style="border-style: dotted;"><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Montant</b></div></th>
+<th vertical-align=middle style="border-style: dotted;"><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Quanité</b></div></th>
+<th vertical-align=middle style="border-style: dotted;"><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Coût unitaire</b></div></th>
+<th vertical-align=middle style="border-style: dotted;"><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Montant</b></div></th>
+</tr>
+
+
+
+</thead>
+<tbody class="valorisation">
+
+  <% @tb_valorisation.each do |t| %> 
+
+    <tr>
+      <td style="border-style: dotted;">  <%= t[0] %>    </td>
+      <td style="border-style: dotted;"> <%= t[1] %>    </td>
+      <td style="border-style: dotted;"> <%= t[2] == 0 ? "#{"-"}" : t[2] %> </td>
+      <td style="border-style: dotted;"> <%= t[3] == 0 ? "#{"-"}" : t[3] %>    </td>
+      <td style="border-style: dotted;"> <%= t[4] == 0 ? "#{"-"}" : t[4] %>  </td>
+      <td style="border-style: dotted;"> <%= t[5] == 0 ? "#{"-"}" : t[5] %>  </td>
+      <td style="border-style: dotted;">  <%= t[6] == 0 ? "#{"-"}" : t[6] %>  </td>
+      <td style="border-style: dotted;">  <%= t[7] == 0 ? "#{"-"}" : t[7] %>  </td>
+      <td style="border-style: dotted;"> <%= t[8] %>  </td>
+      <td style="border-style: dotted;"><%= t[9] %>  </td>
+      <td style="border-style: dotted;"> <%= t[10] %>    </td>
+
+    </tr>
+  <% end %> 
+  <tr>
+    <th style="border-style: dotted;">     </th>
+    <th style="border-style: dotted;"> Total   </th>
+    <th style="border-style: dotted;"> <%= @tq_a.to_s %>  </th>
+    <th style="border-style: dotted;" >  <%= @cump.to_s %>  </th>
+    <th style="border-style: dotted;"> <%= @tm_a.to_s %>   </th>
+    <th style="border-style: dotted;"><%= @tq_o.to_s %>  </th>
+    <th style="border-style: dotted;">  <%= @cump.to_s %>  </th>
+    <th style="border-style: dotted;">  <%= @tm_o.to_s %>  </th>
+    <th style="border-style: dotted;">    </th>
+    <th style="border-style: dotted;">   </th>
+    <th style="border-style: dotted;">    </th>
+
+  </tr>
+</tbody>
+</table>
+  </div>
+  </center>

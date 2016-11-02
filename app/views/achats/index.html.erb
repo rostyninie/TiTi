@@ -32,7 +32,7 @@
           </div>
           <div class="btn-group">
             
-            <input type="text" class="input-xlarge datepicker1" id="date_fin" value="<%= Date.today.to_s %>" title="date fin" readonly="true" onclick="recherche_achat();" >
+            <input type="text" class="input-xlarge datepicker1" id="date_fin" value="<%= Date.today.to_s %>" title="date fin" readonly="true" onblur="recherche_achat();" >
                                            
           </div>
           <div class="btn-group">
@@ -47,7 +47,7 @@
             <button data-toggle="dropdown" class="btn dropdown-toggle">Outils <span class="caret"></span></button>
             <ul class="dropdown-menu">
               <li><a href="#">Print</a></li>
-              <li><a href="#">Save as PDF</a></li>
+              <li><%=link_to "#{"Imprimer en PDF"}" ,"#", onclick: "list_achat_pdf();" %></li>
               <li><a href="#">Export to Excel</a></li>
             </ul>
           </div>
@@ -61,18 +61,38 @@
                   <th>N°</th>
                   <th>Code</th>
                   <th>Prix achat unitaire</th>
-                  <th>Marge brut</th>
+                  <th>Coût d'acha unitairet</th>
+                  <th>Marge</th>
                   <th>Prix HT</th>
+                 
                    <th>Prix Vente</th>
-                  <th>Quantite</th>
+                   <th>Coût d'achat</th>
                    <th>Qt Stock avant l'achat</th>
+                 
+                  <th>Quantite initial</th>
+                  <th>Quantite actuel</th>
+                
+
                   <th>Date achat</th>
                   <th>Utilisateur</th>
                   <th>Produit</th>
                   <th>Fournisseur</th>
+                  
+                   <% if Option.get_config_value('mode')=='2' || Option.get_config_value('mode')=='5' %>
+                  <th>App préc</th>
+                  <th>App Suiv</th>
+                  <th>Changer automatique de stock</th>
+                   <% end %>
+                  <th>Sortie de stock</th>
+                  <th>Reste Qt Sortie</th>
                   <th>Etat</th>
-                  <th>Total</th>
+                   <th>Prix de revient</th>
                   <th>Modifications</th>
+                   <% if Option.get_config_value('mode')=='4' || Option.get_config_value('mode')=='5' %>
+                  <th>Sous-produits</th>
+             
+                   <% end %>
+                   <th>Frais App</th>
                   <th>Modifier</th>
                   
                 
@@ -93,7 +113,9 @@
 
 <!-- /block -->
 <div id="achat-modal" class="modal hide" style="width: 700px;"></div>
-
+<div class="modal hide" id="modal-detailapp" style="width: 340px;">
+  
+</div>
 
 <script type="text/javascript">
  
@@ -131,6 +153,25 @@
 //:with=>"'date_debut='+$('date_debut').val()+'&produit_id='+$('produit_id').val()+'&date_fin='+$('date_fin').val()+'&fournisseur_id='+$('fournisseur_id').val()",:update=>"result")}"
 //%>
   }
+  
+  function list_achat_pdf()
+  {
+    
+  //  document.getElementById('result').innerHTML = "<img src='/assets/roller.gif'>";
+
+window.open('/achats/list_achat_pdf?date_debut='+$("#date_debut").val()+'&date_fin='+$("#date_fin").val()+'&produit_id='+$("#produit_id").val()+'&fournisseur_id='+$("#fournisseur_id").val(),'_blank');
+    
+  }
+  
+  function prix_vente_frai()
+  {
+      var pu= parseFloat($('#cout_a').val());
+   // alert("con");
+    var marge=parseFloat($('#marge').val());
+    $('#prix_r').val(pu+marge)
+  }
+  
+   
   function test()
   {
 
@@ -153,12 +194,18 @@
       var not= (pht+ptva+(marge/quant));
       //$('#prix_v').val(pu+" "+marge+" "+ptva+"  "+pht);
       $('#prix_v').val(parseFloat(not));
+      $('#cout_a').val(parseFloat(not));
     }
   }
   function total()
   {
     var pu = $('#prix_u').val();
     var quant = $('#quant').val();
+     var tva = $('#tva').val();
+     var pht =parseFloat($('#prix_ht').val());
+     var som_frai = parseFloat($('#som_frai').val());
+      var ptva = 0;
+     
     if (isNaN(pu) || isNaN(quant)) {
       // $('submi').prop("readonly","true");
       document.getElementById('submi').disabled = true;
@@ -169,7 +216,13 @@
     {
       document.getElementById('submi').disabled = false;
       document.getElementById('total').innerHTML = 'total = ' + (pu * quant);
-       
+      
+     
+     var prix_revien=(pu*quant) + som_frai;
+     ptva = pu/tva;
+     var not= (pht+ptva+(som_frai/quant));
+     $('#prix_v').val(parseFloat(prix_revien));
+     $('#cout_a').val(parseFloat(not));
 
     }
 
@@ -203,12 +256,13 @@
     {
       document.getElementById('pv').innerHTML = '';
       $('#prix_v').val(ptva+pht+(marge/$("#quant").val()));
+      $('#cout_a').val(ptva+pht+(marge/$("#quant").val()));
     }
 
     // alert($('total').value);
   }
  
- 
 
+    
   
 </script>

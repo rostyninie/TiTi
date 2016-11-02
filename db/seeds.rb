@@ -231,7 +231,8 @@ end
   ["rayons_controle","controlle total sur les rayons"],
   ["rayons_view","voir les rayons"],
   ["type_produits_controle","controlle total sur les catégories de produits"],
-  ["type_produits_view","voir les categories de produits"]].each do |param|
+  ["type_produits_view","voir les categories de produits"],
+  ["coordonne_bancaire_controle","controle total sur les coordonnées bancaires"]].each do |param|
   if Category.first.nil?
     Category.find_or_create_by_code_and_nom_and_description("CG0000001",param[0],param[1]) 
   else

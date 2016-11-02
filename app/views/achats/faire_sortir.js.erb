@@ -1,0 +1,3 @@
+ $("#modal-detailapp").modal("hide")
+  $.jGrowl("<%= @msg %>", {header: ''})
+  $("#result").html("<%= escape_javascript(render(:partial=>'index') ) %>")

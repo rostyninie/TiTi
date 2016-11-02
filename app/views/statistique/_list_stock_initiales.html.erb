@@ -1,0 +1,3 @@
+ <%= 'stock initial :' %> 
+                
+                <%= select :produit,:produit_id,@stock_initailes.map { |a| ["#{"Stock initial N°"} #{a.code} du #{a.created_at.to_s.gsub("UTC","")}",a.id]  },{prompt: "Stock initial"},{onchange: "appel();", id: "stock_initial_id" }%>

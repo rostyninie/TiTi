@@ -1,4 +1,15 @@
 TiTiNew::Application.routes.draw do
+  resources :mouvement_stocks
+
+  get "statistique/index"
+  get "statistique/index_bilan"
+  get "statistique/index_analyse"
+  resources :transactions
+
+  resources :categori_salaires
+
+  resources :coordonne_bancaires
+
   resources :factures
 
   resources :options
@@ -25,7 +36,16 @@ TiTiNew::Application.routes.draw do
   resources :produits
 
   resources :fournisseurs do
+    
     post 'recherche_fournisseur', on: :collection
+    get 'coordonne_bancaires', on: :collection
+    post 'coordonne_bancaires', on: :collection
+    post 'delete_coordonne', on: :collection
+    get 'delete_coordonne', on: :collection
+    post 'update_coordonne', on: :collection
+    get 'update_coordonne', on: :collection
+    post 'save_value_cood', on: :collection
+    get 'save_value_cood', on: :collection
   end
 
   resources :commandes do
@@ -36,7 +56,12 @@ TiTiNew::Application.routes.draw do
     post 'recherche_client', on: :collection
   end
 
-  resources :achats
+  resources :achats do 
+    post 'list_achat_pdf', on: :collection
+    get 'list_achat_pdf', on: :collection
+    post 'achat_history_pdf', on: :collection
+    get 'achat_history_pdf', on: :collection
+  end
 
   resources :categorie_droits
 
@@ -88,7 +113,7 @@ TiTiNew::Application.routes.draw do
   get 'fournisseurs/delete/:id', to: 'fournisseurs#delete'
   #get 'fournisseurs/recherche_fournisseur/:nom/:etat/:pays/:ville/:id', to: 'fournisseurs#recherche_fournisseur'
   get 'clients/delete/:id', to: 'clients#delete'
- # get 'clients/recherche_client/:nom/:etat/:pays/:ville/:id', to: 'clients#recherche_client'
+  # get 'clients/recherche_client/:nom/:etat/:pays/:ville/:id', to: 'clients#recherche_client'
   get 'type_produits/delete/:id', to: 'type_produits#delete'
   post 'type_produits/recherche_type_produit', to: 'type_produits#recherche_type_produit'
   get 'rayons/delete/:id', to: 'rayons#delete'
@@ -100,7 +125,67 @@ TiTiNew::Application.routes.draw do
   #get 'commandes/list', to: 'commandes#list'
   post 'commandes/solde_commande/:id', to: 'commandes#solde_commande'
   get 'commandes/commande_recu_pdf/:id/:facture_id', to: 'commandes#commande_recu_pdf'
-   post 'commandes/recherche_commande', to: 'commandes#recherche_commande'
+  post 'commandes/recherche_commande', to: 'commandes#recherche_commande'
+   
+  post 'achats/active_app/:id', to: 'achats#active_app'
+  post 'achats/change_app/:id', to: 'achats#change_app'
+  
+  post 'achats/add_unique_produit/:id/:id2', to: 'achats#add_unique_produit'
+  get 'achats/update_unique/:id', to: 'achats#update_unique'
+  post 'achats/edit_unique/:id', to: 'achats#edit_unique'
+  post 'achats/delete_unique/:id', to: 'achats#delete_unique'
+  post 'achats/destroy_unique/:id', to: 'achats#destroy_unique'
+  post 'achats/create_unique', to: 'achats#create_unique'
+  post 'achats/faire_sortir', to: 'achats#faire_sortir'
+  post 'achats/frais_app/:id', to: 'achats#frais_app'
+  get 'achats/frais_app/:id', to: 'achats#frais_app'
+  post 'achats/create_frais', to: 'achats#create_frais'
+  get 'achats/create_frais', to: 'achats#create_frais'
+  post 'achats/update_frais', to: 'achats#update_frais'
+  get 'achats/update_frais', to: 'achats#update_frais'
+  post 'achats/destroy_frais', to: 'achats#desstroy_frais'
+  get 'achats/destroy_frais', to: 'achats#destroy_frais'
+  post 'achats/edit_frais', to: 'achats#edit_frais'
+  get 'achats/edit_frais', to: 'achats#edit_frais'
+   post 'achats/delete_frais', to: 'achats#delete_frais'
+  get 'achats/delete_frais', to: 'achats#delete_frais'
+  # post 'achats/list_achat_pdf', to: 'achats#list_achat_pdf'
+  get 'commandes/list_produit/:id', to: 'commandes#list_produit'
+  get 'coordonne_bancaires/delete/:id', to: 'coordonne_bancaires#delete'
+  post 'coordonne_bancaires/delete/:id', to: 'coordonne_bancaires#delete'
+  post 'coordonne_bancaires/recherche_coordonne', to: 'coordonne_bancaires#recherche_coordonne'
+  
+  get "statistique/index"
+  get "statistique/index_bilan"
+  get "statistique/index_analyse"
+  get "statistique/bilan_by_periode"
+  post "statistique/recherche_transaction"
+  get "statistique/valorisation_entree"
+  post "statistique/valorisation_entree"
+  get "statistique/valoriser"
+  post "statistique/valoriser"
+  get "statistique/list_stock_initiales"
+  post "statistique/list_stock_initiales"
+  get "statistique/list_valorisation"
+  post "statistique/list_valorisation"
+  get "statistique/valide_valorisation"
+  post "statistique/valide_valorisation"
+  get "statistique/view_valorisation"
+  post "statistique/view_valorisation"
+  get "statistique/recherche_valorisation"
+  post "statistique/recherche_valorisation"
+  get "statistique/print_valorisation_pdf"
+  post "statistique/print_valorisation_pdf"
+  get "statistique/valorisation_periode"
+  post "statistique/valorisation_periode"
+  get "statistique/list_stock_initiales_periode"
+  post "statistique/list_stock_initiales_periode"
+  get "statistique/valoriser_periode"
+  post "statistique/valoriser_periode"
+   get "statistique/print_valorisation_periode_pdf"
+  post "statistique/print_valorisation_periode_pdf"
+   get "statistique/view_valorisation_periode"
+  post "statistique/view_valorisation_periode"
   #post 'users/dashboard', to: 'users#dashboard'
   #get 'application/menu/:id', to: 'application#menu'
   #get ':controller/:action/:id'
@@ -150,6 +235,7 @@ TiTiNew::Application.routes.draw do
   #     resources :products
   #   end
   get ':controller(/:action(/:id))' 
+  post ':controller(/:action(/:id(/id2)))' 
   #match ':controller/:action/:id', via: [:get, :post]
   # match ':controller/:action', via: [:get, :post]
   #  connect ':controller/:action'

@@ -1,0 +1,22 @@
+<div class="modal-header">
+    <button data-dismiss="modal" class="close" type="button">&times;</button>
+    <h3>Supprimer le produit <%= "#{@unique.code} ?" %></h3>
+  </div>
+<div class="modal-body">
+  
+  <% if @unique.etat==true  %>
+  Vous ne pouvez supprimer ce produit car il à déjà été vendue
+  <% end  %>
+   <div class="modal-footer">
+     
+      <% if @unique.etat==true  %>
+  <%= link_to "OK", "#", class: "btn btn-default", data: { dismiss: "modal" } %>
+     
+     <% else  %>
+    
+    <%= link_to "Oui, Supprimer le produit", {controller: 'achats',:action=>'destroy_unique',:id=>@unique.id}, remote: true, class: "btn btn-danger" %>
+    <%= link_to "Non", "#", class: "btn btn-default", data: { dismiss: "modal" } %>
+  <% end  %>
+    
+  </div>
+</div>

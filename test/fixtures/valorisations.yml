@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  code: MyString
+  type_valorisation: 
+  achat_id: 
+  date_debut: 2016-08-30
+  date_fin: 2016-08-30
+  produit_id: 
+  stock_initial:
+
+two:
+  code: MyString
+  type_valorisation: 
+  achat_id: 
+  date_debut: 2016-08-30
+  date_fin: 2016-08-30
+  produit_id: 
+  stock_initial:

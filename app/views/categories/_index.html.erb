@@ -9,6 +9,6 @@
     <!--<td><#%=d.categorie.nom %></td>-->
     <td class="center"><%=link_to "Modifier",edit_category_path(d),remote: true,class: "btn btn-success" %></td>
  
-    <td class="center"><%=link_to "Supprimer",{controller: 'categories',:action=>'delete',:id=>d.id},remote: true,class: "btn btn-danger" %></td>
+    <!--<td class="center"><#%=link_to "Supprimer",{controller: 'categories',:action=>'delete',:id=>d.id},remote: true,class: "btn btn-danger" %></td>-->
   </tr>
 <% end %>

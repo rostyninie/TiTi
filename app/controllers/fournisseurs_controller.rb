@@ -2,7 +2,7 @@ class FournisseursController < ApplicationController
    before_filter :login_required
    before_filter :message_user
    filter_access_to :all
-  before_action :set_fournisseur, only: [:show, :edit, :update, :destroy]
+  before_action :set_fournisseur, only: [:show, :edit, :update, :destroy,:coordonne_bancaires]
 
   # GET /fournisseurs
   # GET /fournisseurs.json
@@ -77,6 +77,63 @@ class FournisseursController < ApplicationController
     end
     
     render :partial=>"index" 
+  end
+  
+  
+  def coordonne_bancaires
+     
+   @coordonne_fours=CoordonneFournisseur.all(:conditions=>"fournisseur_id=#{@fournisseur.id}")
+    @coordonnes=CoordonneBancaire.find_by_sql("SELECT * FROM coordonne_bancaires  where is_active=true and id not in (select coordonne_bancaire_id FROM coordonne_fournisseurs where fournisseur_id=#{@fournisseur.id})")
+    if request.post?
+     if params[:fournisseurs][:coordonne_ids].first
+      @coordonne_ids=params[:fournisseurs][:coordonne_ids]
+     
+      @coordonne_ids.each do |c|
+      if CoordonneFournisseur.find_by_coordonne_bancaire_id_and_fournisseur_id(c,@fournisseur.id).nil?
+      @coord_f=CoordonneFournisseur.new
+      @coord_f.coordonne_bancaire_id=c
+      @coord_f.fournisseur_id=@fournisseur.id
+      @coord_f.save
+      end
+      
+     end 
+     end
+   
+     flash[:notice]="Coordonné(s) ajouté(s) avec succès!!!"
+    redirect_to :controller=>"fournisseurs",:action=>"coordonne_bancaires",:id=>@fournisseur.id
+    end
+  end
+
+  
+  def delete_coordonne
+    @coordonne_four =CoordonneFournisseur.find(params[:id])
+   unless @coordonne_four.nil?
+     @fournisseur_id=@coordonne_four.fournisseur_id
+     @coordonne_four.destroy
+     if @coordonne_four.destroyed?
+        @coordonnes=CoordonneBancaire.find_by_sql("SELECT * FROM coordonne_bancaires  where is_active=true and id not in (select coordonne_bancaire_id FROM coordonne_fournisseurs where fournisseur_id=#{@fournisseur_id})")
+
+       flash[:notice]="Droits supprimer avec succès!!!"
+   redirect_to :controller=>"fournisseurs",:action=>"coordonne_bancaires",:id=>@fournisseur_id
+     else
+        @coordonnes=CoordonneBancaire.find_by_sql("SELECT * FROM coordonne_bancaires  where is_active=true and id not in (select coordonne_bancaire_id FROM coordonne_fournisseurs where fournisseur_id=#{@fournisseur_id})")
+
+       flash[:notice]="Problème lors de la suppréssion!!!"
+    redirect_to :controller=>"fournisseurs",:action=>"coordonne_bancaires",:id=>@fournisseur_id
+     end
+   end
+ end
+ 
+  def update_coordonne
+    @coordonne_four =CoordonneFournisseur.find(params[:id])
+   
+  end
+  
+  def save_value_cood
+     @coordonne_four =CoordonneFournisseur.find(params[:id])
+      @valeur=params[:fournisseurs][:valeur]
+    @coordonne_four.update_attribute(:valeur,@valeur)
+    flash[:notice]="valeur modifiée!!!"
   end
   
   private

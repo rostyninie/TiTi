@@ -5,7 +5,7 @@ class CreateFournisseurs < ActiveRecord::Migration
       t.string :nom
       t.string :phone
       t.string :address
-      t.integer :ville_id
+      t.integer :ville
       t.integer :pay_id
 
       t.timestamps

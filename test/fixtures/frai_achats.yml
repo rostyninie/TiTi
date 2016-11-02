@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  description: MyString
+  montant: 1.5
+  achat_id: 
+
+two:
+  description: MyString
+  montant: 1.5
+  achat_id: 

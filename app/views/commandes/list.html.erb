@@ -21,7 +21,7 @@
           </div>
           <div class="btn-group">
             
-            <input type="text" class="input-xlarge datepicker1" id="date_fin" value="<%= Date.today.to_s %>" title="date fin" readonly="true" onclick="recherche_commande();" >
+            <input type="text" class="input-xlarge datepicker1" id="date_fin" value="<%= Date.today.to_s %>" title="date fin" readonly="true" onblur="recherche_commande();" >
                                            
           </div>
           <div class="btn-group">
@@ -46,6 +46,7 @@
               <thead>
                 <tr>
                   <th>N°</th>
+                  <td class="hidden"></td>
                   <th>Code</th>
                   <th>Client</th>
                   <th>produits commdes</th>
@@ -72,6 +73,10 @@
 </div>
 
 <div class="modal hide" id="modal-solde" style="width: 340px;">
+  
+</div>
+
+<div class="modal hide" id="modal-produit" style="width: 640px;">
   
 </div>
   

@@ -1,0 +1,37 @@
+<h1>Listing mouvement_stocks</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Type</th>
+      <th>Achat</th>
+      <th>Produit</th>
+      <th>Quantite</th>
+      <th>Prix u</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @mouvement_stocks.each do |mouvement_stock| %>
+      <tr>
+        <td><%= mouvement_stock.date %></td>
+        <td><%= mouvement_stock.type %></td>
+        <td><%= mouvement_stock.achat %></td>
+        <td><%= mouvement_stock.produit %></td>
+        <td><%= mouvement_stock.quantite %></td>
+        <td><%= mouvement_stock.prix_u %></td>
+        <td><%= link_to 'Show', mouvement_stock %></td>
+        <td><%= link_to 'Edit', edit_mouvement_stock_path(mouvement_stock) %></td>
+        <td><%= link_to 'Destroy', mouvement_stock, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Mouvement stock', new_mouvement_stock_path %>

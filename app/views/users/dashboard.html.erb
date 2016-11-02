@@ -53,9 +53,11 @@
 
             </li>
 
+            <!--
             <li>
-              <%= link_to "Statistiques",:controller => "factures" %> 
+              <#%= link_to "Statistiques",:controller => "factures" %> 
             </li>
+            -->
 
 
           </ul>
@@ -138,7 +140,8 @@
 
         <ul class="dropdown-menu" id="me" style="">
           <li>
-            <%= link_to "Statistiques",:controller => "commandes" %> <!-- <i class="icon-arrow-right"></i>-->
+            <%= link_to "Bilan entrée|sortie",:controller => "commandes" %> <!-- <i class="icon-arrow-right"></i>-->
+             <%= link_to "autres",:controller => "commandes" %>
 
           </li>
 

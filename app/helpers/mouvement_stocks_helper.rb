@@ -1,0 +1,2 @@
+module MouvementStocksHelper
+end

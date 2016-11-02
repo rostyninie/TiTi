@@ -1,0 +1,84 @@
+
+<div class="row-fluid">
+
+  <% unless flash[:notice].nil? %>
+    <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <%= flash[:notice] %></div>
+    <script>$.jGrowl("<%= flash[:notice] %>", {header: 'Important'});</script>
+  <% end %>
+
+  <div class="block">
+    <div class="navbar navbar-inner block-header">
+      <div class="muted pull-left">Coordonnés bancaires</div>
+    </div>
+    <div class="block-content collapse in">
+      <div class="span12">
+        <div class="table-toolbar">
+          <div class="btn-group">
+            <%= link_to "Nouveau",new_coordonne_bancaire_path, remote: true, class: "btn btn-success" %>
+             
+            </div>
+            <div class="btn-group">
+              <%= text_field_tag :nom,"", id: "nom", placeholder: "nom",onkeyup: "appel();" %>
+            </div>
+           <div class="btn-group">
+             <%= select :coordonne,:is_active,["active","desactive"].map { |t| [t,t]  },{prompt: "etat"},{onchange: "appel();", id: "etat" }%>
+            </div>
+
+            
+            <div class="btn-group pull-right">
+              <button data-toggle="dropdown" class="btn dropdown-toggle">Outils <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li><a href="#">Print</a></li>
+                <li><a href="#">Save as PDF</a></li>
+                <li><a href="#">Export to Excel</a></li>
+              </ul>
+            </div>
+          </div>
+          <div style=" height: 500px; width: 100%; overflow-x: scroll;overflow-y: scroll; ">
+           
+              <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example2">
+                <thead>
+                  <tr>
+                    <th>N°</th>
+                    <th>Code</th>
+                    <th>Nom du coordonnée</th>
+                    <th>Description</th>
+                    <th>Etat</th>
+                    <th>Modifier</th>
+                    <th>Supprimer</th>
+                  </tr>
+                </thead>
+                <tbody class="coordonne-index" id="result">
+                  <%= render "index" %>
+                </tbody>
+              </table>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="coordonne-modal" class="modal hide" style="width: 600px;"></div>
+ 
+<script>
+  function appel()
+  {
+  document.getElementById('result').innerHTML="<img src='/assets/roller.gif'>";
+ 
+  $.ajax({
+  url: "/coordonne_bancaires/recherche_coordonne",
+  type: "POST",
+  data: {nom: $("#nom").val(),etat: $("#etat").val()},
+  success: function (data) { 
+  // append data to your page
+  $("#result").html(data);
+  }
+  });
+ 
+  }
+ 
+ 
+</script>

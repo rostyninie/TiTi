@@ -1,0 +1,16 @@
+<% i=0 %>
+
+<% @list_frais.each do |frai| %>
+  <tr class="odd gradeX">
+    <td><%=  i+=1%></td>
+    
+    <td class="pu"><%= frai.description.force_encoding("UTF-8") %></td>
+    <td class="mb"><%= frai.montant %></td>
+    
+    
+      <td class="center"><%=link_to "Modifier",{controller: 'achats',:action=>'edit_frais',:id=>frai.id},remote: true ,class: "btn btn-success" %></td>
+
+      <td class="center"><%=link_to "Supprimer",{controller: 'achats',:action=>'delete_frais',:id=>frai.id},remote: true ,class: "btn btn-danger" %></td>
+      </tr>
+    <% end %>
+   

@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  achat_id: 
+  groupe_id: 1
+  code: MyString
+  prix_vente: 1.5
+  etat: false
+  remise: 1.5
+  produit_id: 1
+
+two:
+  achat_id: 
+  groupe_id: 1
+  code: MyString
+  prix_vente: 1.5
+  etat: false
+  remise: 1.5
+  produit_id: 1

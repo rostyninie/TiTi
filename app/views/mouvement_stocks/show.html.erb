@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @mouvement_stock.date %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @mouvement_stock.type %>
+</p>
+
+<p>
+  <strong>Achat:</strong>
+  <%= @mouvement_stock.achat %>
+</p>
+
+<p>
+  <strong>Produit:</strong>
+  <%= @mouvement_stock.produit %>
+</p>
+
+<p>
+  <strong>Quantite:</strong>
+  <%= @mouvement_stock.quantite %>
+</p>
+
+<p>
+  <strong>Prix u:</strong>
+  <%= @mouvement_stock.prix_u %>
+</p>
+
+<%= link_to 'Edit', edit_mouvement_stock_path(@mouvement_stock) %> |
+<%= link_to 'Back', mouvement_stocks_path %>

@@ -26,14 +26,15 @@
 <%= f.text_field :nom,class: "input-xlarge", "placeholder"=>"Nom Produit", "required"=>true, "title"=>"nom produit" %>
   </div>
   <div class="field">
-  <%= f.label :prix_vente %> <%= f.text_field :prix_vente,:value=>@produit.code.nil? ? 0:@produit.prix_vente,class: "input-xlarge", "placeholder"=>"Prix de vente", "required"=>false, readOnly: true, "title"=>"prix vente produit"  %>
   </div>
+   <% if Option.get_config_value('mode')!='4' %>
   <div class="field">
  <%= f.label :quantite_gros %>  <%= f.text_field :quantite_gros,class: "input-xlarge", "placeholder"=>"Quantité en gros", "required"=>true, "title"=>"Quantité en gros du produit"  %>
   </div>
   <div class="field">
   <%= f.label :prix_gros %> <%= f.text_field :prix_gros,:value=>@produit.code.nil? ? 0:@produit.prix_gros,class: "input-xlarge", "placeholder"=>"prix en gros", "required"=>false , readOnly: true, "title"=>"prix en gros du produit" %>
   </div>
+   <% end %>
     <div class="field">
   <%= f.label :quantite_stock %> <%= f.text_field :quantite_stock,:value=>@produit.code.nil? ? 0:@produit.quantite_stock,class: "input-xlarge", "placeholder"=>"Quantité stock", "required"=>false, :readOnly=>true, "title"=>"quantité en stock du produit" %>
   </div>
@@ -56,7 +57,21 @@
     <div class="field">
     <%= f.select :rayon_id,Rayon.all(conditions: {is_active: true}).map{|p| [p.nom.force_encoding("UTF-8"),p.id]} %>
   </div>
+  
+   <div class="field">
+     <% if Option.get_config_value('mode')=='1' || Option.get_config_value('mode')=='4' %>
+  Mode d'approvisionement :  <%= f.select :mode,[["Simple","simple"]].map { |t| [t[0],t[1]] },selected: @produit.mode,required: true%>
+   <% elsif Option.get_config_value('mode')=='2' || Option.get_config_value('mode')=='5' %>
+  Mode d'approvisionement :  <%= f.select :mode,[["Premier entré premier sortie","fifo"],["Dernier entré premier sortie","lifo"]].map { |t| [t[0],t[1]] } ,selected: @produit.mode,required: true%>
+   <% end %>
+  </div>
  <% if !@produit.code.nil?%>
+  <% if Option.get_config_value('mode')=='1' || Option.get_config_value('mode')=='4' %>
+   <div class="field">
+        <%= f.label :cump %>
+       <%= f.text_field :cump,value: @produit.cump,class: "input-xlarge", "placeholder"=>"CUMP", "title"=>"Coût moyen unitaire pondéré"%>
+      </div>
+  <% end %>
     <div class="field">
         <%= f.label :active %>
         <%= f.check_box :is_active,value: @produit.is_active %>

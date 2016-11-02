@@ -9,7 +9,7 @@
       <div class="nav-collapse collapse">
         <ul class="nav pull-right">
           <li class="dropdown">
-            <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"> <i class="icon-user"></i><!-- <#%= "#{@current_user.nom}  #{@current_user.prenom}" %> --><i class="caret"></i>
+            <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"> <i class="icon-user"></i> <%= "#{@current_user.nom}  #{@current_user.prenom}" %> <i class="caret"></i>
 
             </a>
             <ul class="dropdown-menu">
@@ -46,9 +46,11 @@
 
               </li>
               <%  end %>
+              <!--
               <li>
-                <%= link_to "Statistiques",:controller => "factures" %> 
+                <#%= link_to "Statistiques",:controller => "factures" %> 
               </li>
+              -->
 
 
             </ul>
@@ -98,6 +100,21 @@
                 <%= link_to "Clients",:controller => "clients" %>
               </li> 
               <%  end %>
+             
+                                    <li class="dropdown-submenu">
+                                        <a tableindex="-1" href="#">Salaires</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a tableindex="-1" href="#">Catégories de salaires</a></li>
+                                                <li><a tableindex="-1" href="#">Salaire des employés</a></li>
+                                                <li><a tableindex="-1" href="#">Bulletins de paie</a></li>
+                                            </ul>
+                                    </li>
+                                   
+              <%if permitted_to? :index, :coordonne_bancaires %>
+              <li>
+                <%= link_to "coordonnés bancaires",:controller => "coordonne_bancaires" %>
+              </li> 
+              <%  end %>
             </ul>
           </li>
            <%  end %>
@@ -131,6 +148,22 @@
             </ul>
           </li>
           <%  end %>
+          
+          <li class="dropdown">
+            <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Statistiques <i class="caret"></i>
+
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <%= link_to "Bilan",controller: "statistique",action: "index_bilan" %>
+              </li>
+              <li>
+                <%= link_to "autres",controller: "options",action: "new" %>
+              </li>
+
+            </ul>
+          </li>
+          
           <%if permitted_to? :new, :options %>
           <li class="dropdown">
             <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Modifier les paramètres <i class="caret"></i>
@@ -145,6 +178,8 @@
             </ul>
           </li>
           <%  end %>
+          
+          
         </ul>
       </div>
       <!--/.nav-collapse -->
@@ -178,7 +213,7 @@
                 <a href="/<%= controller_name.to_s %>"> <%= controller_name.to_s %></a> <span class="divider">/</span>	
               </li>
               <li>
-               <%= action_name.to_s %>
+               <%= action_name.gsub("_"," ").to_s %>
               </li>
              
             </ul>

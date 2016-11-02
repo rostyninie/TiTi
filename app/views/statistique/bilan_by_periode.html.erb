@@ -1,0 +1,49 @@
+<div class="row-fluid">
+  <!-- block -->
+  <div class="block">
+    <div class="navbar navbar-inner block-header">
+      <div class="muted pull-left">Bilan</div>
+      <div class="pull-right"><span class="badge badge-warning">Bilan par période</span>
+
+      </div>
+    </div>
+    <div class="block-content collapse in">
+
+ Date début : <div class="btn-group">
+              <input type="text" class="input-xlarge datepicker1" id="date_debut" value="<%= Date.today.to_s %>" title="date debut" readonly="true" onblur="recherche_transaction();" >          
+            </div>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date fin : <div class="btn-group">
+
+              <input type="text" class="input-xlarge datepicker1" id="date_fin" value="<%= Date.today.to_s %>" title="date fin" readonly="true" onblur="recherche_transaction();" >
+
+            </div>
+          <div class="btn-group" style="padding-left: 100px;">
+           <a href="#" class="btn btn-primary" onclick="achat_history_pdf();"> Imprimer le bilan <i class="icon-white icon-print"> </i>  </a> 
+          </div>
+           <div id="result">
+      <%= render "list_transaction" %>
+            </div>
+    </div>
+  </div>
+  <!-- /block -->
+</div>
+
+<script>
+    function recherche_transaction()
+    {
+      document.getElementById('result').innerHTML = "<img src='/assets/roller.gif'>";
+
+      $.ajax({
+        url: "/statistique/recherche_transaction",
+        type: "POST",
+        data: {date_debut: $("#date_debut").val(), date_fin: $("#date_fin").val()},
+        success: function(data) {
+          // append data to your page
+          $("#result").html(data);
+        }
+      });
+
+    }
+
+
+  </script>

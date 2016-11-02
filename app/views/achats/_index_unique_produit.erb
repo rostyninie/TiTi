@@ -1,0 +1,24 @@
+
+<% i=0 %>
+
+<% @list_unique.each do |unique| %>
+  <tr class="odd gradeX" id="<%= unique.code %>">
+    <td><%=  i+=1%></td>
+    <td class="code"><%= unique.code %></td>
+    <td class="pu"><%= UniqueProduit.find_all_by_groupe_id(unique.id).count!=0 ? UniqueProduit.where(groupe_id: unique.id).sum(:prix_vente) : unique.prix_vente %></td>
+    <td class="mb"><%= @produit.nom.force_encoding("UTF-8") %></td>
+    
+    <td> <%=link_to "Sous-produit #{UniqueProduit.find_all_by_groupe_id(unique.id).count}",{controller: 'achats',:action=>'add_unique_produit',:id=>@achat.id,:groupe_id=>unique.id},class: "btn btn-success" %></td>
+   <td class="mb"><%= unique.etat==true ? "OUI" : "NON" %></td>
+   
+      <td class="center"><%=link_to "Modifier",{controller: 'achats',:action=>'edit_unique',:id=>unique.id},remote: true,disabled: unique.etat==true ? true : false ,class: "btn btn-success" %></td>
+
+      <td class="center"><%=link_to "Supprimer",{controller: 'achats',:action=>'delete_unique',:id=>unique.id},remote: true,disabled: unique.etat==true ? true : false ,class: "btn btn-danger" %></td>
+      </tr>
+    <% end %>
+   
+
+
+
+
+

@@ -17,7 +17,8 @@ gem 'sass', '3.2.19'
 #gem 'bootstrap-sass', '2.3.2.0'
 #gem 'materialize-sass', '0.97.3'
 gem 'sprockets', '2.11.0'
-#gem 'sprockets-rails','2.0.1'
+#gem 'turbo-sprockets-rails3'
+gem 'sprockets-rails', '2.0.1'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
@@ -42,6 +43,11 @@ group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
 end
+
+group :development, :test do
+  gem 'rspec', '~> 3.5'
+end
+
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

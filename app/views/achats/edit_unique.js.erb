@@ -1,0 +1,5 @@
+<% if @unique.etat==true%>
+$.jGrowl("<%= "Impossible de modifier le produit car il est déjà vendue!!!" %>", {header: 'information'})
+<% else %>
+$("#form_unique").html("<%= escape_javascript(render(:partial =>'form_unique_produit')) %>")
+<% end %>

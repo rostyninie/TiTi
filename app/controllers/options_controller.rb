@@ -16,13 +16,13 @@ class OptionsController < ApplicationController
 
   # GET /options/new
   def new
-   @config = Option.get_multiple_configs_as_hash ['Tva','Name','Email','Phone','Adress']
+   @config = Option.get_multiple_configs_as_hash ['Tva','Name','Email','Phone','Adress','Mode','DateDebutExo','DateFinExo','Valorisation']
     
     if request.post?
       Option.set_config_values(params[:option])
       
      
-         @config = Option.get_multiple_configs_as_hash ['Tva','Name','Email','Phone','Adress']
+         @config = Option.get_multiple_configs_as_hash ['Tva','Name','Email','Phone','Adress','Mode','DateDebutExo','DateFinExo','Valorisation']
        
      
       flash[:notice] = "#{"Configurations modifier avec succès!!!"}"

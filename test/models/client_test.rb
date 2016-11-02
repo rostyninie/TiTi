@@ -1,7 +1,8 @@
 require 'test_helper'
 
 class ClientTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+   test "should client without no" do
+     client=Client.new
+     assert !client.save
+   end
 end

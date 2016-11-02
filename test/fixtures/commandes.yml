@@ -2,16 +2,14 @@
 
 one:
   code: MyString
-  montant: 1.5
   en_cour: false
   client_id: 1
-  date_reglage: 2016-01-21
+  user_id: 1
   is_deleted: false
 
 two:
   code: MyString
-  montant: 1.5
   en_cour: false
   client_id: 1
-  date_reglage: 2016-01-21
+  user_id: 1
   is_deleted: false

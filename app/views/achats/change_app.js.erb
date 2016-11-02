@@ -1,0 +1,18 @@
+
+$(".achat-index").html("<%= escape_javascript(render(:partial=>'index')) %>")
+
+<% if @achat.etat_stock > 0 %>
+
+var maliste = $("#produits tbody").children("tr")
+ maliste.each(function()
+      {
+      if ($(this).find('.numero').html()=="<%= @achat.produit_id.to_s.html_safe %>")
+        {
+        $(this).find('.quantite').html('<span class="last_achat hidden"><%= @achat.quantite.to_s.html_safe %></span><div class="progress progress-success"><div style="width: 100%;" class="bar"><%= @achat.sortie.nil? ? 0 : @achat.sortie.to_s.html_safe %></div></div>')
+          $(this).find('.prix_vente').html('<%= @achat.prix_vente.to_s.html_safe %>')
+        }
+      });
+      
+      <% end %>
+   
+$.jGrowl("<%= flash[:notice] %>", {header: 'information'})

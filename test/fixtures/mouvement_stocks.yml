@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  date: 2016-08-31 09:13:50
+  type_mouvement: 
+  achat_id: 1
+  produit_id: 1
+  quantite: 1
+  prix_u: 1.5
+
+two:
+  date: 2016-08-31 09:13:50
+  type_mouvement: 
+  achat_id: 1
+  produit_id: 1
+  quantite: 1
+  prix_u: 1.5

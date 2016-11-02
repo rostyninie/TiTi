@@ -1,0 +1,87 @@
+<% unless @valorisation.nil? %>
+<div class="span8" style="font-weight: bold; font-size: 20px; font-style: italic; color: #93a1a1;">
+  <% if @valorisation.type_valorisation=="cumpe" %>
+  <%= "Valorisation du produit : #{@produit.nom.force_encoding("UTF-8")} de l'approvisionnenment #{@last_achat.code} du #{@last_achat.date_achat.to_s}" %></div>
+<% elsif @valorisation.type_valorisation=="cumpp" %>
+ <%= "Valorisation du produit : #{@produit.nom.force_encoding("UTF-8")} du #{@init_achat.date_achat.to_s} du #{@last_achat.date_achat.to_s}" %></div>
+<% end %>
+<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="tb_last_valoris">
+  <thead>
+    <tr>
+      <th rowspan="2">Date</th>
+      <th rowspan="2">Opérations</th>
+      <th rowspan="1" colspan="3">Stock initial et entrées</th>
+      <th rowspan="1" colspan="3">Sorties</th>
+      <th rowspan="1" colspan="3">Stock</th>
+    </tr>
+    <tr>
+      <th vertical-align=middle><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Quanité</b></div></th>
+<th vertical-align=middle><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Coût unitaire</b></div></th>
+<th vertical-align=middle><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Montant</b></div></th>
+<th vertical-align=middle><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Quanité</b></div></th>
+<th vertical-align=middle><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Coût unitaire</b></div></th>
+<th vertical-align=middle><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Montant</b></div></th>
+<th vertical-align=middle><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Quanité</b></div></th>
+<th vertical-align=middle><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Coût unitaire</b></div></th>
+<th vertical-align=middle><div style="writing-mode:sideways-lr; white-space: nowrap;"><b>Montant</b></div></th>
+</tr>
+
+
+
+</thead>
+<tbody class="valorisation">
+
+  <% @tb_valorisation.each do |t| %> 
+
+    <tr>
+      <td>  <%= t[0] %>    </td>
+      <td> <%= t[1] %>    </td>
+      <td> <%= t[2] == 0 ? "#{"-"}" : t[2] %> </td>
+      <td> <%= t[3] == 0 ? "#{"-"}" : t[3] %>    </td>
+      <td> <%= t[4] == 0 ? "#{"-"}" : t[4] %>  </td>
+      <td> <%= t[5] == 0 ? "#{"-"}" : t[5] %>  </td>
+      <td>  <%= t[6] == 0 ? "#{"-"}" : t[6] %>  </td>
+      <td>  <%= t[7] == 0 ? "#{"-"}" : t[7] %>  </td>
+      <td> <%= t[8] %>  </td>
+      <td><%= t[9] %>  </td>
+      <td> <%= t[10] %>    </td>
+
+    </tr>
+  <% end %> 
+  <tr>
+    <th>     </th>
+    <th> Total   </th>
+    <th> <%= @tq_a.to_s %>  </th>
+    <% if @valorisation.type_valorisation=="cumpe" %>
+    <th>    </th>
+    <% elsif @valorisation.type_valorisation=="cumpp" %>
+    <th> <%= @cump.to_s %>   </th>
+    
+   <% end %>
+    <th> <%= @tm_a.to_s %>   </th>
+    <% if @valorisation.type_valorisation=="cumpe" %>
+    <th>    </th>
+    <% elsif @valorisation.type_valorisation=="cumpp" %>
+    <th> <%= @cump.to_s %>   </th>
+    <% end %>
+    <th>  <%= @tm_o.to_s %>  </th>
+    <th>    </th>
+    <th>   </th>
+    <th>    </th>
+
+  </tr>
+</tbody>
+</table>
+<% if @valorisation.type_valorisation=="cumpe" %>
+<%=link_to "Imprimer la valorisation",{controller: 'statistique',:action=>'print_valorisation_pdf',:produit_id=>@produit.id,:app_init_id=>@init_achat,:app_last_id=>@last_achat.id},class: "btn btn-primary",target: "_blank" %>
+<% elsif @valorisation.type_valorisation=="cumpp" %>
+<%=link_to "Imprimer la valorisation",{controller: 'statistique',:action=>'print_valorisation_periode_pdf',:produit_id=>@produit.id,:app_init_id=>@init_achat,:app_last_id=>@last_achat.id},class: "btn btn-primary",target: "_blank" %>
+<% end %>
+
+
+<% else %>
+
+<div class="span12 offset2" style="font-weight: bold; font-size: 45px; font-style: italic; color: #93a1a1;">
+                <%= "Aucune valorisation trouvée!!!" %></div>
+
+<% end %>

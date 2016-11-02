@@ -1,0 +1,61 @@
+
+<% if @unique.code.nil?%>
+    <%= form_for(:unique, :url => {:controller=>"achats",:action=>"create_unique"}, remote: true, :html=> {:multipart=>true}) do |c| %>
+<ul class="errors" style="color: #EE5757;">
+            
+          </ul>
+ 
+ <%= c.hidden_field :produit_id,:value=>@produit.id%> 
+<%= c.hidden_field :achat_id,:value=>@achat.id%> 
+<% unless @groupe.nil? %>
+<%= c.hidden_field :groupe_id,:value=>@groupe.id%> 
+<% end %>
+     
+App = <%= text_field_tag  :app,@achat.code,:readonly=>true,:class=>"input-small",:id=>"code_achat",title: "code achat"%> 
+
+  <%= text_field_tag  :produit,@produit.nom,:readonly=>true,:class=>"input-small",:id=>"nom_produit",title: "Nom produit"%>
+
+      
+      
+     <br/> <br/>
+
+      <%= c.text_field :code,:value=>"",:class=>"input-large",:id=>"code",:placeholder=>"CODE-BARRE",:required => true,:rel=>"tooltip",  "data-original-title"=>"CODE-BARRE"%> 
+      <%= c.text_field :prix_vente,:value=>(@groupe.nil? ? @achat.prix_vente : UniqueProduit.find_all_by_groupe_id(@groupe.id).count!=0 ? UniqueProduit.find_all_by_groupe_id(@groupe.id).first.prix_vente : @groupe.prix_vente),:readonly=>@groupe.nil? ? true : false,:class=>"input-large",:id=>"prix_v",:placeholder=>"Prix de vente" ,:required => true,title: "Prix de vente"%>
+  
+      <br/>
+     
+      <br/>
+     <% if  @achat.unique_produits.count < @achat.sortie  %>
+      <%= c.submit"", :value => "► #{"Enregistrer"}",:id=>"submi", :class => "btn btn-large btn-primary" %>
+      <% else %>
+      
+   <% end %>
+       <% end %>
+      <% else %>
+      
+      <%= form_for(:unique, :url => {:controller=>"achats",:action=>"update_unique",:id=>@unique.id}, remote: true, :html=> {:multipart=>true}) do |c| %>
+<ul class="errors" style="color: #EE5757;">
+            
+          </ul>
+ App = <%= text_field_tag  :app,@unique.achat.code,:readonly=>true,:class=>"input-small",:id=>"code_achat",title: "code achat"%> 
+
+  <%= text_field_tag  :produit,@unique.produit.nom.force_encoding("UTF-8"),:readonly=>true,:class=>"input-small",:id=>"nom_produit",title: "Nom produit"%>
+
+      
+      
+     <br/> <br/>
+
+      <%= c.text_field :code,:value=>@unique.code,:class=>"input-large",:id=>"code",:placeholder=>"CODE-BARRE",:required => true,:rel=>"tooltip",  "data-original-title"=>"CODE-BARRE"%> 
+      <%= c.text_field :prix_vente,:value=>@unique.prix_vente,:readonly=>@unique.groupe_id.nil? ? true : false,:class=>"input-large",:id=>"prix_v",:placeholder=>"Prix de vente" ,:required => true,title: "Prix de vente"%>
+  
+      <br/>
+     
+      <br/>
+      <%= c.submit"", :value => "► #{"Mdifier le produit"}",:id=>"submi", :class => "btn btn-large btn-primary" %>
+   
+      <% end %>
+      
+
+    <%end%>
+ 
+   

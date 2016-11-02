@@ -1,0 +1,14 @@
+<% i=0 %>
+<% @coordonne_bancaires.each do |c| %>
+  <tr class="odd gradeX">
+    <td><%=  i+=1%></td>
+    <td><%= c.code %></td>
+    <td><%=c.nom.force_encoding("UTF-8") %></td>
+    <td><%=c.description.force_encoding("UTF-8")%></td>
+    <td><%=c.is_active.to_s%></td>
+    <!--<td><#%=d.categorie.nom %></td>-->
+    <td class="center"><%=link_to "Modifier",edit_coordonne_bancaire_path(c),remote: true,class: "btn btn-success" %></td>
+ 
+    <td class="center"><%=link_to "Supprimer",{controller: 'coordonne_bancaires',:action=>'delete',:id=>c.id},remote: true,class: "btn btn-danger" %></td>
+  </tr>
+<% end %>

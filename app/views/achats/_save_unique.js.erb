@@ -1,0 +1,13 @@
+$("ul.errors").html("")
+<% if @unique.errors.any? %>
+  <% @unique.errors.full_messages.each do |message| %>
+$("ul.errors").append($("<li />").html("<%= message.html_safe %>"))
+<% end%>
+<% else %>
+$("#unique-modal").modal("hide")
+$(".unique-index").html("<%= escape_javascript(render(:partial=>'index_unique_produit')) %>")
+$("#form_unique").html("<%= escape_javascript(render(:partial=>'form_unique_produit')) %>")
+$.jGrowl("<%= flash[:notice] %>", {header: 'information'})
+
+
+<% end %>

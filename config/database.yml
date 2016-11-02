@@ -11,7 +11,7 @@
 development:
   adapter: mysql2
   encoding: utf8
-  database: titinew5
+  database: titinew7
   pool: 5
   username: root
   password: fedena
@@ -34,10 +34,10 @@ test:
 production:
   adapter: mysql2
   encoding: utf8
-  database: titinew_production
+  database: titinew6
   pool: 5
   username: root
-  password: ninie
+  password: fedena
   host: 127.0.0.1
-  collation: utf8_general_ci
+  collation: utf8_unicode_ci
 

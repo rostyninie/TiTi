@@ -2,31 +2,73 @@
 <% i=0 %>
 <% gt=0 %>
 <% @achats.each do |achat| %>
-  <tr class="odd gradeX">
+  <tr class="odd gradeX" id="<%= achat.code %>">
     <td><%=  i+=1%></td>
-    <td><%= achat.code %></td>
-    <td><%= achat.prix_achat_unitaire %></td>
-    <td><%= achat.marge_brut %></td>
-    <td><%= achat.prix_ht %></td>
-    <td><%= achat.prix_vente %></td>
-    <td><%= achat.quantite %></td>
+    <td class="code"><%= achat.code %></td>
+    <td class="pu"><%= achat.prix_achat_unitaire %></td>
+    <td class="pu"><%= achat.cout_achat %></td>
+    <td class="mb"><%= achat.marge_brut %></td>
+    <td class="pht"><%= achat.prix_ht %></td>
+   
+    <td class="pv"><%= achat.prix_vente %></td>
+     <td><%=h (achat.quantite*achat.prix_achat_unitaire).to_s %></td>
     <td><%= achat.quantite_stock_av %></td>
-    <td><%= achat.date_achat %></td>
-    <td><%= achat.user.nom.force_encoding("UTF-8") %></td>
-    <td><%=h achat.produit.nom.force_encoding("UTF-8") %></td>
-    <td><%=h achat.fournisseur.nom.force_encoding("UTF-8") %></td>
-    <td><%=h achat.is_deleted.to_s %></td>
-    <td><%=h (achat.quantite*achat.prix_achat_unitaire).to_s %></td>
-    <% gt=gt + (achat.quantite*achat.prix_achat_unitaire) %>
+ 
+      <td class="qt"><%= achat.quantite %></td>
+      <td class="etat_st"><%= achat.etat_stock %></td>
+   
+
+    <td class="date_a"><%= achat.date_achat %></td>
+    <td class="user"><%= achat.user.nom.force_encoding("UTF-8") %></td>
+    <td class="produit"><%=h achat.produit.nom.force_encoding("UTF-8") %></td>
+    <td class="fourniss"><%=h achat.fournisseur.nom.force_encoding("UTF-8") %></td>
+    <% if Option.get_config_value('mode')=='2' || Option.get_config_value('mode')=='5' %>
+     
+        <td><%=h achat.previous_id.nil? ? "#{"NON"}" : "#{"<a class=\"btn btn-primary btn_prev\" title=\""+Achat.find_by_id(achat.previous_id).code+"\">Voir... </td>"}".html_safe %></td>
+     
+      
+        <td><%=h achat.next_id.nil? ? "#{"NON"}" : "#{"<a class=\"btn btn-primary btn_next\" title=\""+Achat.find_by_id(achat.next_id).code+"\">Voir... </td>"}".html_safe %></td>
+     <%if achat.is_active==true %>
+        <td><%=link_to "Changer de stock",{controller: 'achats',:action=>'change_app',:id=>achat.produit.id},remote: true,class: "btn" %></td>
+    <% else %>
+        <td><%= "" %></td>
+      <% end %>
+      <% end %>
+        <%if achat.is_active==true %>
+         <td class="solder center"><%=link_to "#{"Faire Sortir..."}" ,"",remote: true,class: "bt_fs btn btn",title: achat.code %></td>
+          <%else %>
+         <td class="solder center"><%= "#{"-"}" %></td>
+         <%end %>
+         <td class="sortie"><%=h achat.sortie.to_s %></td>
+        <%if achat.is_active==true %>
+    <td> <%=link_to "Utiliser",{controller: 'achats',:action=>'active_app',:id=>achat.id},remote: true,class: "btn btn-success", desabled: true %></td>
+    <%else %>
+    <td><%=link_to "Activer",{controller: 'achats',:action=>'active_app',:id=>achat.id},remote: true,class: "btn" %></td>
+    <%end %>
+    <td class="pr"><%= achat.prix_revient %></td>
+    <% gt=gt + achat.prix_revient %>
     <% exist=AchatHistory.find_all_by_produit_id_and_code(achat.produit.id,achat.code ).count %>
     <% if exist>0 %>
-     <td class="center"><%=link_to "#{"Modifications("} #{exist.to_s} )" ,{controller: 'achats',:action=>'achat_history',:id=>achat.produit.id,:code=>achat.code},remote: true,class: "btn btn-primary",title: "historique sur toute les modification de l'achat après sa création." %></td>
-   <% else %>
-     <td class="center"></td>
-    <% end %>
-     <td class="center"><%=link_to "Modifier",edit_achat_path(achat),remote: true,class: "btn btn-success" %></td>
+      <td class="center"><%=link_to "#{"Modifications("} #{exist.to_s} )" ,{controller: 'achats',:action=>'achat_history',:id=>achat.produit.id,:code=>achat.code},remote: true,class: "btn btn-primary",title: "historique sur toute les modification de l'achat après sa création." %></td>
+      <% else %>
+        <td class="center"></td>
+      <% end %>
+        
+         <% if Option.get_config_value('mode')=='4' || Option.get_config_value('mode')=='5' %>
+        <% unless achat.sortie.nil? %>
+           <td> <%=link_to "Sous-produit #{achat.unique_produits.count}",{controller: 'achats',:action=>'add_unique_produit',:id=>achat.id},class: "btn btn-success" %></td>
+           <% else %>
+            <td><%= "#{"-"}" %></td>
+            <% end %>
+                   <% end %>
+            <% if achat.frai_achats.count==0 %>
+           <td> <%=link_to "Ajouter",{controller: 'achats',:action=>'frais_app',:id=>achat.id},class: "btn btn-success" %></td>
+           <% else %>
+            <td> <%=link_to "voir #{achat.frai_achats.count}",{controller: 'achats',:action=>'frais_app',:id=>achat.id},class: "btn btn-success" %></td>
+            <% end %>
+      <td class="center"><%=link_to "Modifier",edit_achat_path(achat),remote: true,class: "btn btn-success" %></td>
 
-      <!--<td class="center"><#%=link_to "Supprimer",{controller: 'achats',:action=>'delete',:id=>achat.id},remote: true,class: "btn btn-danger" %></td>-->
+        <!--<td class="center"><#%=link_to "Supprimer",{controller: 'achats',:action=>'delete',:id=>achat.id},remote: true,class: "btn btn-danger" %></td>-->
       </tr>
     <% end %>
     <tr class="odd gradeX" >
@@ -40,17 +82,86 @@
       <td><%= "-" %></td>
       <td><%= "-" %></td>
       <td><%= "-" %></td>
+      <td><%= "-" %></td>
       <td><%="-" %></td>
-       <td><%="-" %></td>
-       <td><%="-" %></td>
+       <td><%= "-" %></td>
+      <td><%="-" %></td>
+      <td><%="-" %></td>
+      <td><%="-" %></td>
+      <td><%="-" %></td>
+      <td><%="-" %></td>
+      <% if Option.get_config_value('mode')=='2' || Option.get_config_value('mode')=='5' %>
+      <td><%="-" %></td>
+      <td><%="-" %></td>
+      <td><%="-" %></td>
+       <% end %>
       <td style="background-color: #B3D38D; font-size: 15px; font-weight: bold;"><%=h (gt).to_s %></td>
       <td><%="-" %></td>
       <td class="center"><%="-" %></td>
-
+      <% if Option.get_config_value('mode')=='4' || Option.get_config_value('mode')=='5' %>
+      <td class="center"><%="-" %></td>
+        <% end %>
+      <td><%="-" %></td>
     </tr>
 
 
+  <script>
+      $("td").on('click','.btn_prev', function() {
+      
+     var code=$("#"+$(this).attr('title')+"").find('.code').html(); 
+     var pu=$("#"+$(this).attr('title')+"").find('.pu').html(); 
+     var mb=$("#"+$(this).attr('title')+"").find('.mb').html(); 
+     var pht=$("#"+$(this).attr('title')+"").find('.pht').html(); 
+     var pv=$("#"+$(this).attr('title')+"").find('.pv').html(); 
+     var qt=$("#"+$(this).attr('title')+"").find('.qt').html(); 
+     var etat_st=$("#"+$(this).attr('title')+"").find('.etat_st').html(); 
+     var date_a=$("#"+$(this).attr('title')+"").find('.date_a').html(); 
+     var user=$("#"+$(this).attr('title')+"").find('.user').html(); 
+     var produit=$("#"+$(this).attr('title')+"").find('.produit').html(); 
+     var fourniss=$("#"+$(this).attr('title')+"").find('.fourniss').html(); 
+   
+      
+        var modal = '<div class="modal-header"><button data-dismiss="modal" class="close" type="button">&times;</button><h3> approvisionement précédent  :</h3></div><div class="modal-body"> <span id="error" style="color :red;"></span><br/><table class="table"><tr><th>Code achat</th> <td> '+code+'</td></tr><tr><th>Produit</th> <td> '+produit+'</td></tr><tr><th>Prix unitaire</th> <td> '+pu+'</td></tr><tr><th>Quantité</th> <td> '+qt+'</td></tr><tr><th>Marge brut</th> <td> '+mb+'</td></tr><tr><th>Prix de vente</th> <td> '+pv+'</td></tr><tr><th>Fournisseur</th> <td> '+fourniss+'</td></tr><tr><th>Etat en stock</th> <td> '+etat_st+'</td></tr><tr><th>Date</th> <td> '+date_a+'</td></tr><tr><th>Utilisateur</th> <td> '+user+'</td></tr></table></div>';
+        $("#modal-detailapp").html(modal);
+        $("#modal-detailapp").modal('show');
+       
+      });
+  
+   $("td .btn_next").on('click', function() {
+       
+     var code=$("#"+$(this).attr('title')+"").find('.code').html(); 
+     var pu=$("#"+$(this).attr('title')+"").find('.pu').html(); 
+     var mb=$("#"+$(this).attr('title')+"").find('.mb').html(); 
+     var pht=$("#"+$(this).attr('title')+"").find('.pht').html(); 
+     var pr=$("#"+$(this).attr('title')+"").find('.pr').html(); 
+     var pv=$("#"+$(this).attr('title')+"").find('.pv').html(); 
+     var qt=$("#"+$(this).attr('title')+"").find('.qt').html(); 
+     var etat_st=$("#"+$(this).attr('title')+"").find('.etat_st').html(); 
+     var date_a=$("#"+$(this).attr('title')+"").find('.date_a').html(); 
+     var user=$("#"+$(this).attr('title')+"").find('.user').html(); 
+     var produit=$("#"+$(this).attr('title')+"").find('.produit').html(); 
+     var fourniss=$("#"+$(this).attr('title')+"").find('.fourniss').html(); 
+   
+      
+        var modal = '<div class="modal-header"><button data-dismiss="modal" class="close" type="button">&times;</button><h3> approvisionement suivant  :</h3></div><div class="modal-body"> <span id="error" style="color :red;"></span><br/><table class="table"><tr><th>Code achat</th> <td> '+code+'</td></tr><tr><th>Produit</th> <td> '+produit+'</td></tr><tr><th>Prix unitaire</th> <td> '+pu+'</td></tr><tr><th>Quantité</th> <td> '+qt+'</td></tr><tr><th>Marge brut</th> <td> '+mb+'</td></tr><tr><th>Prix de revient</th> <td> '+pr+'</td></tr><tr><th>Prix de vente</th> <td> '+pv+'</td></tr><tr><th>Fournisseur</th> <td> '+fourniss+'</td></tr><tr><th>Etat en stock</th> <td> '+etat_st+'</td></tr><tr><th>Date</th> <td> '+date_a+'</td></tr><tr><th>Utilisateur</th> <td> '+user+'</td></tr></table></div>';
+        $("#modal-detailapp").html(modal);
+        $("#modal-detailapp").modal('show');
+       
+      });
+      
+       
+      $("td .bt_fs").on('click', function() {
+        // <input title="" data-original-title="" class="btn btn-large btn-primary" id="submi" name="commit" value="► Enregistrer" type="submit">
+        // <input class="input-large" data-original-title="Prix Unitaire" id="prix_u" name="achat[prix_achat_unitaire]" onkeyup="total(); prix_hort_taxe();" placeholder="prix achat unitaire" rel="tooltip" required="required" value="" type="text">
+        // <form accept-charset="UTF-8" action="/achats" data-remote="true" enctype="multipart/form-data" method="post">
+         var code=$("#"+$(this).attr('title')+"").find('.code').html(); 
+         var qt=$("#"+$(this).attr('title')+"").find('.etat_st').html(); 
+        var modal = '<div class="modal-header"><button data-dismiss="modal" class="close" type="button">&times;</button><h3> Sortie de stock :</h3></div><div class="modal-body"> <span id="error" style="color :red;"></span><br/><form accept-charset="UTF-8" action="/achats/faire_sortir" data-remote="true" enctype="multipart/form-data" method="post"}><input name="code_achat" value="' + code + '" type="hidden"/> <input class="input-large" title="Quantité à faire sortir" id="qt_sortie" name="quantite_sortie" rel="tooltip"  value="' + qt + '" type="text"> <input title="" data-original-title="" class="btn btn-large btn-primary" id="submi" name="commit" value="► Enregistrer" type="submit"></form></div>';
+        $("#modal-detailapp").html(modal);
+        $("#modal-detailapp").modal('show');
+        //alert($(this).parent().parent().find('.reste').html());
+      });
+      
 
-
-
+</script>
 

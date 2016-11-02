@@ -1,0 +1,92 @@
+ <div class="row-fluid">
+        <div class="span6">
+          <% som_entre=0%>
+          <% som_sortie=0%>
+          <% som_reste=0%>
+          <!-- block -->
+          <div class="block">
+            <div class="navbar navbar-inner block-header">
+              <div class="muted pull-left">Sorties</div>
+              <div class="pull-right"><span class="badge badge-info"><%= @entrees.count.to_s %></span>
+
+              </div>
+            </div>
+            <div class="block-content collapse in">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Titre</th>
+                    <th>Montant</th>
+                    <th>Date </th>
+                  </tr>
+                </thead>
+                <tbody>
+                 
+                  <% @entrees.each_with_index do |t,i| %>
+                  <tr>
+                    <td><%= i+1 %></td>
+                    <td><%= t.titre %></td>
+                    <td><%= t.montant %></td>
+                    <% som_entre = som_entre + t.montant %>
+                    <td><%= t.date_transaction %></td>
+                  </tr>
+                  <% end %>
+                 
+              </table>
+            </div>
+          </div>
+           <% if @factures.count !=0 %>
+          <% @factures.each do |f|%>
+          <% som_reste = som_reste + (f.montant - f.versement) %>
+          <% end %>
+          <% end %>
+           <hr>Total sorties : <%= (som_entre).to_s %> <hr>
+           Total des reste commandes non soldées : <%= (som_reste).to_s %> <hr>
+          <!-- /block -->
+        </div>
+        <div class="span6">
+          <!-- block -->
+          <div class="block">
+            <div class="navbar navbar-inner block-header">
+              <div class="muted pull-left">Entrées</div>
+              <div class="pull-right"><span class="badge badge-info"><%= @sorties.count.to_s %></span>
+
+              </div>
+            </div>
+            <div class="block-content collapse in">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                   <th>Titre</th>
+                    <th>Montant</th>
+                    <th>Date </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @sorties.each_with_index do |t,i| %>
+                  <tr>
+                    <td><%= i+1 %></td>
+                    <td><%= t.titre %></td>
+                    <td><%= t.montant %></td>
+                    <% som_sortie = som_sortie + t.montant %>
+                    <td><%= t.date_transaction %></td>
+                  </tr>
+                  <% end %>
+                 
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- /block -->
+           
+         
+          <hr>Total Entrées : <%= som_sortie.to_s %> 
+          <hr>
+           
+        </div>
+  
+            <hr>Gains sans tenir compte du total des restes des commande non soldées : <%= (som_entre - som_sortie).to_s %> <hr>
+        Gains en tenant compte du total des restes des commande non soldées : <%= ((som_entre + som_reste) - som_sortie).to_s %> <hr>
+      </div>

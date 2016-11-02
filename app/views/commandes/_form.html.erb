@@ -1,14 +1,16 @@
 <%= form_for(@commande, remote: true, :html=> {:multipart=>true}) do |f|  %>
   <%= f.hidden_field :user_id,:value=>@current_user.id%>
-<%= hidden_field_tag "id_p","",:id=>"prd_id"%>
-<%= hidden_field_tag "quantite_g","",:id=>"prd_gros"%>
-<%= hidden_field_tag "prix_g","",:id=>"prd_prix_gros"%>
-<%= hidden_field_tag "list_produits","",:id=>"list_produits"%>
+  <%= hidden_field_tag "id_p","",:id=>"prd_id"%>
+  <%= hidden_field_tag "quantite_g","",:id=>"prd_gros"%>
+  <%= hidden_field_tag "prix_g","",:id=>"prd_prix_gros"%>
+  <%= hidden_field_tag "achat_c","",:id=>"achat_code"%>
+  <%= hidden_field_tag "list_produits","",:id=>"list_produits"%>
   <% if Commande.count==0 %>
     <% code="1" %>
   <% else %>
     <% code=Commande.last.code.next %>
   <% end %>
+  <span class="list_p">N°</span>
   <div class="row-fluid">
     <div class="span2" >
       <div class="input-prepend"> 
@@ -19,390 +21,705 @@
       <div style="margin-left: 140px;"  class="span6" >
         <span class="label label-success"> Nom produit </span> &nbsp; : &nbsp;<span id="nom_produit" class="label">---------------</span>
       </div>
-  
-</div>
-<div class="row-fluid">
-  <div class="span3">
-    <span class="label label-important">Vendre en gros : </span> <%= check_box_tag "en_gros",checked: false,id: "en_gros"%>
-  </div>
-  
-   <div class="span6 hidden qt_g">
-    <span class="label label-important">Quantite en gros </span> &nbsp; : &nbsp;<span id="qt_gros" class="label">---------------</span>
-  </div>
-  </div>
-<div class="row-fluid">
-   <div class="span6">
-     <h4 ><span class="label label-important"> Prix du produit </span> &nbsp; : &nbsp;<span id="pu">----------</span> Fcfa</h4> 
-          </div>
-  
-</div>
+
+    </div>
+    <% if Option.get_config_value('mode')=='1' || Option.get_config_value('mode')=='2' %>
+      <div class="row-fluid">
+        <div class="span3">
+          <span class="label label-important">Vendre en gros : </span> <%= check_box_tag "en_gros",checked: false,id: "en_gros"%>
+        </div>
+
+        <div class="span6 hidden qt_g">
+          <span class="label label-important">Quantite en gros </span> &nbsp; : &nbsp;<span id="qt_gros" class="label">---------------</span>
+        </div>
+      </div>
+    <% end %>
+    <div class="row-fluid">
+      <div class="span6">
+        <h4 ><span class="label label-important"> Prix du produit </span> &nbsp; : &nbsp;<span id="pu">----------</span> Fcfa</h4> 
+      </div>
+
+    </div>
     <br/>
     <div class="row-fluid">
-      <div class="span5">
-        <span class="label label-important">Quantite : </span> <%= text_field_tag "quantite","",class: "input-mini",id: "quantite",required: true %> <span class="label" id="unite">Boite</span>
-        </div>
-        <div style="margin-left: 40px;" class="span2">
-          <div class="input-append"> 
-            <span class="label label-info">Remise : </span> <%= text_field_tag "remise","",class: "input-mini",id: "remise" %> <span class="add-on">%</span>
-            </div>
+      <div class="span6">
+        <% if Option.get_config_value('mode')=='1' || Option.get_config_value('mode')=='2' %>
+          <span class="label label-important">Quantite : </span> <%= text_field_tag "quantite","",class: "input-mini",id: "quantite",required: true%> <span class="label" id="unite">Boite</span>
+
+          <% elsif Option.get_config_value('mode')=='4' || Option.get_config_value('mode')=='5' %>
+            <span class="label label-important">Quantite : </span> <%= text_field_tag "quantite","",class: "input-mini",id: "quantite",required: true,readOnly: true %> <span class="label" id="unite">Boite</span>
+
+            <% end %>
           </div>
-
-         
-        </div>
-       <br/>
-        <div class="row-fluid">
-          <div class="span4">
-             
-            <span class="label label-important">Client : </span><input type="text" class="span6" id="client" name="client"  data-provide="typeahead" data-items="4" data-source='<%= @client_string %>'>           
-            <!-- <span class="label label-important">Client : </span> <#%= f.select :client_id,Client.active.map{|c| [c.nom.force_encoding("UTF-8"),c.id]},:id=>"client"%>--> 
-          </div>
-
-        </div>
-        <br/>
-        <div class="row-fluid">
-          <div class="span5">
-            <a class="btn btn-large btn-block btn-inverse" id="ajout_panier">Ajouter à la commande +</a>
-          </div>
-        </div>
-
-        <div class="row-fluid">
-          <div class="span7">
-            <table class="table" id="produit">
-              <thead>
-                <tr class="tete">
-                  <th class="hidden">Numero</th>
-                  <th>Nom</th>
-                  <th>Pu</th>
-                  <th>Quantite</th>
-                  <th>Remise</th>
-                  <th>Total</th>
-                  <th>supprimer</th>
-
-                </tr>
-              </thead>
-
-              <tbody>
-                
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="row-fluid">
-          <div class="span2">
-           <div class="input-append"> 
-            <span class="label label-info">Paiement : </span> <%= text_field_tag "paiement","0",class: "input-small",id: "paiement" %> <span class="add-on">Fcfa</span>
-            </div>
-            </div>
-          
-           <div style="margin-left: 250px;" class="span3">
-    <span class="label label-info">En cour : </span> <%= f.check_box :en_cour,checked: false, :id => "en_cour"%>
-  </div>
-           </div>
-          <div class="row-fluid">
-          <div  class="span1">
-           <div class="input-append"> 
-             <span class="label label-info">Montant &nbsp;&nbsp;&nbsp;: </span> <%= text_field_tag "montant","0",class: "input-small",id: "montant",readonly: true %> <span class="add-on">Fcfa</span>
-            </div>
-            </div>
-            
-           <div style="margin-left: 250px;" class="span2">
-           <div class="input-append"> 
-            <span class="label label-info">Reste : </span> <%= text_field_tag "reste","0",class: "input-small",id: "reste" %> <span class="add-on">Fcfa</span>
-            </div>
+          <div style="margin-left: 40px;" class="span2">
+            <div class="input-append"> 
+              <span class="label label-info">Remise : </span> <%= text_field_tag "remise","",class: "input-mini",id: "remise" %> <span class="add-on">%</span>
               </div>
-        </div>
-        <div class="row-fluid">
-          <div class="span3 offset1">
-           <%= f.submit "Solder $",:class=>"btn btn-large btn-block btn-inverse",:id=>"partiel" %> 
+            </div>
+
+
           </div>
-          
-            <div class="span3 offset1">
-           <%=link_to "Imprimer",{controller: 'droits'},class: "btn btn-large btn-block btn-inverse",:id=>"imprimer",:target => '_blank' %> 
+          <br/>
+
+          <div class="row-fluid">
+            <div class="span4">
+
+              <span class="label label-important">Prix vente : </span><input type="text" class="span6" id="prix_v" name="prix_vente" >           
+              <!-- <span class="label label-important">Client : </span> <#%= f.select :client_id,Client.active.map{|c| [c.nom.force_encoding("UTF-8"),c.id]},:id=>"client"%>--> 
+            </div>
+
+
+            <div class="span4">
+
+              <span class="label label-important">Client : </span><input type="text" class="span6" id="client" name="client"  data-provide="typeahead" data-items="4" data-source='<%= @client_string %>' required="required">           
+              <!-- <span class="label label-important">Client : </span> <#%= f.select :client_id,Client.active.map{|c| [c.nom.force_encoding("UTF-8"),c.id]},:id=>"client"%>--> 
+            </div>
+
           </div>
-          
-       </div>
+          <br/>
+          <div class="row-fluid">
+            <div class="span5">
+              <a class="btn btn-large btn-block btn-inverse" id="ajout_panier">Ajouter à la commande +</a>
+            </div>
+          </div>
 
-        
-      <% end %>
+          <div class="row-fluid">
+            <div class="span7">
+              <table class="table" id="produit">
+                <thead>
+                  <tr class="tete">
+                    <th class="hidden">Numero</th>
+                    <th>Nom</th>
+                    <th>Pu</th>
+                    <th>Quantite</th>
+                    <th>Remise</th>
+                    <th>Total</th>
+                    <th>supprimer</th>
 
-        <script>
-  
-  var quantite_stock=0;
-  
+                  </tr>
+                </thead>
 
-  
-  $("#produits").on('mouseover', '.pr', function() {
-    $(this).attr({
-      class: "error pr"
-    });
+                <tbody>
 
-  });
-  
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row-fluid">
+            <div class="span2">
+              <div class="input-append"> 
+                <span class="label label-info">Paiement : </span> <%= text_field_tag "paiement","0",class: "input-small",id: "paiement" %> <span class="add-on">Fcfa</span>
+                </div>
+              </div>
 
-  $("#produits").on('mouseout', '.pr', function() {
-    $(this).attr({
-      class: "success pr"
-    });
+              <div style="margin-left: 250px;" class="span3">
+                <span class="label label-info">En cour : </span> <%= f.check_box :en_cour,checked: false, :id => "en_cour"%>
+              </div>
+            </div>
+            <div class="row-fluid">
+              <div  class="span1">
+                <div class="input-append"> 
+                  <span class="label label-info">Montant &nbsp;&nbsp;&nbsp;: </span> <%= text_field_tag "montant","0",class: "input-small",id: "montant",readonly: true %> <span class="add-on">Fcfa</span>
+                  </div>
+                </div>
 
-  });
-  
-  $("#produits").on('click', '.pr', function() {
-    $("#nom_produit").html($(this).find(".nom").html());
-    $("#pu").html($(this).find(".prix_vente").html());
-    $("#quantite").val("1");
-    $("#unite").html($(this).find(".unite").html());
-    $("#prd_id").html($(this).find(".numero").html());
-    $("#prd_gros").html($(this).find(".quantite_gros").html());
-    $("#prd_prix_gros").html($(this).find(".prix_gros").html());
-    $("#remise").val("0");
-    $("select [value=3]").attr({selected: true});
-  
-  quantite_stock=$(this).find(".quantite .bar").html();
-   var quantite_gros=0;
-   var prix_gros=0;
-    if($("#en_gros").is(':checked'))
-  {
-     quantite_gros=$("#prd_gros").html();
-    // alert(quantite_gros);
-    prix_gros=$("#prd_prix_gros").html();
-    $('#pu').html(prix_gros);
-  $('.qt_g').attr({class : "span6 qt_g"});
-   $('#qt_gros').html(quantite_gros);
-   //alert('oui'); 
-  }
-  else
-  {
-    $('.qt_g').attr({class : "span6 hidden qt_g"});
-  }
-  
-  });
-var pu=0;
+                <div style="margin-left: 250px;" class="span2">
+                  <div class="input-append"> 
+                    <span class="label label-info">Reste : </span> <%= text_field_tag "reste","0",class: "input-small",id: "reste" %> <span class="add-on">Fcfa</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="row-fluid">
+                  <div class="span3 offset1">
+                    <%= f.submit "Solder $",:class=>"btn btn-large btn-block btn-inverse",:id=>"partiel" %> 
+                  </div>
 
-$("#remise").on("keyup", function(){
-  var pu1=pu;
-  var remise=parseInt($(this).val());
-  var pu_remise=parseInt(pu1 -((pu1 * remise)/100));
-  $("#pu").html(pu_remise);
-});
+                  <!--<div class="span3 offset1">
+                 <#%=link_to "Imprimer",{controller: 'droits'},class: "btn btn-large btn-block btn-inverse",:id=>"imprimer",:target => '_blank' %> 
+                </div>-->
 
-$("#remise").on("focus", function(){
-pu=parseFloat($("#pu").html());
-//alert("cont");
-});
-
-$("#remise").on("focusout", function(){
-//pu=parseFloat($("#pu").html());
-if($(this).val()=="")
-{
-  $("#pu").html(pu);
-  }
-
-//alert("cont");
-});
+                </div>
 
 
-$("#ajout_panier").on('click', function(){
-  var id=$("#prd_id").html();
-  var nom_produit=$("#nom_produit").html();
-  var pri_unit=parseFloat($("#pu").html());
-  var quantite=parseInt($("#quantite").val());
-  var remis=parseInt($("#remise").val());
-  var total=0;
-  var quantite_gros=0;
-   var prix_gros=0;
-   
-  if($("#en_gros").is(':checked'))
-   {
-     
-     quantite_gros=$("#prd_gros").html();
-    // alert(quantite_gros);
-    prix_gros=$("#prd_prix_gros").html();
-    // alert(prix_gros);
-    if(quantite_stock>=(quantite*quantite_gros))
-    {
-    
-    quantite=quantite*quantite_gros;
-    //total=quantite*prix_gros;
-    total=quantite*pri_unit;
-  }
-  else
-  {
-     alert("Inpossible d'ajouter ce produit car la quantité en stock est inférieur à la quantité demandé.");
-  }
-   }
-   else
-   {
-     if(quantite_stock>=quantite)
-     {
-       total=pri_unit*quantite;
-     }
-     else
-     {
-       alert("Inpossible d'ajouter ce produit car la quantité en stock est inférieur à la quantité demandé.");
-     }
-     
-   }
-   if(total!=0)
-   {
-  var ajout_p='<tr id="'+id+'"><td class="prd_id hidden">'+id+'</td><td class="prd_nom">'+nom_produit+' </td><td class="prd_pu">'+pri_unit+' </td><td class="prd_quantite">'+quantite+'</td><td class="prd_remise">'+remis+'</td><td class="prd_total">'+total+'</td><td><a class="btn btn-danger delet" title="'+id+'">supprimer </td></tr>';
-   var montant=parseInt($("#montant").val());
-    var total_montant=montant+total;
-    $("#produit tbody").append(ajout_p);
-    $("#montant").val(total_montant);
-    $("#produits tbody").children("tr").each(function(){
-      if($(this).find('.numero').html()==id)
-      {
-        quantite_stock= ($(this).find('.quantite .bar').html()-quantite);
-        var last_achat=parseInt($(this).find('.last_achat').html());
-        var last_ach_qt_st=last_achat+quantite_stock;
-        //alert(last_ach_qt_st);
-        var pourc=parseInt(((quantite_stock*100)/(last_ach_qt_st)));
-       // alert(quantite_stock+"*100/("+last_achat+"+"+quantite_stock+")="+pourc);
-        var couleur="";
-        if(pourc>=70)
-        {
-          couleur="success";
-        }
-        else if(pourc>=25 && pourc<70)
-        {
-          couleur="warning";
-        }
-        else if(pourc<25)
-        {
-          couleur="danger";
-        }
-           
-        var modifi_maliste='<td class="numero hidden">'+$(this).find('.numero').html()+'</td><td class="nom">'+$(this).find('.nom').html()+'</td> <td class="prix_vente">'+$(this).find('.prix_vente').html()+'</td><td class="quantite"><span class="last_achat hidden">'+last_achat+'</span>  <div class="progress progress-'+couleur+'"><div style="width: '+pourc+'%;" class="bar">'+quantite_stock+'</div></div></td><td class="quantite_gros hidden">'+$(this).find('.quantite_gros').html()+'</td><td class="prix_gros hidden">'+$(this).find('.prix_gros').html()+'</td> <td class="unite hidden">'+$(this).find('.unite').html()+'</td><td class="code hidden">'+$(this).find('.code').html()+'</td>';
-       $(this).html(modifi_maliste);
-      }
-    });
-    
-    var new_pr=id+','+quantite+','+remis+',1;';
-    $("#list_produits").val($("#list_produits").val()+new_pr);
-    
-   }  
-    
-});
+              <% end %>
+
+              <script>
+
+                var quantite_stock = 0;
 
 
 
-$("#paiement").on("keyup", function(){
- $("#reste").val(parseInt($("#paiement").val())-parseInt($("#montant").val())); 
-});
+                $("#produits").on('mouseover', '.pr', function() {
+                  $(this).attr({
+                    class: "error pr"
+                  });
+
+                });
 
 
- $("#produit tbody").on("click",".delet", function(){
-   // alert($(this).attr('title'));
-   var total_retir=$("#"+$(this).attr('title')+"").find('.prd_total').html();
-   var quantite=$("#"+$(this).attr('title')+"").find('.prd_quantite').html();
-   var id=$("#"+$(this).attr('title')+"").find('.prd_id').html();
-   var remis=$("#"+$(this).attr('title')+"").find('.prd_remise').html();
-   var montant=parseInt($("#montant").val());
-   var new_pr=id+','+quantite+','+remis+',1;';
-   var list_produits= $("#list_produits").val(); 
- var new_list_produit=Remplace($("#list_produits").val(),new_pr,'');
-   $("#list_produits").val(new_list_produit);
-  
-   $("#montant").val(montant-total_retir);
-   $("#"+$(this).attr('title')+"").remove();
-   if($("#paiement").val()!="")
-   {
-  $("#reste").val($("#paiement").val()-$("#montant").val()); 
-   }
-  // alert("$(this).val()");
-   
- 
-      $("#produits tbody").children("tr").each(function(){
-        
-      if(parseInt($(this).find('.numero').html())==parseInt(id))
-      {
-       
-        quantite_stock= (parseInt($(this).find('.quantite .bar').html())+parseInt(quantite));
-        
-        var last_achat=parseInt($(this).find('.last_achat').html());
-        var last_ach_qt_st=last_achat+quantite_stock;
-        //alert(last_ach_qt_st);
-        var pourc=parseInt(((quantite_stock*100)/(last_ach_qt_st)));
-       // alert(quantite_stock+"*100/("+last_achat+"+"+quantite_stock+")="+pourc);
-        var couleur="";
-        if(pourc>=70)
-        {
-          couleur="success";
-        }
-        else if(pourc>=25 && pourc<70)
-        {
-          couleur="warning";
-        }
-        else if(pourc<25)
-        {
-          couleur="danger";
-        }
-           
-        var modifi_maliste='<td class="numero hidden">'+$(this).find('.numero').html()+'</td><td class="nom">'+$(this).find('.nom').html()+'</td> <td class="prix_vente">'+$(this).find('.prix_vente').html()+'</td><td class="quantite"><span class="last_achat hidden">'+last_achat+'</span>  <div class="progress progress-'+couleur+'"><div style="width: '+pourc+'%;" class="bar">'+quantite_stock+'</div></div></td><td class="quantite_gros hidden">'+$(this).find('.quantite_gros').html()+'</td><td class="prix_gros hidden">'+$(this).find('.prix_gros').html()+'</td> <td class="unite hidden">'+$(this).find('.unite').html()+'</td><td class="code hidden">'+$(this).find('.code').html()+'</td>';
-       $(this).html(modifi_maliste);
-      }
-    });
-  
- });
+                $("#produits").on('mouseout', '.pr', function() {
+                  $(this).attr({
+                    class: "success pr"
+                  });
 
-  var maliste = $("#produits tbody").children("tr");
+                });
 
-  $("#nom").on({
-    keyup: function() {
-      //alert($(this).val());
-      var cle = $(this).val();
-      $("#produits tbody").children("tr").remove();
-      maliste.each(function()
-      {
-        if ($(this).find('.nom').html().substring(0, cle.length).toUpperCase() == cle.toUpperCase())
-        {
+                $("#produits").on('click', '.pr', function() {
+                  var mode = $("#mode").html();
+                  var change_app = $("#change_app").html();
+                  $("#nom_produit").html($(this).find(".nom").html());
+                  $("#pu").html($(this).find(".prix_vente").html());
+                  $("#quantite").val("1");
+                  $("#unite").html($(this).find(".unite").html());
+                  $("#prd_id").html($(this).find(".numero").html());
+                  if (mode == "4" || mode == "5") {
+                    $("#achat_code").html($(this).find(".code").html());
+                  }
+                  $("#prd_gros").html($(this).find(".quantite_gros").html());
+                  $("#prd_prix_gros").html($(this).find(".prix_gros").html());
+                  $("#remise").val("0");
+                  $("#prix_v").val("0");
+                  $("select [value=3]").attr({selected: true});
 
-        //  alert($(this).find('.nom').html());
-          //$(this).remove()
-        var  ajout='<tr class="success pr"><td class="numero hidden">'+$(this).find('.numero').html()+'</td><td class="nom">'+$(this).find('.nom').html()+'</td> <td class="prix_vente">'+$(this).find('.prix_vente').html()+'</td><td class="quantite"><span class="last_achat hidden">'+$(this).find('.last_achat').html()+'</span>'+$(this).find('.quantite').html()+' </td> <td class="quantite_gros hidden">'+$(this).find('.quantite_gros').html()+'</td><td class="prix_gros hidden">'+$(this).find('.prix_gros').html()+'</td> <td class="unite hidden">'+$(this).find('.unite').html()+'</td><td class="code hidden">'+$(this).find('.code').html()+'</td></tr>';
-     // alert($(this).find('.nom').html());
-          $("#produits tbody").append(ajout);
-//$("#maliste").children("option").remove('[value='+$(this).html()+']');
-        }
+                  quantite_stock = $(this).find(".quantite .bar").html();
+                  var quantite_gros = 0;
+                  var prix_gros = 0;
+                  if ($("#en_gros").is(':checked'))
+                  {
+                    quantite_gros = $("#prd_gros").html();
+                    // alert(quantite_gros);
+                    prix_gros = $("#prd_prix_gros").html();
+                    $('#pu').html(prix_gros);
+                    $('.qt_g').attr({class: "span6 qt_g"});
+                    $('#qt_gros').html(quantite_gros);
+                    //alert('oui'); 
+                  }
+                  else
+                  {
+                    $('.qt_g').attr({class: "span6 hidden qt_g"});
+                  }
 
-      });
-    }
-  });
-  
-$("#en_gros").on("change", function(){
-  
-    var quantite_gros=0;
-   var prix_gros=0;
-    if($("#en_gros").is(':checked'))
-  {
-     quantite_gros=$("#prd_gros").html();
-    // alert(quantite_gros);
-    prix_gros=$("#prd_prix_gros").html();
-    $('#pu').html(prix_gros);
-  $('.qt_g').attr({class : "span6 qt_g"});
-   $('#qt_gros').html(quantite_gros);
-   //alert('oui'); 
-  }
-  else
-  {
-    $('.qt_g').attr({class : "span6 hidden qt_g"});
-  }
-});
+                });
+                var pu = 0;
+
+                $("#remise").on("keyup", function() {
+                  var pu1 = pu;
+                  var remise = parseFloat($(this).val());
+                  var pu_remise = parseFloat(pu1 - ((pu1 * remise) / 100));
+                  $("#pu").html(pu_remise);
+                });
+
+                $("#prix_v").on("keyup", function() {
+                  var pu1 = pu;
+                  var pv = parseFloat($(this).val());
+                  var remise = parseFloat(((pu1 - pv) * 100) / pu1);
+                  $("#pu").html(pv);
+                  $("#remise").val(remise);
+                });
+
+                $("#remise").on("focus", function() {
+                  pu = parseFloat($("#pu").html());
+                  //alert("cont");
+                });
+
+                $("#prix_v").on("focus", function() {
+                  pu = parseFloat($("#pu").html());
+                  //alert("cont");
+                });
+
+                $("#remise").on("focusout", function() {
+                  //pu=parseFloat($("#pu").html());
+                  if ($(this).val() == "")
+                  {
+                    $("#pu").html(pu);
+                  }
+
+                  //alert("cont");
+                });
 
 
+                $("#prix_v").on("focusout", function() {
+                  //pu=parseFloat($("#pu").html());
+                  if ($(this).val() == "")
+                  {
+                    $("#pu").html(pu);
+                    $("#remise").val(0);
+                  }
 
-//$("#en_gros").trigger('change');
+                  //alert("cont");
+                });
 
-   function Remplace(expr,a,b) {
-      var i=0
-      while (i!=-1) {
-         i=expr.indexOf(a,i);
-         if (i>=0) {
-            expr=expr.substring(0,i)+b+expr.substring(i+a.length);
-            i+=b.length;
-         }
-      }
-      return expr
-   }
+                // ajout un produit au panier
 
-</script>
+                //**********************************************************************************************************************
+                $("#ajout_panier").on('click', function() {
+                  var id = $("#prd_id").html();
+                  var achat_code = $("#achat_code").html();
+                  var mode = $("#mode").html();
+                  var change_app = $("#change_app").html();
+                  var nom_produit = $("#nom_produit").html();
+                  var pri_unit = parseFloat($("#pu").html());
+                  var quantite = parseInt($("#quantite").val());
+                  var remis = parseFloat($("#remise").val());
+                  var total = 0;
+                  var quantite_gros = 0;
+                  var prix_gros = 0;
+
+                  if ($("#en_gros").is(':checked'))
+                  {
+
+                    quantite_gros = $("#prd_gros").html();
+                    // alert(quantite_gros);
+                    prix_gros = $("#prd_prix_gros").html();
+                    // alert(prix_gros);
+                    if (quantite_stock >= (quantite * quantite_gros))
+                    {
+
+                      quantite = quantite * quantite_gros;
+                      //total=quantite*prix_gros;
+                      total = quantite * pri_unit;
+                    }
+                    else
+                    {
+                      alert("Inpossible d'ajouter ce produit car la quantité en stock est inférieur à la quantité demandé.");
+                    }
+                  }
+                  else
+                  {
+                    if (quantite_stock >= quantite)
+                    {
+                      total = pri_unit * quantite;
+                    }
+                    else
+                    {
+                      alert("Inpossible d'ajouter ce produit car la quantité en stock est inférieur à la quantité demandé.");
+                    }
+
+                  }
+                  if (total != 0)
+                  {
+                    if (mode == "4" || mode == "5") {
+                      var ajout_p = '<tr id="' + id + '"><td class="prd_id hidden">' + id + '</td><td class="code_a hidden">' + achat_code + '</td><td class="prd_nom">' + nom_produit + ' </td><td class="prd_pu">' + pri_unit + ' </td><td class="prd_quantite">' + quantite + '</td><td class="prd_remise">' + remis + '</td><td class="prd_total">' + total + '</td><td><a class="btn btn-danger delet" title="' + id + '">supprimer </td></tr>';
+                    } else {
+                      var ajout_p = '<tr id="' + id + '"><td class="prd_id hidden">' + id + '</td><td class="prd_nom">' + nom_produit + ' </td><td class="prd_pu">' + pri_unit + ' </td><td class="prd_quantite">' + quantite + '</td><td class="prd_remise">' + remis + '</td><td class="prd_total">' + total + '</td><td><a class="btn btn-danger delet" title="' + id + '">supprimer </td></tr>';
+                    }
+                    // var ajout_p = '<tr id="' + id + '"><td class="prd_id hidden">' + id + '</td><td class="prd_nom">' + nom_produit + ' </td><td class="prd_pu">' + pri_unit + ' </td><td class="prd_quantite">' + quantite + '</td><td class="prd_remise">' + remis + '</td><td class="prd_total">' + total + '</td><td><a class="btn btn-danger delet" title="' + id + '">supprimer </td></tr>';
+                    var montant = parseInt($("#montant").val());
+                    var total_montant = montant + total;
+                    $("#produit tbody").append(ajout_p);
+                    $("#montant").val(total_montant);
+                    $("#produits tbody").html(maliste);
+
+                    $("#produits tbody").children("tr").each(function() {
+                      if (mode == "1" || mode == "2") {
+                        if ($(this).find('.numero').html() == id)
+                        {
+                          quantite_stock = ($(this).find('.quantite .bar').html() - quantite);
+                          var last_achat = parseInt($(this).find('.last_achat').html());
+                          if (mode == "1") {
+                            // var last_ach_qt_st = last_achat + quantite_stock;
+
+                            //var pourc = parseInt(((quantite_stock * 100) / (last_ach_qt_st)));
+                            var pourc = parseInt(((quantite_stock * 100) / (last_achat)));
+                          }
+                          else {
+                            var pourc = parseInt(((quantite_stock * 100) / (last_achat)));
+                          }
+                          // alert(quantite_stock+"*100/("+last_achat+"+"+quantite_stock+")="+pourc);
+                          var couleur = "";
+                          if (pourc >= 70)
+                          {
+                            couleur = "success";
+                          }
+                          else if (pourc >= 25 && pourc < 70)
+                          {
+                            couleur = "warning";
+                          }
+                          else if (pourc < 25)
+                          {
+                            couleur = "danger";
+                          }
+                          if (change_app == "oui") {
+
+                            var modifi_maliste = '<td class="numero hidden">' + $(this).find('.numero').html() + '</td><td class="nom">' + $(this).find('.nom').html() + '</td> <td class="prix_vente">' + $(this).find('.prix_vente').html() + '</td><td class="quantite"><span class="last_achat hidden">' + last_achat + '</span>  <div class="progress progress-' + couleur + '"><div style="width: ' + pourc + '%;" class="bar">' + quantite_stock + '</div></div></td> <td><a href="/achats/change_app/' + id + '" class="btn" data-remote="true">changer de stock</a></td><td class="quantite_gros hidden">' + $(this).find('.quantite_gros').html() + '</td><td class="prix_gros hidden">' + $(this).find('.prix_gros').html() + '</td> <td class="unite hidden">' + $(this).find('.unite').html() + '</td><td class="code hidden">' + $(this).find('.code').html() + '</td>';
+
+                          }
+                          else {
+
+                            var modifi_maliste = '<td class="numero hidden">' + $(this).find('.numero').html() + '</td><td class="nom">' + $(this).find('.nom').html() + '</td> <td class="prix_vente">' + $(this).find('.prix_vente').html() + '</td><td class="quantite"><span class="last_achat hidden">' + last_achat + '</span>  <div class="progress progress-' + couleur + '"><div style="width: ' + pourc + '%;" class="bar">' + quantite_stock + '</div></div></td><td class="quantite_gros hidden">' + $(this).find('.quantite_gros').html() + '</td><td class="prix_gros hidden">' + $(this).find('.prix_gros').html() + '</td> <td class="unite hidden">' + $(this).find('.unite').html() + '</td><td class="code hidden">' + $(this).find('.code').html() + '</td>';
+
+
+                          }
+                          $(this).html(modifi_maliste);
+                        }
+                      } else if (mode == "4" || mode == "5") {
+                        if ($(this).find('.code').html() == achat_code)
+                        {
+                          quantite_stock = ($(this).find('.quantite .bar').html() - quantite);
+                          var last_achat = parseInt($(this).find('.last_achat').html());
+
+
+                          var pourc = parseInt(((quantite_stock * 100) / (last_achat)));
+
+                          // alert(quantite_stock+"*100/("+last_achat+"+"+quantite_stock+")="+pourc);
+                          var couleur = "";
+                          if (pourc >= 70)
+                          {
+                            couleur = "success";
+                          }
+                          else if (pourc >= 25 && pourc < 70)
+                          {
+                            couleur = "warning";
+                          }
+                          else if (pourc < 25)
+                          {
+                            couleur = "danger";
+                          }
+
+                          if (change_app == "oui") {
+
+                            var modifi_maliste = '<td class="numero hidden">' + $(this).find('.numero').html() + '</td><td class="code_b">' + $(this).find('.code_b').html() + '</td><td class="nom">' + $(this).find('.nom').html() + '</td> <td class="prix_vente">' + $(this).find('.prix_vente').html() + '</td><td class="quantite"><span class="last_achat hidden">' + last_achat + '</span>  <div class="progress progress-' + couleur + '"><div style="width: ' + pourc + '%;" class="bar">' + quantite_stock + '</div></div></td>' + '<td><a href="/achats/change_app/' + id + '" class="btn" data-remote="true">changer de stock</a></td>  <td class="unite hidden">' + $(this).find('.unite').html() + '</td><td class="code hidden">' + $(this).find('.code').html() + '</td>';
+
+                          }
+                          else {
+
+                            var modifi_maliste = '<td class="numero hidden">' + $(this).find('.numero').html() + '</td><td class="code_b">' + $(this).find('.code_b').html() + '</td><td class="nom">' + $(this).find('.nom').html() + '</td> <td class="prix_vente">' + $(this).find('.prix_vente').html() + '</td><td class="quantite"><span class="last_achat hidden">' + last_achat + '</span>  <div class="progress progress-' + couleur + '"><div style="width: ' + pourc + '%;" class="bar">' + quantite_stock + '</div></div></td>  <td class="unite hidden">' + $(this).find('.unite').html() + '</td><td class="code hidden">' + $(this).find('.code').html() + '</td>';
+
+                          }
+
+
+                          // var modifi_maliste='<td class="numero hidden">'+$(this).find('.numero').html()+'</td><td class="code_b">'+$(this).find('.code_b').html()+'</td><td class="nom">'+$(this).find('.nom').html()+'</td> <td class="prix_vente">'+$(this).find('.prix_vente').html()+'</td><td class="quantite"><span class="last_achat hidden">'+last_achat+'</span>  <div class="progress progress-'+couleur+'"><div style="width: '+pourc+'%;" class="bar">'+quantite_stock+'</div></div></td>  <td class="unite hidden">'+$(this).find('.unite').html()+'</td><td class="code hidden">'+$(this).find('.code').html()+'</td>';
+
+                          $(this).html(modifi_maliste);
+
+                        }
+                      }
+
+                    });
+
+                    var new_pr = id + ',' + quantite + ',' + remis + ',' + pri_unit + ',1;';
+                    $("#list_produits").val($("#list_produits").val() + new_pr);
+                    //$(".list_p").html($("#list_produits").val());
+
+                  }
+
+                });
+
+                //**********************************************************************************************************************
+
+                $("#paiement").on("keyup", function() {
+                  $("#reste").val(parseInt($("#paiement").val()) - parseInt($("#montant").val()));
+                });
+
+                // retirer un élément dans le panier en cliquant sur le boutton supprimer du panier
+                // 
+                //***********************************************************************************************
+                $("#produit tbody").on("click", ".delet", function() {
+                  // alert($(this).attr('title'));
+                  var mode = $("#mode").html();
+                  var change_app = $("#change_app").html();
+                  var total_retir = $("#" + $(this).attr('title') + "").find('.prd_total').html();
+                  var quantite = $("#" + $(this).attr('title') + "").find('.prd_quantite').html();
+                  var pri_unit = parseFloat($("#" + $(this).attr('title') + "").find('.prd_pu').html());
+                  var id = $("#" + $(this).attr('title') + "").find('.prd_id').html();
+                  if (mode == "4" || mode == "5") {
+                    var achat_code = $("#" + $(this).attr('title') + "").find('.code_a').html();
+
+                  }
+                  var remis = parseFloat($("#" + $(this).attr('title') + "").find('.prd_remise').html());
+                  var montant = parseInt($("#montant").val());
+                  var new_pr = id + ',' + quantite + ',' + remis + ',' + pri_unit + ',1;';
+                  var list_produits = $("#list_produits").val();
+                  var new_list_produit = Remplace($("#list_produits").val(), new_pr, '');
+
+                  $("#list_produits").val(new_list_produit);
+                  // $(".list_p").html($("#list_produits").val());
+                  $("#montant").val(montant - total_retir);
+                  $("#" + $(this).attr('title') + "").remove();
+                  if ($("#paiement").val() != "")
+                  {
+                    $("#reste").val($("#paiement").val() - $("#montant").val());
+                  }
+                  // alert("$(this).val()");
+
+
+                  //$("#produits tbody").children("tr").each(function() {
+                  $("#produits tbody").html(maliste);
+
+                  $("#produits tbody").children("tr").each(function() {
+
+                    if (mode == "1" || mode == "2") {
+                      //alert("con");
+                      if (parseInt($(this).find('.numero').html()) == parseInt(id))
+                      {
+
+                        quantite_stock = (parseInt($(this).find('.quantite .bar').html()) + parseInt(quantite));
+
+                        var last_achat = parseInt($(this).find('.last_achat').html());
+
+                        if (mode == "1") {
+                          // var last_ach_qt_st = last_achat + quantite_stock;
+                          //alert(last_ach_qt_st);
+                          //var pourc = parseInt(((quantite_stock * 100) / (last_ach_qt_st)));
+                          var pourc = parseInt(((quantite_stock * 100) / (last_achat)));
+                        }
+                        else {
+                          var pourc = parseInt(((quantite_stock * 100) / (last_achat)));
+                        }
+                        var couleur = "";
+                        if (pourc >= 70)
+                        {
+                          couleur = "success";
+                        }
+                        else if (pourc >= 25 && pourc < 70)
+                        {
+                          couleur = "warning";
+                        }
+                        else if (pourc < 25)
+                        {
+                          couleur = "danger";
+                        }
+
+                        if (change_app == "oui") {
+
+                          var modifi_maliste = '<td class="numero hidden">' + $(this).find('.numero').html() + '</td><td class="nom">' + $(this).find('.nom').html() + '</td> <td class="prix_vente">' + $(this).find('.prix_vente').html() + '</td><td class="quantite"><span class="last_achat hidden">' + last_achat + '</span>  <div class="progress progress-' + couleur + '"><div style="width: ' + pourc + '%;" class="bar">' + quantite_stock + '</div></div></td> <td><a href="/achats/change_app/' + id + '" class="btn" data-remote="true" >changer de stock</a></td><td class="quantite_gros hidden">' + $(this).find('.quantite_gros').html() + '</td><td class="prix_gros hidden">' + $(this).find('.prix_gros').html() + '</td> <td class="unite hidden">' + $(this).find('.unite').html() + '</td><td class="code hidden">' + $(this).find('.code').html() + '</td>';
+
+
+
+                        } else {
+
+                          var modifi_maliste = '<td class="numero hidden">' + $(this).find('.numero').html() + '</td><td class="nom">' + $(this).find('.nom').html() + '</td> <td class="prix_vente">' + $(this).find('.prix_vente').html() + '</td><td class="quantite"><span class="last_achat hidden">' + last_achat + '</span>  <div class="progress progress-' + couleur + '"><div style="width: ' + pourc + '%;" class="bar">' + quantite_stock + '</div></div></td><td class="quantite_gros hidden">' + $(this).find('.quantite_gros').html() + '</td><td class="prix_gros hidden">' + $(this).find('.prix_gros').html() + '</td> <td class="unite hidden">' + $(this).find('.unite').html() + '</td><td class="code hidden">' + $(this).find('.code').html() + '</td>';
+
+                        }
+
+                        $(this).html(modifi_maliste);
+                      }
+                    } else if (mode == "4" || mode == "5") {
+
+                      if ($(this).find('.code').html() == achat_code)
+                      {
+
+                        quantite_stock = (parseInt($(this).find('.quantite .bar').html()) + parseInt(quantite));
+
+                        var last_achat = parseInt($(this).find('.last_achat').html());
+
+
+                        var pourc = parseInt(((quantite_stock * 100) / (last_achat)));
+
+                        var couleur = "";
+                        if (pourc >= 70)
+                        {
+                          couleur = "success";
+                        }
+                        else if (pourc >= 25 && pourc < 70)
+                        {
+                          couleur = "warning";
+                        }
+                        else if (pourc < 25)
+                        {
+                          couleur = "danger";
+                        }
+
+
+                        if (change_app == "oui") {
+                          var modifi_maliste = '<td class="numero hidden">' + $(this).find('.numero').html() + '</td><td class="code_b">' + $(this).find('.code_b').html() + '</td><td class="nom">' + $(this).find('.nom').html() + '</td> <td class="prix_vente">' + $(this).find('.prix_vente').html() + '</td><td class="quantite"><span class="last_achat hidden">' + last_achat + '</span>  <div class="progress progress-' + couleur + '"><div style="width: ' + pourc + '%;" class="bar">' + quantite_stock + '</div></div></td> <td><a href="/achats/change_app/' + id + '" class="btn" data-remote="true" >changer de stock</a></td>  <td class="unite hidden">' + $(this).find('.unite').html() + '</td><td class="code hidden">' + $(this).find('.code').html() + '</td>';
+
+                        }
+                        else {
+
+                          var modifi_maliste = '<td class="numero hidden">' + $(this).find('.numero').html() + '</td><td class="code_b">' + $(this).find('.code_b').html() + '</td><td class="nom">' + $(this).find('.nom').html() + '</td> <td class="prix_vente">' + $(this).find('.prix_vente').html() + '</td><td class="quantite"><span class="last_achat hidden">' + last_achat + '</span>  <div class="progress progress-' + couleur + '"><div style="width: ' + pourc + '%;" class="bar">' + quantite_stock + '</div></div></td>  <td class="unite hidden">' + $(this).find('.unite').html() + '</td><td class="code hidden">' + $(this).find('.code').html() + '</td>';
+
+                        }
+
+
+
+
+
+                        $(this).html(modifi_maliste);
+                      }
+
+                    }
+
+                  });
+
+                });
+
+
+                //*******************************************************************************************************************************************************
+                var maliste = $("#produits tbody").children("tr");
+
+                // recherche par nom du produit
+                // ********************************************************************************************************
+                $("#nom").on({
+                  keyup: function() {
+                    //alert($(this).val());
+                    var cle = $(this).val();
+                    var mode = $("#mode").html();
+                    $("#produits tbody").children("tr").remove();
+                    maliste.each(function()
+                    {
+                      if ($(this).find('.nom').html().substring(0, cle.length).toUpperCase() == cle.toUpperCase())
+                      {
+
+                        //  alert($(this).find('.nom').html());
+                        //$(this).remove()
+                        if (mode == "1") {
+                          var ajout = '<tr class="success pr"><td class="numero hidden">' + $(this).find('.numero').html() + '</td><td class="nom">' + $(this).find('.nom').html() + '</td> <td class="prix_vente">' + $(this).find('.prix_vente').html() + '</td><td class="quantite"><span class="last_achat hidden">' + $(this).find('.last_achat').html() + '</span>' + $(this).find('.quantite').html() + ' </td> <td class="quantite_gros hidden">' + $(this).find('.quantite_gros').html() + '</td><td class="prix_gros hidden">' + $(this).find('.prix_gros').html() + '</td> <td class="unite hidden">' + $(this).find('.unite').html() + '</td><td class="code hidden">' + $(this).find('.code').html() + '</td></tr>';
+                        } else if (mode == "2") {
+                          var ajout = '<tr class="success pr"><td class="numero hidden">' + $(this).find('.numero').html() + '</td><td class="nom">' + $(this).find('.nom').html() + '</td> <td class="prix_vente">' + $(this).find('.prix_vente').html() + '</td><td class="quantite"><span class="last_achat hidden">' + $(this).find('.last_achat').html() + '</span>' + $(this).find('.quantite').html() + ' </td><td><a href="/achats/change_app/' + $(this).find('.numero').html() + '" class="btn" data-remote="true" >changer de stock</a></td> <td class="quantite_gros hidden">' + $(this).find('.quantite_gros').html() + '</td><td class="prix_gros hidden">' + $(this).find('.prix_gros').html() + '</td> <td class="unite hidden">' + $(this).find('.unite').html() + '</td><td class="code hidden">' + $(this).find('.code').html() + '</td></tr>';
+                        } else if (mode == "4") {
+                          var ajout = '<tr class="success pr"><td class="numero hidden">' + $(this).find('.numero').html() + '</td><td class="code_b">' + $(this).find('.code_b').html() + '</td><td class="nom">' + $(this).find('.nom').html() + '</td> <td class="prix_vente">' + $(this).find('.prix_vente').html() + '</td><td class="quantite"><span class="last_achat hidden">' + $(this).find('.last_achat').html() + '</span>' + $(this).find('.quantite').html() + ' </td> <td class="unite hidden">' + $(this).find('.unite').html() + '</td><td class="code hidden">' + $(this).find('.code').html() + '</td></tr>';
+                        } else if (mode == "5") {
+                          var ajout = '<tr class="success pr"><td class="numero hidden">' + $(this).find('.numero').html() + '</td><td class="code_b">' + $(this).find('.code_b').html() + '</td><td class="nom">' + $(this).find('.nom').html() + '</td> <td class="prix_vente">' + $(this).find('.prix_vente').html() + '</td><td class="quantite"><span class="last_achat hidden">' + $(this).find('.last_achat').html() + '</span>' + $(this).find('.quantite').html() + ' </td><td><a href="/achats/change_app/' + $(this).find('.numero').html() + '" class="btn" data-remote="true" >changer de stock</a></td> <td class="unite hidden">' + $(this).find('.unite').html() + '</td><td class="code hidden">' + $(this).find('.code').html() + '</td></tr>';
+                        }
+                        // alert($(this).find('.nom').html());
+                        $("#produits tbody").append(ajout);
+                        //$("#maliste").children("option").remove('[value='+$(this).html()+']');
+                      }
+
+                    });
+                  }
+                });
+
+                // ********************************************************************************************************
+
+                // recherche par code barre
+                // ********************************************************************************************************
+                $("#code").on({
+                  keyup: function() {
+                    //alert($(this).val());
+                    var cle = $(this).val();
+                    var mode = $("#mode").html();
+                    $("#produits tbody").children("tr").remove();
+                    maliste.each(function()
+                    {
+                      if ($(this).find('.code_b').html().substring(0, cle.length).toUpperCase() == cle.toUpperCase())
+                      {
+
+                        //  alert($(this).find('.nom').html());
+                        //$(this).remove()
+                        if (mode == "1") {
+                          var ajout = '<tr class="success pr"><td class="numero hidden">' + $(this).find('.numero').html() + '</td><td class="nom">' + $(this).find('.nom').html() + '</td> <td class="prix_vente">' + $(this).find('.prix_vente').html() + '</td><td class="quantite"><span class="last_achat hidden">' + $(this).find('.last_achat').html() + '</span>' + $(this).find('.quantite').html() + ' </td> <td class="quantite_gros hidden">' + $(this).find('.quantite_gros').html() + '</td><td class="prix_gros hidden">' + $(this).find('.prix_gros').html() + '</td> <td class="unite hidden">' + $(this).find('.unite').html() + '</td><td class="code hidden">' + $(this).find('.code').html() + '</td></tr>';
+                          $("#produits tbody").append(ajout);
+                        } else if (mode == "2") {
+                          var ajout = '<tr class="success pr"><td class="numero hidden">' + $(this).find('.numero').html() + '</td><td class="nom">' + $(this).find('.nom').html() + '</td> <td class="prix_vente">' + $(this).find('.prix_vente').html() + '</td><td class="quantite"><span class="last_achat hidden">' + $(this).find('.last_achat').html() + '</span>' + $(this).find('.quantite').html() + ' </td><td><a href="/achats/change_app/' + $(this).find('.numero').html() + '" class="btn" data-remote="true" >changer de stock</a></td> <td class="quantite_gros hidden">' + $(this).find('.quantite_gros').html() + '</td><td class="prix_gros hidden">' + $(this).find('.prix_gros').html() + '</td> <td class="unite hidden">' + $(this).find('.unite').html() + '</td><td class="code hidden">' + $(this).find('.code').html() + '</td></tr>';
+                          $("#produits tbody").append(ajout);
+                        } else if (mode == "4") {
+                          var ajout = '<tr class="success pr"><td class="numero hidden">' + $(this).find('.numero').html() + '</td><td class="code_b">' + $(this).find('.code_b').html() + '</td><td class="nom">' + $(this).find('.nom').html() + '</td> <td class="prix_vente">' + $(this).find('.prix_vente').html() + '</td><td class="quantite"><span class="last_achat hidden">' + $(this).find('.last_achat').html() + '</span>' + $(this).find('.quantite').html() + ' </td> <td class="unite hidden">' + $(this).find('.unite').html() + '</td><td class="code hidden">' + $(this).find('.code').html() + '</td></tr>';
+
+                          $("#nom_produit").html($(this).find(".nom").html());
+                          $("#pu").html($(this).find(".prix_vente").html());
+                          $("#quantite").val("1");
+                          $("#unite").html($(this).find(".unite").html());
+                          $("#prd_id").html($(this).find(".numero").html());
+                          $("#achat_code").html($(this).find(".code").html());
+                          $("#prd_gros").html($(this).find(".quantite_gros").html());
+                          $("#prd_prix_gros").html($(this).find(".prix_gros").html());
+                          $("#remise").val("0");
+                          $("#prix_v").val("0");
+                          $("select [value=3]").attr({selected: true});
+
+                          quantite_stock = $(this).find(".quantite .bar").html();
+                          var quantite_gros = 0;
+                          var prix_gros = 0;
+                          if ($("#en_gros").is(':checked'))
+                          {
+                            quantite_gros = $("#prd_gros").html();
+                            // alert(quantite_gros);
+                            prix_gros = $("#prd_prix_gros").html();
+                            $('#pu').html(prix_gros);
+                            $('.qt_g').attr({class: "span6 qt_g"});
+                            $('#qt_gros').html(quantite_gros);
+                            //alert('oui'); 
+                          }
+                          else
+                          {
+                            $('.qt_g').attr({class: "span6 hidden qt_g"});
+                          }
+
+                          $("#produits tbody").append(ajout);
+                        }else if (mode == "5") {
+                          
+                          var ajout = '<tr class="success pr"><td class="numero hidden">' + $(this).find('.numero').html() + '</td><td class="code_b">' + $(this).find('.code_b').html() + '</td><td class="nom">' + $(this).find('.nom').html() + '</td> <td class="prix_vente">' + $(this).find('.prix_vente').html() + '</td><td class="quantite"><span class="last_achat hidden">' + $(this).find('.last_achat').html() + '</span>' + $(this).find('.quantite').html() + ' </td> <td><a href="/achats/change_app/' + $(this).find('.numero').html() + '" class="btn" data-remote="true" >changer de stock</a></td> <td class="unite hidden">' + $(this).find('.unite').html() + '</td><td class="code hidden">' + $(this).find('.code').html() + '</td></tr>';
+
+                          $("#nom_produit").html($(this).find(".nom").html());
+                          $("#pu").html($(this).find(".prix_vente").html());
+                          $("#quantite").val("1");
+                          $("#unite").html($(this).find(".unite").html());
+                          $("#prd_id").html($(this).find(".numero").html());
+                          $("#achat_code").html($(this).find(".code").html());
+                          $("#prd_gros").html($(this).find(".quantite_gros").html());
+                          $("#prd_prix_gros").html($(this).find(".prix_gros").html());
+                          $("#remise").val("0");
+                          $("#prix_v").val("0");
+                          $("select [value=3]").attr({selected: true});
+
+                          quantite_stock = $(this).find(".quantite .bar").html();
+                          var quantite_gros = 0;
+                          var prix_gros = 0;
+                          if ($("#en_gros").is(':checked'))
+                          {
+                            quantite_gros = $("#prd_gros").html();
+                            // alert(quantite_gros);
+                            prix_gros = $("#prd_prix_gros").html();
+                            $('#pu').html(prix_gros);
+                            $('.qt_g').attr({class: "span6 qt_g"});
+                            $('#qt_gros').html(quantite_gros);
+                            //alert('oui'); 
+                          }
+                          else
+                          {
+                            $('.qt_g').attr({class: "span6 hidden qt_g"});
+                          }
+
+                          $("#produits tbody").append(ajout);
+                        }
+                        //$("#code").val("");
+                        // alert($(this).find('.nom').html());
+
+                        //$("#maliste").children("option").remove('[value='+$(this).html()+']');
+                      }
+
+                    });
+                  }
+                });
+                // ******************************************************************************************************** 
+
+
+                $("#en_gros").on("change", function() {
+
+                  var quantite_gros = 0;
+                  var prix_gros = 0;
+                  if ($("#en_gros").is(':checked'))
+                  {
+                    quantite_gros = $("#prd_gros").html();
+                    // alert(quantite_gros);
+                    prix_gros = $("#prd_prix_gros").html();
+                    $('#pu').html(prix_gros);
+                    $('.qt_g').attr({class: "span6 qt_g"});
+                    $('#qt_gros').html(quantite_gros);
+                    //alert('oui'); 
+                  }
+                  else
+                  {
+                    $('.qt_g').attr({class: "span6 hidden qt_g"});
+                  }
+                });
+
+
+
+                //$("#en_gros").trigger('change');
+
+                function Remplace(expr, a, b) {
+                  var i = 0
+                  while (i != -1) {
+                    i = expr.indexOf(a, i);
+                    if (i >= 0) {
+                      expr = expr.substring(0, i) + b + expr.substring(i + a.length);
+                      i += b.length;
+                    }
+                  }
+                  return expr
+                }
+
+              </script>

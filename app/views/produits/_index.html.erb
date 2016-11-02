@@ -6,8 +6,10 @@
         <td><%= produit.code.force_encoding("UTF-8") %></td>
         <td><%= produit.nom.force_encoding("UTF-8") %></td>
         <td><%= produit.prix_vente %></td>
+         <% if Option.get_config_value('mode')!='4' %>
         <td><%= produit.quantite_gros %></td>
         <td><%= produit.prix_gros %></td>
+         <% end %>
         <td><%= produit.quantite_stock %></td>
         <td><%= produit.unite.force_encoding("UTF-8") %></td>
         <td><%= produit.type_produit.nom.force_encoding("UTF-8") %></td>
@@ -15,6 +17,7 @@
         <td><%= produit.is_active.to_s %></td>
         <td><%= produit.seuil_warning %></td>
         <td><%= produit.seuil_danger %></td>
+        <td><%= produit.mode %></td>
     <!--<td><#%=d.categorie.nom %></td>-->
     <td class="center"><%=link_to "Modifier",edit_produit_path(produit),remote: true,class: "btn btn-success" %></td>
  

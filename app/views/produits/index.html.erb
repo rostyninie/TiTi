@@ -63,9 +63,10 @@
                   <th>Code</th>
                   <th>Nom</th>
                   <th>Prix vente</th>
+                   <% if Option.get_config_value('mode')!='4' %>
                   <th>Quantite gros</th>
                   <th>Prix gros</th>
-                  
+                   <% end %>
                   <th>Quantite stock</th>
                   <th>Unite</th>
                   <th>Type produit</th>
@@ -73,6 +74,7 @@
                   <th>Is active</th>
                   <th>seuil d'attention</th>
                    <th>seuil de danger</th>
+                   <th>Mode d'app</th>
                   <!-- <th>Catégorie</th>-->
                   <th>Modifier</th>
                   <th>Supprimer</th>

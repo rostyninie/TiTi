@@ -1,0 +1,22 @@
+<% i=0 %>
+
+     <% @valorisations.each do |v| %>
+      <tr class="odd gradeX">
+        <td><%=  i+=1%></td>
+        <td><%= v.code.force_encoding("UTF-8") %></td>
+        <td><%= v.produit.nom.force_encoding("UTF-8") %></td>
+        <td><%= "#{Achat.find_by_id(v.stock_initial).code }  #{Achat.find_by_id(v.stock_initial).date_achat.to_s}" %></td>
+        <td><%= "#{v.achat.code }  #{v.achat.date_achat.to_s}" %></td>
+        <td><%=  v.created_at.to_s %></td>
+  
+      <% if v.type_valorisation=="cumpe" %>
+    <td class="center"><%=link_to "voir la valorisation",{controller: 'statistique',:action=>'view_valorisation',:valorisation_id=>v.id},remote: true,class: "btn btn-success" %></td>
+  
+    <% elsif v.type_valorisation=="cumpp" %>
+    
+     <td class="center"><%=link_to "voir la valorisation",{controller: 'statistique',:action=>'view_valorisation_periode',:valorisation_id=>v.id},remote: true,class: "btn btn-success" %></td>
+  
+   <% end %>
+      </tr>
+<% end %>
+  

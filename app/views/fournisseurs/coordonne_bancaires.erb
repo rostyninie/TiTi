@@ -1,0 +1,59 @@
+<%#
+# To change this license header, choose License Headers in Project Properties.
+# To change this template file, choose Tools | Templates
+# and open the template in the editor.
+%>
+<div class="row-fluid">
+   <% unless flash[:notice].nil? %>
+    <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <%= flash[:notice] %></div>
+    <script>$.jGrowl("<%= flash[:notice] %>", {header: 'Important'});</script>
+  <% end %>
+
+<h2><%= @fournisseur.nom %></h2>
+<div class="block">
+    <div class="navbar navbar-inner block-header">
+      <div class="muted pull-left">Liste des coordonnés bancaires :</div>
+    </div>
+    <div class="block-content collapse in">
+      <div class="span12">
+        <%= form_for(:fournisseurs, :url => {:controller=> 'fournisseurs',:action=> 'coordonne_bancaires',:id=> params[:id]}, :html=> {:multipart=>true}) do |b| %>
+          <fieldset>
+            <legend>Coordonnés Bancaires</legend>
+            
+             <table cellspacing="10">
+               <% @coordonnes.each do |c| %>
+               
+               <tr>
+                 <td><label for="<% c.nom.force_encoding("UTF-8")  %>"> <b><span class="text-info" ><%= c.nom.force_encoding("UTF-8")+"    "  %> </span></b><%="     "+c.description.force_encoding("UTF-8")  %></label></td><td><%= check_box_tag "fournisseurs[coordonne_ids][]",c.id%></td></tr>
+           
+            <% end  %>
+               <% if @coordonnes.count >0  %>
+           <tr> <td><%= b.submit"", :value => "#{"Ajouter des coordonnés au fournisseur"}", :class => "btn btn-large btn-primary" %></td><tr>
+              <% end  %>
+            </table>
+          </fieldset>
+        <%end%>
+         <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example2">
+          <tbody>
+             <% @coordonne_fours.each do |c| %>
+               <% @cood=CoordonneBancaire.find_by_id(c.coordonne_bancaire_id) %>
+            <% unless @cood.nil? %>
+            <tr>
+             <td><%=@cood.nom.force_encoding("UTF-8")%></td>
+                <td><%=  @cood.description.force_encoding("UTF-8")%></td>
+                <td id="<%=@cood.code.force_encoding("UTF-8")%>"><%=  c.valeur.nil? ? "#{"Vide"}" : c.valeur.force_encoding("UTF-8") %></td>
+                <td class="center"><%=link_to "Modifier la valeur",{:controller=>"fournisseurs",:action=>"update_coordonne",:id=>c.id},remote: true,:class=>"btn btn-primary"%></td> 
+                 <td class="center"><%=link_to "Supprimer",{:controller=>"fournisseurs",:action=>"delete_coordonne",:id=>c.id},:class=>"btn btn-danger" ,:confirm=>"voulez vous vraiment supprimer le coordonné "+@cood.nom.force_encoding("UTF-8")+" ?"%></td> 
+            </tr>
+             <% end  %>
+              <% end  %>
+             </tbody>
+        </table>
+         </div>
+    </div>
+</div>
+</div>
+
+ <div id="valeur_coord-modal" class="modal hide" style="width: 330px;"></div>
